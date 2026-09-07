@@ -384,6 +384,7 @@ class PdfGenerationService:
         # ----------------------------------------------------------------------
         # C. Render Components
         # ----------------------------------------------------------------------
+        bullet_count_on_page = 0
         for comp in components:
             c_type = comp.get("component_type")
             c_title = comp.get("title")
@@ -416,8 +417,21 @@ class PdfGenerationService:
                 if c_content:
                     story.append(Paragraph(c_content, styles["Body"]))
                 for item in c_items:
+                    if bullet_count_on_page >= 12:
+                        story.append(PageBreak())
+                        story.append(Paragraph(f"{page_title} (continued)", styles["SectionTitle"]))
+                        if page_subtitle:
+                            story.append(Paragraph(f"<i>{page_subtitle} (continued)</i>", styles["Body"]))
+                        story.append(HRFlowable(
+                            width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border),
+                            spaceBefore=4, spaceAfter=12
+                        ))
+                        if c_title:
+                            story.append(Paragraph(f"{c_title} (continued)", styles["SubsectionHeading"]))
+                        bullet_count_on_page = 0
                     bullet_p = Paragraph(f"&bull; &nbsp; {item}", styles["BulletText"])
                     story.append(bullet_p)
+                    bullet_count_on_page += 1
                 story.append(Spacer(1, 6))
 
             # Tables (e.g. Pricing / Timelines)
@@ -577,12 +591,77 @@ class PdfGenerationService:
 
         # Sections
         for sec in draft_dict.get("sections", []):
-            story.append(Paragraph(sec.get("section_title", "Service Details"), styles["SectionTitle"]))
+            story.append(PageBreak())
+            sec_title = sec.get("section_title", "Service Details")
+            story.append(Paragraph(sec_title, styles["SectionTitle"]))
             if sec.get("opening_text"):
                 story.append(Paragraph(sec["opening_text"], styles["Body"]))
+            story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border), spaceBefore=4, spaceAfter=12))
+
+            bullet_count_on_page = 0
             for sub in sec.get("subsections", []):
-                if sub.get("heading"):
-                    story.append(Paragraph(sub["heading"], styles["SubsectionHeading"]))
-                for b in sub.get("bullets", []):
+                sub_heading = sub.get("heading")
+                bullets = sub.get("bullets", [])
+
+                if sub_heading:
+                    story.append(Paragraph(sub_heading, styles["SubsectionHeading"]))
+                for b in bullets:
+                    if bullet_count_on_page >= 12:
+                        story.append(PageBreak())
+                        story.append(Paragraph(f"{sec_title} (continued)", styles["SectionTitle"]))
+                        story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border), spaceBefore=4, spaceAfter=12))
+                        if sub_heading:
+                            story.append(Paragraph(f"{sub_heading} (continued)", styles["SubsectionHeading"]))
+                        bullet_count_on_page = 0
                     story.append(Paragraph(f"&bull; &nbsp; {b}", styles["BulletText"]))
+                    bullet_count_on_page += 1
             story.append(Spacer(1, 10))
+
+        # Why Us
+        why_us = draft_dict.get("why_us", [])
+        if why_us:
+            story.append(PageBreak())
+            story.append(Paragraph("Why Sympl Solutions", styles["SectionTitle"]))
+            story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border), spaceBefore=4, spaceAfter=12))
+            for item in why_us:
+                story.append(Paragraph(f"&bull; &nbsp; {item}", styles["BulletText"]))
+
+        # Pricing
+        pricing = draft_dict.get("pricing", {})
+        if pricing and pricing.get("fee_items"):
+            story.append(PageBreak())
+            story.append(Paragraph("Investment Schedule", styles["SectionTitle"]))
+            story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border), spaceBefore=4, spaceAfter=12))
+            fee_items = pricing.get("fee_items", [])
+            currency = pricing.get("currency", "CAD")
+            table_rows = []
+            for item in fee_items:
+                cat = item.get("category", "Professional Services")
+                freq = item.get("billing_frequency", "monthly").replace("_", " ").title()
+                amt = item.get("amount")
+                amt_str = f"${amt:,.2f} {currency}" if amt is not None else "[Pending]"
+                desc = item.get("description", "")
+                table_rows.append([cat, freq, amt_str, desc])
+            tbl_data = {
+                "headers": ["Service Category", "Frequency", "Fee", "Scope Details"],
+                "rows": table_rows
+            }
+            story.append(self._build_platypus_table(tbl_data, styles))
+
+        # Exclusions
+        exclusions = draft_dict.get("exclusions", [])
+        if exclusions:
+            story.append(PageBreak())
+            story.append(Paragraph("Engagement Terms & Exclusions", styles["SectionTitle"]))
+            story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border), spaceBefore=4, spaceAfter=12))
+            for exc in exclusions:
+                story.append(self._create_callout_box(exc, styles["CalloutText"]))
+                story.append(Spacer(1, 6))
+
+        # Closing / Sign-off
+        story.append(PageBreak())
+        story.append(Paragraph("Next Steps & Authorization", styles["SectionTitle"]))
+        story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor(self.branding.colors.border), spaceBefore=4, spaceAfter=12))
+        story.append(Paragraph("By signing below, authorized representatives agree to the terms herein.", styles["Body"]))
+        story.append(Spacer(1, 15))
+        story.append(self._build_signature_block(client_name, styles))

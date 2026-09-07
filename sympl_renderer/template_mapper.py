@@ -67,12 +67,12 @@ class TemplateMapper:
             page_num += 1
 
         # ----------------------------------------------------------------------
-        # 4. Service Detail Pages (Dynamic: 1 page per draft section)
+        # 4. Service Detail Pages (Dynamic: automatically paginated per section)
         # ----------------------------------------------------------------------
         for sec in sections:
-            detail_page = self._build_service_detail_page(page_num, sec, client_name)
-            pages.append(detail_page)
-            page_num += 1
+            detail_pages = self._build_service_detail_pages(page_num, sec, client_name)
+            pages.extend(detail_pages)
+            page_num += len(detail_pages)
 
         # ----------------------------------------------------------------------
         # 5. Implementation Timeline Page (Dynamic: Transformation / Transition)
@@ -205,54 +205,121 @@ class TemplateMapper:
             components=components
         )
 
-    def _build_service_detail_page(self, page_num: int, section: Dict[str, Any], client_name: str) -> RenderPage:
+    def _build_service_detail_pages(
+        self,
+        start_page_num: int,
+        section: Dict[str, Any],
+        client_name: str,
+        max_bullets_per_page: int = 12
+    ) -> List[RenderPage]:
+        """
+        Translates a single proposal_draft service section into one or more RenderPage instances.
+        Intelligently paginates subsections and bullet lists when content exceeds max_bullets_per_page (12).
+        Continuation pages are titled '{Section Title} (continued)' with matching subtitles.
+        """
         sec_title = section.get("section_title", "Service Details")
         opening_text = section.get("opening_text", "")
         subsections = section.get("subsections", [])
 
-        components = [
-            RenderComponent(
-                component_id=f"sec_heading_{page_num}",
+        pages: List[RenderPage] = []
+        current_components: List[RenderComponent] = []
+        current_bullets = 0
+        current_chars = 0
+        page_idx = 0
+
+        def start_page():
+            nonlocal current_components, current_bullets, current_chars
+            p_num = start_page_num + page_idx
+            p_title = sec_title if page_idx == 0 else f"{sec_title} (continued)"
+            header_content = opening_text if page_idx == 0 and opening_text else None
+            current_components.append(RenderComponent(
+                component_id=f"sec_heading_{p_num}",
                 component_type=ComponentType.HEADING,
-                title=sec_title,
-                content=opening_text if opening_text else None,
+                title=p_title,
+                content=header_content,
                 styling={"color": self.branding.colors.primary}
-            )
-        ]
+            ))
+            current_chars = len(p_title) + (len(header_content) if header_content else 0)
+            current_bullets = 0
 
-        total_bullets = 0
-        total_chars = len(sec_title) + len(opening_text)
+        def finalize_page():
+            nonlocal current_components, current_bullets, current_chars, page_idx
+            p_num = start_page_num + page_idx
+            p_title = sec_title if page_idx == 0 else f"{sec_title} (continued)"
+            p_sub = "Deliverables & Procedures" if page_idx == 0 else "Deliverables & Procedures (continued)"
 
-        for i, sub in enumerate(subsections):
+            pages.append(RenderPage(
+                page_number=p_num,
+                page_type=PageType.SERVICE_DETAIL,
+                page_title=p_title,
+                page_subtitle=p_sub,
+                components=current_components,
+                overflow_detected=False,
+                capacity_metrics={
+                    "bullet_count": current_bullets,
+                    "char_count": current_chars,
+                    "max_bullet_capacity": max_bullets_per_page
+                }
+            ))
+            current_components = []
+            current_bullets = 0
+            current_chars = 0
+            page_idx += 1
+
+        start_page()
+
+        if not subsections:
+            finalize_page()
+            return pages
+
+        for sub_i, sub in enumerate(subsections):
             sub_heading = sub.get("heading", "")
             bullets = sub.get("bullets", [])
-            total_bullets += len(bullets)
-            total_chars += len(sub_heading) + sum(len(b) for b in bullets)
 
-            components.append(RenderComponent(
-                component_id=f"subsec_{page_num}_{i}",
-                component_type=ComponentType.BULLET_LIST,
-                title=sub_heading,
-                items=bullets,
-                styling={"color": self.branding.colors.neutral_dark}
-            ))
+            if not bullets:
+                current_components.append(RenderComponent(
+                    component_id=f"subsec_{start_page_num + page_idx}_{sub_i}",
+                    component_type=ComponentType.BULLET_LIST,
+                    title=sub_heading,
+                    items=[],
+                    styling={"color": self.branding.colors.neutral_dark}
+                ))
+                current_chars += len(sub_heading)
+                continue
 
-        # Check potential layout overflow (e.g. > 10 bullets per page)
-        overflow = total_bullets > 10 or total_chars > 1600
+            b_idx = 0
+            while b_idx < len(bullets):
+                avail = max_bullets_per_page - current_bullets
+                if avail <= 0:
+                    finalize_page()
+                    start_page()
+                    avail = max_bullets_per_page
 
-        return RenderPage(
-            page_number=page_num,
-            page_type=PageType.SERVICE_DETAIL,
-            page_title=sec_title,
-            page_subtitle="Deliverables & Procedures",
-            components=components,
-            overflow_detected=overflow,
-            capacity_metrics={
-                "bullet_count": total_bullets,
-                "char_count": total_chars,
-                "max_bullet_capacity": 10
-            }
-        )
+                chunk = bullets[b_idx : b_idx + avail]
+                h_title = sub_heading if b_idx == 0 else f"{sub_heading} (continued)"
+                current_components.append(RenderComponent(
+                    component_id=f"subsec_{start_page_num + page_idx}_{sub_i}_{b_idx}",
+                    component_type=ComponentType.BULLET_LIST,
+                    title=h_title,
+                    items=chunk,
+                    styling={"color": self.branding.colors.neutral_dark}
+                ))
+                current_bullets += len(chunk)
+                current_chars += len(h_title) + sum(len(b) for b in chunk)
+                b_idx += len(chunk)
+
+        if current_components:
+            finalize_page()
+
+        return pages
+
+    def _build_service_detail_page(self, page_num: int, section: Dict[str, Any], client_name: str) -> RenderPage:
+        """
+        Backward-compatible single-page builder. Returns the primary service detail page.
+        For complete multi-page pagination, use _build_service_detail_pages.
+        """
+        pages = self._build_service_detail_pages(page_num, section, client_name)
+        return pages[0]
 
     def _build_timeline_page(self, page_num: int, sections: List[Dict[str, Any]], client_name: str) -> RenderPage:
         phases = [
