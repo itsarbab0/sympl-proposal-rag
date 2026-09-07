@@ -4,7 +4,8 @@ Sympl Solutions Proposal RAG — Why Us Reference Block Assembly & Decision Engi
 Implements:
   1. Dynamic Why Us inclusion evaluation (not hardcoded by archetype).
   2. Deterministic reference block assembly in canonical historical order.
-  3. Sector and organization identity variant selection.
+  3. Reference block classification (GLOBAL, SECTOR_SPECIFIC, CONDITIONAL).
+  4. Strict sector and organization identity boundary isolation.
 """
 
 from typing import List, Dict, Any, Tuple
@@ -13,57 +14,86 @@ from .schema import ClientInput
 
 class WhyUsSelector:
     """
-    Evaluates Why Us inclusion dynamically and compiles the canonical reference block sequence.
+    Evaluates Why Us inclusion dynamically and compiles the canonical reference block sequence
+    with strict classification guards to prevent sector-specific statement leakage.
     """
+
+    # Reference Block Classification Constants
+    GLOBAL_REFERENCE_BLOCK = "GLOBAL_REFERENCE_BLOCK"
+    SECTOR_SPECIFIC_REFERENCE_BLOCK = "SECTOR_SPECIFIC_REFERENCE_BLOCK"
+    CONDITIONAL_REFERENCE_BLOCK = "CONDITIONAL_REFERENCE_BLOCK"
 
     REFERENCE_BLOCKS = {
         "REF_BLOCK_WHY_US_OPENING": {
+            "block_id": "REF_BLOCK_WHY_US_OPENING",
             "block_key": "REF_BLOCK_WHY_US_OPENING",
+            "block_type": "GLOBAL_REFERENCE_BLOCK",
             "render_as": "intro",
             "content": "Sympl Solutions is committed to ensuring a high standard of financial clarity and timely support. We bring:"
         },
         "REF_BLOCK_WHY_US_CREDENTIAL_RESPONSIVE_TEAM": {
+            "block_id": "REF_BLOCK_WHY_US_CREDENTIAL_RESPONSIVE_TEAM",
             "block_key": "REF_BLOCK_WHY_US_CREDENTIAL_RESPONSIVE_TEAM",
+            "block_type": "GLOBAL_REFERENCE_BLOCK",
             "render_as": "bullet",
             "content": "A responsive, detail-oriented team"
         },
         "REF_BLOCK_WHY_US_EXP_NONPROFIT": {
+            "block_id": "REF_BLOCK_WHY_US_EXP_NONPROFIT",
             "block_key": "REF_BLOCK_WHY_US_EXP_NONPROFIT",
+            "block_type": "CONDITIONAL_REFERENCE_BLOCK",
             "render_as": "bullet",
             "content": "Decade-long expertise in nonprofit finance"
         },
         "REF_BLOCK_WHY_US_EXP_CHARITY": {
+            "block_id": "REF_BLOCK_WHY_US_EXP_CHARITY",
             "block_key": "REF_BLOCK_WHY_US_EXP_CHARITY",
+            "block_type": "CONDITIONAL_REFERENCE_BLOCK",
             "render_as": "bullet",
             "content": "Decade-long expertise in nonprofit and charity finance"
         },
         "REF_BLOCK_WHY_US_CREDENTIAL_TECH_INTEGRATION": {
+            "block_id": "REF_BLOCK_WHY_US_CREDENTIAL_TECH_INTEGRATION",
             "block_key": "REF_BLOCK_WHY_US_CREDENTIAL_TECH_INTEGRATION",
+            "block_type": "GLOBAL_REFERENCE_BLOCK",
             "render_as": "bullet",
             "content": "Streamlined tech integration and clear process flows"
         },
         "REF_BLOCK_WHY_US_SECTOR_COMM_SOCIAL": {
+            "block_id": "REF_BLOCK_WHY_US_SECTOR_COMM_SOCIAL",
             "block_key": "REF_BLOCK_WHY_US_SECTOR_COMM_SOCIAL",
+            "block_type": "SECTOR_SPECIFIC_REFERENCE_BLOCK",
+            "sector": "community_services",
             "render_as": "bullet",
             "content": "BIPOC and immigrant-led leadership with lived experiences in community, social service and arts & culture"
         },
         "REF_BLOCK_WHY_US_SECTOR_ARTS_LEADERSHIP": {
+            "block_id": "REF_BLOCK_WHY_US_SECTOR_ARTS_LEADERSHIP",
             "block_key": "REF_BLOCK_WHY_US_SECTOR_ARTS_LEADERSHIP",
+            "block_type": "SECTOR_SPECIFIC_REFERENCE_BLOCK",
+            "sector": "arts_culture",
             "render_as": "bullet",
             "content": "BIPOC-led leadership with lived experiences in community arts"
         },
         "REF_BLOCK_WHY_US_SECTOR_ARTS_EXP_RPFF": {
+            "block_id": "REF_BLOCK_WHY_US_SECTOR_ARTS_EXP_RPFF",
             "block_key": "REF_BLOCK_WHY_US_SECTOR_ARTS_EXP_RPFF",
+            "block_type": "SECTOR_SPECIFIC_REFERENCE_BLOCK",
+            "sector": "arts_culture",
             "render_as": "bullet",
             "content": "Experience with arts and non-profit organizations across Canada"
         },
         "REF_BLOCK_WHY_US_CLOSING_1": {
+            "block_id": "REF_BLOCK_WHY_US_CLOSING_1",
             "block_key": "REF_BLOCK_WHY_US_CLOSING_1",
+            "block_type": "GLOBAL_REFERENCE_BLOCK",
             "render_as": "paragraph",
             "content": "We value thoughtful system design, clarity in reporting, and building long-term trusted partnerships."
         },
         "REF_BLOCK_WHY_US_CLOSING_2": {
+            "block_id": "REF_BLOCK_WHY_US_CLOSING_2",
             "block_key": "REF_BLOCK_WHY_US_CLOSING_2",
+            "block_type": "GLOBAL_REFERENCE_BLOCK",
             "render_as": "paragraph",
             "content": "Any new requirements or adjustments can be discussed and integrated as needed. We work with transparency, flexibility, and a commitment to helping our partners thrive."
         }
@@ -116,48 +146,60 @@ class WhyUsSelector:
     @classmethod
     def assemble_why_us(cls, client_input: ClientInput) -> List[Dict[str, Any]]:
         """
-        Assembles canonical Why Us reference blocks in strict historical order.
+        Assembles canonical Why Us reference blocks in strict historical order,
+        strictly enforcing block classification boundaries so sector-specific
+        statements are quarantined to matching sectors.
         """
         org = client_input.organization
         pref = client_input.preferences
         blocks: List[Dict[str, Any]] = []
 
-        # 1. Opening Declaration (Deterministic)
+        # 1. Opening Declaration (GLOBAL_REFERENCE_BLOCK)
         blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_OPENING"])
 
-        # 2. Responsive Team Credential (Deterministic)
+        # 2. Responsive Team Credential (GLOBAL_REFERENCE_BLOCK)
         blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_CREDENTIAL_RESPONSIVE_TEAM"])
 
-        # 3. Organization Expertise Variant (Nonprofit vs Charity)
+        # 3. Organization Expertise Variant (CONDITIONAL_REFERENCE_BLOCK)
         if org.organization_type == "charity":
             blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_EXP_CHARITY"])
         elif org.organization_type == "nonprofit":
             blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_EXP_NONPROFIT"])
-        # For commercial/for_profit entities, omit nonprofit expertise bullet
+        # Commercial / for-profit organizations deliberately omit nonprofit expertise bullet
 
-        # 4. Tech Integration Credential (Deterministic)
+        # 4. Tech Integration Credential (GLOBAL_REFERENCE_BLOCK)
         blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_CREDENTIAL_TECH_INTEGRATION"])
 
-        # 5. Sector & Identity Lived Experience Variant
+        # 5. Sector & Identity Lived Experience Variant (SECTOR_SPECIFIC_REFERENCE_BLOCK)
         pref_id = pref.identity_credential_preference
 
+        # Community / Social Services Sector Isolation
         if pref_id == "community_social" or (
             pref_id in (None, "auto") and org.sector in ("community_services", "social_services", "literacy")
         ):
             blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_SECTOR_COMM_SOCIAL"])
 
+        # Arts & Culture Sector Isolation
         elif pref_id == "arts_leadership" or (
             pref_id in (None, "auto") and org.sector == "arts_culture"
         ):
             blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_SECTOR_ARTS_LEADERSHIP"])
-            # If arts organization with national/cross-Canada context, add RPFF national experience
+            # If arts organization with national / cross-Canada context, add RPFF national experience
             if "across canada" in (org.description or "").lower() or "national" in (org.description or "").lower():
                 blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_SECTOR_ARTS_EXP_RPFF"])
 
-        # 6. Standalone Closing Paragraph 1 (Deterministic)
+        # 6. Standalone Closing Paragraph 1 (GLOBAL_REFERENCE_BLOCK)
         blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_CLOSING_1"])
 
-        # 7. Standalone Closing Paragraph 2 (Deterministic)
+        # 7. Standalone Closing Paragraph 2 (GLOBAL_REFERENCE_BLOCK)
         blocks.append(cls.REFERENCE_BLOCKS["REF_BLOCK_WHY_US_CLOSING_2"])
 
         return blocks
+
+
+# Module-level exports for backward-compatibility and test imports
+GLOBAL_REFERENCE_BLOCK = WhyUsSelector.GLOBAL_REFERENCE_BLOCK
+SECTOR_SPECIFIC_REFERENCE_BLOCK = WhyUsSelector.SECTOR_SPECIFIC_REFERENCE_BLOCK
+CONDITIONAL_REFERENCE_BLOCK = WhyUsSelector.CONDITIONAL_REFERENCE_BLOCK
+REFERENCE_BLOCKS = WhyUsSelector.REFERENCE_BLOCKS
+

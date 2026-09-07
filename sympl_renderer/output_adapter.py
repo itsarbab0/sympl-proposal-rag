@@ -228,3 +228,27 @@ class MarkdownAdapter(OutputAdapter):
             lines.append("")
 
         return "\n".join(lines)
+
+
+class PdfOutputAdapter(OutputAdapter):
+    """Compiles RenderedProposal into a styled binary vector PDF using ReportLab Platypus."""
+
+    def __init__(self, pdf_service: Optional[Any] = None):
+        from sympl_renderer.pdf_generator import PdfGenerationService
+        self.pdf_service = pdf_service or PdfGenerationService()
+
+    def adapt(self, proposal: RenderedProposal) -> bytes:
+        try:
+            return self.pdf_service.generate_pdf(proposal)
+        except Exception as e:
+            raise AdapterError(f"Failed to compile PDF from RenderedProposal: {e}") from e
+
+    def write_to_file(self, proposal: RenderedProposal, file_path: Union[str, Path] = "proposal.pdf") -> Path:
+        try:
+            out_path = Path(file_path)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            self.pdf_service.generate_pdf(proposal, output_path=out_path)
+            return out_path
+        except Exception as e:
+            raise AdapterError(f"Failed to write PDF to file '{file_path}': {e}") from e
+

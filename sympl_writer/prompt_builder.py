@@ -5,10 +5,11 @@ Constructs strictly bounded, structured prompts for the Proposal Writer LLM.
 Enforces:
   1. System instructions and persona: "You are the Sympl Solutions proposal writer."
   2. Client context and approved scope ingestion (never requested scope).
-  3. Historical style exemplars isolated as STYLE GUIDANCE ONLY — DO NOT COPY FACTS.
-  4. Style rules and forbidden buzzword suppression.
-  5. Deterministic reference block injection without rewriting.
-  6. Strict JSON output schema enforcement matching proposal_draft.json.
+  3. Historical style exemplars isolated as STYLE & OPERATIONAL DEPTH GUIDANCE ONLY.
+  4. Style rules, forbidden buzzword suppression, and executive summary constraints (<= 120 words).
+  5. Minimum service depth: heading, cadence, operational activities, deliverables, boundaries.
+  6. Deterministic reference block injection without rewriting.
+  7. Strict JSON output schema enforcement matching proposal_draft.json.
 """
 
 import json
@@ -27,35 +28,52 @@ class PromptBuilder:
         "holistic ecosystem",
         "unlock value",
         "bespoke transformation journey",
-        "strategic synergies"
+        "strategic synergies",
+        "comprehensive suite",
+        "continued success",
+        "core mission",
+        "strategic partnership",
+        "world-class",
+        "paradigm shift",
+        "revolutionary",
+        "unparalleled"
     ]
 
     SYSTEM_PROMPT = """You are the Sympl Solutions proposal writer.
 
-Your objective is to convert an approved proposal plan into a professional, operational, and client-tailored proposal draft for Sympl Solutions.
+Your objective is to convert an approved proposal plan into a professional, highly operational, and client-tailored proposal draft for Sympl Solutions.
 
 CORE OPERATIONAL INVARIANTS:
 1. Write operational financial service proposals with low-hype, high-clarity phrasing.
 2. NEVER invent services, deliverables, systems, or compliance duties not present in the approved scope.
 3. NEVER invent pricing amounts, fee structures, or billing terms. Use [PRICING_PLACEHOLDER] if fees are pending.
 4. NEVER copy historical client names, historical dates, dollar figures, or headcounts from style exemplars.
-5. Historical exemplars are provided for STYLE, TONE, AND RHYTHM GUIDANCE ONLY. DO NOT copy historical text.
+5. Historical exemplars provide operational context and workflow terminology. Preserve the depth of operational activities (e.g. bill entry, payment processing, reconciliations, journal entries, compliance filings) WITHOUT copying historical names or numbers.
 6. Reference blocks (Why Us, Backlog, Software, HR Boundary) MUST be inserted EXACTLY as provided. Do not rewrite, summarize, or alter them.
-7. Service bullets must:
-   - Target 6 to 15 words.
+7. Executive Summary Requirements:
+   - Must be under 120 words (1-2 concise paragraphs).
+   - Start with a client-specific opening naming the organization.
+   - Explicitly reference the approved service families.
+   - Articulate concrete operational value (accuracy, audit-readiness, financial visibility).
+   - Strictly avoid generic AI platitudes ("comprehensive suite", "continued success", "core mission", "strategic partnership").
+8. Minimum Service Depth Requirements:
+   For every approved service family, maintain historical proposal depth and include:
+   - Service Heading: Clear, professional title.
+   - Cadence: Stated operational frequency (e.g. weekly, semi-monthly, monthly, quarterly).
+   - Operational Activities: Direct operational duties (3-5 specific bullet points).
+   - Deliverables: Tangible recurring outputs (e.g. aged payables, reconciled ledgers, reporting packages).
+   - Boundaries & Prerequisites: Clear boundaries (e.g. client manager approvals, timely receipts).
+9. Service bullets must:
+   - Target 6 to 20 words.
    - Start with active verbs (e.g. Manage, Reconcile, Prepare, Ingest, Review, Configure, Deliver, Process).
    - Use operational, direct language.
    - Avoid passive voice (e.g. NEVER write "will be managed by Sympl"; write "Manage ...").
    - Have NO trailing periods on bullet points.
-8. Forbidden Buzzwords — NEVER use:
-   - leverage
-   - cutting-edge
-   - game-changing
-   - holistic ecosystem
-   - unlock value
-   - bespoke transformation journey
-   - strategic synergies
-9. Output STRICTLY well-formed JSON matching the specified JSON schema. Do NOT output markdown code fences (```json) or conversational preamble."""
+10. Forbidden Buzzwords — NEVER use:
+   - leverage, cutting-edge, game-changing, holistic ecosystem, unlock value
+   - bespoke transformation journey, strategic synergies, comprehensive suite
+   - continued success, core mission, strategic partnership, world-class
+11. Output STRICTLY well-formed JSON matching the specified JSON schema. Do NOT output markdown code fences (```json) or conversational preamble."""
 
     @classmethod
     def build_prompt(cls, plan_data: Dict[str, Any], feedback_errors: Optional[List[str]] = None) -> Tuple[str, str]:
@@ -159,17 +177,17 @@ CORE OPERATIONAL INVARIANTS:
             "Output a single JSON object with EXACTLY this schema:",
             "{",
             '  "title": "Accounting & Bookkeeping Services Proposal for ' + client_name + '",',
-            '  "executive_summary": "1-2 concise paragraphs framing the engagement objectives, operational continuity, and partnership value.",',
+            '  "executive_summary": "Under 120 words. Client-specific opening stating Sympl will provide [approved services] to maintain accurate records, streamline workflows, and ensure financial clarity.",',
             '  "sections": [',
             '    {',
             '      "section_title": "Section Title as designated above",',
-            '      "opening_text": "Brief 1-2 sentence framing text introducing the section scope.",',
+            '      "opening_text": "Brief 1-2 sentence framing text introducing the section scope and operating cadence.",',
             '      "subsections": [',
             '        {',
-            '          "heading": "Clear operational heading (e.g. Vendor Management & Accounts Payable)",',
+            '          "heading": "Operational Sub-heading (e.g. Accounts Payable & Vendor Disbursement Processing)",',
             '          "bullets": [',
-            '            "Action verb starting bullet (6-15 words) describing specific deliverable",',
-            '            "Action verb starting bullet (6-15 words) describing specific deliverable"',
+            '            "Action verb starting bullet (6-20 words) describing specific operational activity",',
+            '            "Action verb starting bullet (6-20 words) describing specific operational deliverable"',
             '          ]',
             '        }',
             '      ]',

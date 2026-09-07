@@ -1,0 +1,932 @@
+{
+  "name": "Sympl Proposal RAG MVP Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "sympl-proposal-intake",
+        "formTitle": "Sympl Proposal Intake Form",
+        "formDescription": "Submit organizational details, engagement scope, and commercial terms for proposal generation.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "client_name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "organization_type",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Nonprofit"
+                  },
+                  {
+                    "option": "Commercial"
+                  },
+                  {
+                    "option": "Healthcare"
+                  },
+                  {
+                    "option": "Education"
+                  },
+                  {
+                    "option": "Arts & Culture"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "sector",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "engagement_type",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Recurring"
+                  },
+                  {
+                    "option": "Fixed Term"
+                  },
+                  {
+                    "option": "One Time"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "complexity",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Compact"
+                  },
+                  {
+                    "option": "Standard"
+                  },
+                  {
+                    "option": "Comprehensive"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "bookkeeping",
+              "fieldType": "checkbox"
+            },
+            {
+              "fieldLabel": "payroll",
+              "fieldType": "checkbox"
+            },
+            {
+              "fieldLabel": "financial_reporting",
+              "fieldType": "checkbox"
+            },
+            {
+              "fieldLabel": "compliance",
+              "fieldType": "checkbox"
+            },
+            {
+              "fieldLabel": "digital_transformation",
+              "fieldType": "checkbox"
+            },
+            {
+              "fieldLabel": "transition",
+              "fieldType": "checkbox"
+            },
+            {
+              "fieldLabel": "pricing_model",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "fixed_retainer"
+                  },
+                  {
+                    "option": "hourly"
+                  },
+                  {
+                    "option": "custom"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "currency",
+              "defaultValue": "CAD"
+            },
+            {
+              "fieldLabel": "amount",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-user-proposal-form",
+      "name": "User Proposal Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 1: Temporary proposal intake form capturing client info, engagement parameters, requested services, and pricing."
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "Human Scope Approval Gate",
+        "formDescription": "=Review and approve billable scope for client: {{$('User Proposal Form').first().json.client_name}} ({{$('User Proposal Form').first().json.organization_type}} - {{$('User Proposal Form').first().json.sector}})\nAmount: {{$('User Proposal Form').first().json.currency || 'CAD'}} {{$('User Proposal Form').first().json.amount}} ({{$('User Proposal Form').first().json.pricing_model}})",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Approval Decision",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "APPROVE"
+                  },
+                  {
+                    "option": "REJECT"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Approve Bookkeeping",
+              "fieldType": "checkbox",
+              "defaultValue": "={{$('User Proposal Form').first().json.bookkeeping || false}}"
+            },
+            {
+              "fieldLabel": "Approve Payroll",
+              "fieldType": "checkbox",
+              "defaultValue": "={{$('User Proposal Form').first().json.payroll || false}}"
+            },
+            {
+              "fieldLabel": "Approve Financial Reporting",
+              "fieldType": "checkbox",
+              "defaultValue": "={{$('User Proposal Form').first().json.financial_reporting || false}}"
+            },
+            {
+              "fieldLabel": "Approve Compliance",
+              "fieldType": "checkbox",
+              "defaultValue": "={{$('User Proposal Form').first().json.compliance || false}}"
+            },
+            {
+              "fieldLabel": "Approve Digital Transformation",
+              "fieldType": "checkbox",
+              "defaultValue": "={{$('User Proposal Form').first().json.digital_transformation || false}}"
+            },
+            {
+              "fieldLabel": "Approve Transition",
+              "fieldType": "checkbox",
+              "defaultValue": "={{$('User Proposal Form').first().json.transition || false}}"
+            },
+            {
+              "fieldLabel": "Approver Notes"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-human-approval-gate",
+      "name": "Human Approval Gate",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 2: Mandatory human approval gate. Halts generation until reviewer verifies client data, approved scope, and commercial terms."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-approval-decision",
+              "leftValue": "={{$json['Approval Decision'] || $json.decision || $json.approval_decision}}",
+              "rightValue": "APPROVE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "node-approval-decision-check",
+      "name": "Approval Decision Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "Routes approved leads to payload preparation; routes rejections to clean exit."
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "rej-status",
+              "name": "status",
+              "value": "rejected",
+              "type": "string"
+            },
+            {
+              "id": "rej-msg",
+              "name": "message",
+              "value": "Proposal generation rejected",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "node-approval-rejected",
+      "name": "Proposal Generation Rejected",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        520
+      ],
+      "notesInFlow": true,
+      "notes": "Error handling: stops execution and emits rejection payload."
+    },
+    {
+      "parameters": {
+        "jsCode": "const approval = $input.first().json;\nconst form = $('User Proposal Form').first().json;\n\n// Build approved_scope strictly from reviewer human selections\nconst approvedScope = {\n  bookkeeping: Boolean(approval['Approve Bookkeeping'] !== undefined ? approval['Approve Bookkeeping'] : form.bookkeeping),\n  payroll: Boolean(approval['Approve Payroll'] !== undefined ? approval['Approve Payroll'] : form.payroll),\n  financial_reporting: Boolean(approval['Approve Financial Reporting'] !== undefined ? approval['Approve Financial Reporting'] : form.financial_reporting),\n  compliance: Boolean(approval['Approve Compliance'] !== undefined ? approval['Approve Compliance'] : form.compliance),\n  digital_transformation: Boolean(approval['Approve Digital Transformation'] !== undefined ? approval['Approve Digital Transformation'] : form.digital_transformation),\n  transition: Boolean(approval['Approve Transition'] !== undefined ? approval['Approve Transition'] : form.transition)\n};\n\nreturn [{\n  json: {\n    client_name: String(form.client_name || '').trim(),\n    organization_type: String(form.organization_type || 'Nonprofit').trim().toLowerCase(),\n    sector: String(form.sector || 'community_services').trim(),\n    engagement_type: String(form.engagement_type || 'Recurring').trim().toLowerCase(),\n    complexity: String(form.complexity || 'Standard').trim().toLowerCase(),\n    approved_scope: approvedScope,\n    commercial_terms: {\n      pricing_model: String(form.pricing_model || 'fixed_retainer').trim(),\n      currency: String(form.currency || 'CAD').trim(),\n      amount: Number(form.amount || 0)\n    },\n    callback_url: ''\n  }\n}];"
+      },
+      "id": "node-prepare-rag-payload",
+      "name": "Prepare Proposal Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 3: Transforms human-approved data into contract JSON. Never invents scope."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/generate/async",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "={{$env.RAG_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{JSON.stringify($json)}}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "node-call-rag-api",
+      "name": "Call Sympl Proposal RAG API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1160,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 4: Invokes asynchronous RAG generation endpoint on Railway."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-has-job-id",
+              "leftValue": "={{$json.job_id}}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "node-if-rag-success",
+      "name": "IF RAG Succeeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1400,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "Validates that Railway issued a valid job_id."
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "err-status",
+              "name": "status",
+              "value": "failed",
+              "type": "string"
+            },
+            {
+              "id": "err-stage",
+              "name": "stage",
+              "value": "rag_generation",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "node-rag-error",
+      "name": "RAG API Error Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1400,
+        520
+      ],
+      "notesInFlow": true,
+      "notes": "Error handling: emits failure payload if Railway API call fails."
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-job-id",
+              "name": "job_id",
+              "value": "={{$json.job_id}}",
+              "type": "string"
+            },
+            {
+              "id": "field-poll-count",
+              "name": "poll_count",
+              "value": 0,
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "node-store-job-id",
+      "name": "Store Job ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 5: Persists job_id and initializes loop counter."
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "node-wait-5s",
+      "name": "Wait 5 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1880,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 7: Non-blocking 5-second pause between status checks."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/status/{{$json.job_id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{$env.RAG_API_KEY}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "node-check-status-api",
+      "name": "Check Status API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2120,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 8: Polls job status from Railway backend."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-completed",
+              "leftValue": "={{$json.status}}",
+              "rightValue": "COMPLETED",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "node-if-completed",
+      "name": "IF Completed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2360,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 9: Verifies whether generation reached COMPLETED status."
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst currentCount = $('Store Job ID').first().json.poll_count || 0;\nconst newCount = currentCount + 1;\n\n// 60 iterations * 5 seconds = 300 seconds (5 minutes maximum timeout)\nconst isTimeout = newCount >= 60;\n\nreturn [{\n  json: {\n    job_id: $('Store Job ID').first().json.job_id,\n    status: isTimeout ? 'timeout' : (item.status || 'RUNNING'),\n    poll_count: newCount\n  }\n}];"
+      },
+      "id": "node-check-timeout-counter",
+      "name": "Check Timeout Counter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2360,
+        520
+      ],
+      "notesInFlow": true,
+      "notes": "Increments polling counter and bounds execution to 5 minutes."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-timeout-check",
+              "leftValue": "={{$json.status}}",
+              "rightValue": "timeout",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "node-if-timeout",
+      "name": "IF Timeout?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2120,
+        520
+      ],
+      "notesInFlow": true,
+      "notes": "Branches on 5-minute timeout."
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "to-status",
+              "name": "status",
+              "value": "timeout",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "node-poll-timeout-response",
+      "name": "Poll Timeout Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2120,
+        720
+      ],
+      "notesInFlow": true,
+      "notes": "Error handling: emits timeout payload after 5 minutes of polling."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/{{$json.proposal_id}}/pdf",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{$env.RAG_API_KEY}}"
+            }
+          ]
+        },
+        "responseFormat": "file",
+        "outputDataPropertyName": "proposal.pdf",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "node-download-pdf",
+      "name": "Retrieve Generated PDF",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2600,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 10: Downloads the binary vector PDF proposal generated by ReportLab Platypus."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/{{$('IF Completed?').first().json.proposal_id}}/manifest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{$env.RAG_API_KEY}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "node-get-manifest",
+      "name": "Retrieve Manifest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2840,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 11: Retrieves manifest.json verifying artifact hashes and file completeness."
+    },
+    {
+      "parameters": {
+        "jsCode": "const manifest = $input.first().json;\nconst proposalId = $('IF Completed?').first().json.proposal_id;\n\nreturn [{\n  json: {\n    proposal_id: proposalId,\n    file: 'proposal.pdf',\n    action: 'IMPORT_TO_CANVA',\n    status: 'READY',\n    manifest_verified: manifest.all_artifacts_present === true || manifest.artifact_count === 5\n  }\n}];"
+      },
+      "id": "node-canva-handoff-prep",
+      "name": "Prepare Canva Import Handoff",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3080,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 12: Prepares standardized import payload for Canva integration layer."
+    },
+    {
+      "parameters": {
+        "jsCode": "// CANVA IMPORT SERVICE PLACEHOLDER\n// This will later connect to our pipeline backend which handles:\n// - Canva OAuth\n// - Canva client secret\n// - Canva import API\n// - design creation\n\nconst item = $input.first().json;\nreturn [{\n  json: {\n    ...item,\n    canva_service_dispatched: true,\n    service_note: 'Handoff payload ready for Canva Import API integration.'\n  }\n}];"
+      },
+      "id": "node-canva-import-service",
+      "name": "CANVA IMPORT SERVICE",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3320,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "FUTURE CANVA INTEGRATION PLACEHOLDER: Connects to backend handling Canva OAuth, client secret, import API, and design creation."
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "final-status",
+              "name": "status",
+              "value": "completed",
+              "type": "string"
+            },
+            {
+              "id": "final-job-id",
+              "name": "job_id",
+              "value": "={{$('Store Job ID').first().json.job_id}}",
+              "type": "string"
+            },
+            {
+              "id": "final-prop-id",
+              "name": "proposal_id",
+              "value": "={{$('IF Completed?').first().json.proposal_id}}",
+              "type": "string"
+            },
+            {
+              "id": "final-pdf",
+              "name": "pdf_generated",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "final-manifest",
+              "name": "manifest_verified",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "final-canva",
+              "name": "canva_ready",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      "id": "node-return-completion",
+      "name": "Return Completion Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3560,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "NODE 13: Emits final completion payload with job_id, proposal_id, and artifact status flags."
+    }
+  ],
+  "connections": {
+    "User Proposal Form": {
+      "main": [
+        [
+          {
+            "node": "Human Approval Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human Approval Gate": {
+      "main": [
+        [
+          {
+            "node": "Approval Decision Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approval Decision Check": {
+      "main": [
+        [
+          {
+            "node": "Prepare Proposal Payload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Proposal Generation Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Proposal Payload": {
+      "main": [
+        [
+          {
+            "node": "Call Sympl Proposal RAG API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Sympl Proposal RAG API": {
+      "main": [
+        [
+          {
+            "node": "IF RAG Succeeded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF RAG Succeeded?": {
+      "main": [
+        [
+          {
+            "node": "Store Job ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RAG API Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Job ID": {
+      "main": [
+        [
+          {
+            "node": "Wait 5 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Check Status API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status API": {
+      "main": [
+        [
+          {
+            "node": "IF Completed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Completed?": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Generated PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Timeout Counter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Timeout Counter": {
+      "main": [
+        [
+          {
+            "node": "IF Timeout?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Timeout?": {
+      "main": [
+        [
+          {
+            "node": "Poll Timeout Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 5 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Generated PDF": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Manifest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Manifest": {
+      "main": [
+        [
+          {
+            "node": "Prepare Canva Import Handoff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Canva Import Handoff": {
+      "main": [
+        [
+          {
+            "node": "CANVA IMPORT SERVICE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CANVA IMPORT SERVICE": {
+      "main": [
+        [
+          {
+            "node": "Return Completion Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

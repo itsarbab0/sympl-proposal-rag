@@ -99,7 +99,11 @@ class ProposalValidator:
         "world-class",
         "paradigm shift",
         "revolutionary",
-        "unparalleled"
+        "unparalleled",
+        "comprehensive suite",
+        "continued success",
+        "core mission",
+        "strategic partnership"
     ]
 
     # 3. Passive Voice Patterns
@@ -425,7 +429,13 @@ class ProposalValidator:
             if re.search(rf"\b{re.escape(buzz)}\b", all_text, re.IGNORECASE):
                 errors.append(f"Forbidden buzzword/hype detected: '{buzz}'")
 
-        # 2. Bullet analysis: length, passive voice, trailing periods
+        # 2. Executive summary word count check (target <= 120 words)
+        if draft.executive_summary:
+            exec_words = len(draft.executive_summary.split())
+            if exec_words > 120:
+                warnings.append(f"Executive summary exceeds target word count ({exec_words} words > 120 words)")
+
+        # 3. Bullet analysis: length, passive voice, trailing periods
         for s in draft.sections:
             for sub in s.subsections:
                 for b in sub.bullets:

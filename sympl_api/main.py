@@ -25,7 +25,11 @@ from sympl_api.exceptions import (
     validation_exception_handler,
     domain_exception_handler
 )
-from sympl_observability.resilience import RequestSizeLimitMiddleware
+from sympl_observability.resilience import (
+    RequestSizeLimitMiddleware,
+    RateLimitMiddleware,
+    default_rate_limiter
+)
 from sympl_observability.environment import validate_environment
 
 
@@ -70,7 +74,20 @@ def create_app() -> FastAPI:
         lifespan=lifespan
     )
 
-    # 1. CORS Middleware (Production Safe: No wildcard with credentials)
+    # 1. Rate Limiting Middleware (in-memory sliding window, configurable limit)
+    app.add_middleware(
+        RateLimitMiddleware,
+        limiter=default_rate_limiter,
+        enabled=settings.RATE_LIMIT_ENABLED
+    )
+
+    # 2. Request Size Limiter Middleware (1MB)
+    app.add_middleware(RequestSizeLimitMiddleware, max_size_bytes=settings.MAX_REQUEST_SIZE_BYTES)
+
+    # 3. Request Correlation ID Middleware
+    app.add_middleware(RequestIdMiddleware)
+
+    # 4. CORS Middleware (Outermost: adds CORS headers across all status codes)
     cors_origins = settings.get_cors_origins()
     is_prod = settings.ENVIRONMENT.lower() == "production"
     allow_creds = not (is_prod and "*" in cors_origins)
@@ -84,13 +101,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # 2. Request Size Limiter Middleware (1MB)
-    app.add_middleware(RequestSizeLimitMiddleware, max_size_bytes=settings.MAX_REQUEST_SIZE_BYTES)
-
-    # 3. Request Correlation ID Middleware
-    app.add_middleware(RequestIdMiddleware)
-
-    # 3. Exception Handlers
+    # 5. Exception Handlers
     app.add_exception_handler(APIException, api_exception_handler)
     app.add_exception_handler(RequestValidationError, validation_exception_handler)
     app.add_exception_handler(ScopeFirewallError, domain_exception_handler)
@@ -100,8 +111,11 @@ def create_app() -> FastAPI:
     app.add_exception_handler(ValueError, domain_exception_handler)
     app.add_exception_handler(Exception, domain_exception_handler)
 
-    # 4. Route Mounts
+    # 6. Route Mounts: Dual mounting for API Versioning and Backward Compatibility
+    # Unversioned legacy endpoints: /proposal/generate/async, /health, /proposal/{id}/pdf, etc.
     app.include_router(router)
+    # Versioned endpoints: /api/v1/proposal/generate/async, /api/v1/health, /api/v1/proposal/{id}/pdf, etc.
+    app.include_router(router, prefix="/api/v1")
 
     return app
 

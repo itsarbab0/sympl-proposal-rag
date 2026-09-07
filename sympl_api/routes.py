@@ -5,7 +5,7 @@ Defines REST endpoints for health checks, isolated stage runs (Plan, Write, Rend
 and full end-to-end proposal generation.
 """
 
-from fastapi import APIRouter, Depends, status, Request, HTTPException
+from fastapi import APIRouter, Depends, status, Request, HTTPException, Response
 from typing import Dict, Any
 
 from sympl_api.schemas import (
@@ -168,3 +168,74 @@ async def get_proposal_job_status(job_id: str):
             }
         )
     return job_info
+
+
+@router.get(
+    "/proposal/{proposal_id}/pdf",
+    summary="Download Proposal PDF Document",
+    tags=["Proposal Artifacts"]
+)
+async def get_proposal_pdf(proposal_id: str):
+    """
+    Returns the binary vector PDF file for a generated proposal.
+    """
+    pdf_bytes = default_store.load_pdf(proposal_id)
+    if not pdf_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error": "PDF_NOT_FOUND",
+                "message": f"PDF artifact for proposal '{proposal_id}' was not found."
+            }
+        )
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="proposal_{proposal_id}.pdf"'}
+    )
+
+
+@router.get(
+    "/proposal/{proposal_id}/manifest",
+    summary="Get Proposal Artifact Manifest",
+    tags=["Proposal Artifacts"]
+)
+async def get_proposal_manifest(proposal_id: str):
+    """
+    Returns manifest.json listing all 5 proposal artifacts with metadata and hashes.
+    """
+    manifest = default_store.load_manifest(proposal_id)
+    if not manifest:
+        # Attempt to compile if directory exists
+        manifest = default_store.compile_manifest(proposal_id)
+    if not manifest or manifest.get("artifact_count", 0) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error": "MANIFEST_NOT_FOUND",
+                "message": f"Manifest for proposal '{proposal_id}' was not found."
+            }
+        )
+    return manifest
+
+
+@router.get(
+    "/proposal/{proposal_id}/artifacts",
+    summary="List Proposal Artifacts",
+    tags=["Proposal Artifacts"]
+)
+async def list_proposal_artifacts(proposal_id: str):
+    """
+    Returns artifact availability and file details for a given proposal.
+    """
+    manifest = default_store.load_manifest(proposal_id)
+    if not manifest:
+        manifest = default_store.compile_manifest(proposal_id)
+    return {
+        "proposal_id": proposal_id,
+        "artifact_count": manifest.get("artifact_count", 0),
+        "expected_count": 5,
+        "all_artifacts_present": manifest.get("all_artifacts_present", False),
+        "artifacts": manifest.get("artifacts", {})
+    }
+

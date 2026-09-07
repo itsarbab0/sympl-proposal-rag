@@ -83,6 +83,16 @@ class Settings:
     LLM_TIMEOUT_SECONDS: int = int(os.environ.get("LLM_TIMEOUT_SECONDS", "30"))
     LLM_MAX_RETRIES: int = int(os.environ.get("LLM_MAX_RETRIES", "2"))
 
+    # Rate Limiting (Single-Instance in-memory; migrate to Redis for distributed clusters)
+    RATE_LIMIT_ENABLED: bool = os.environ.get("RATE_LIMIT_ENABLED", ENV.get("RATE_LIMIT_ENABLED", "true")).lower() in ("true", "1", "yes")
+    RATE_LIMIT_REQUESTS_PER_MINUTE: int = int(os.environ.get("RATE_LIMIT_REQUESTS_PER_MINUTE", ENV.get("RATE_LIMIT_REQUESTS_PER_MINUTE", "60")))
+
+    # Automation & Webhook Callbacks
+    BASE_URL: str = os.environ.get("BASE_URL", ENV.get("BASE_URL", "http://localhost:8000")).rstrip("/")
+    WEBHOOK_TIMEOUT_SECONDS: int = int(os.environ.get("WEBHOOK_TIMEOUT_SECONDS", ENV.get("WEBHOOK_TIMEOUT_SECONDS", "5")))
+    WEBHOOK_MAX_RETRIES: int = int(os.environ.get("WEBHOOK_MAX_RETRIES", ENV.get("WEBHOOK_MAX_RETRIES", "2")))
+    N8N_ORIGIN: str = os.environ.get("N8N_ORIGIN", ENV.get("N8N_ORIGIN", ""))
+
     # Database
     DATABASE_URL: str = os.environ.get("DATABASE_URL", ENV.get("DATABASE_URL", ""))
 
@@ -94,8 +104,15 @@ class Settings:
     def get_cors_origins(self) -> List[str]:
         """Returns authorized CORS origins. Restricts wildcard in production."""
         raw = os.environ.get("CORS_ORIGINS", ENV.get("CORS_ORIGINS", ""))
+        origins = []
         if raw:
-            return [orig.strip() for orig in raw.split(",") if orig.strip()]
+            origins.extend([orig.strip() for orig in raw.split(",") if orig.strip()])
+        n8n_orig = os.environ.get("N8N_ORIGIN", ENV.get("N8N_ORIGIN", self.N8N_ORIGIN))
+        if n8n_orig and n8n_orig.strip() and n8n_orig.strip() not in origins:
+            origins.append(n8n_orig.strip())
+
+        if origins:
+            return origins
         if os.environ.get("ENVIRONMENT", self.ENVIRONMENT).lower() == "production":
             return []  # Disallow open wildcard in production unless explicitly configured
         return ["*"]

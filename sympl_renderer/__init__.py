@@ -50,8 +50,10 @@ from sympl_renderer.output_adapter import (
     JsonOutputAdapter,
     CanvaPayloadAdapter,
     HtmlPdfAdapter,
-    MarkdownAdapter
+    MarkdownAdapter,
+    PdfOutputAdapter
 )
+from sympl_renderer.pdf_generator import PdfGenerationService, NumberedCanvas
 from sympl_renderer.renderer import ProposalRenderer
 
 __all__ = [
@@ -83,6 +85,9 @@ __all__ = [
     "CanvaPayloadAdapter",
     "HtmlPdfAdapter",
     "MarkdownAdapter",
+    "PdfOutputAdapter",
+    "PdfGenerationService",
+    "NumberedCanvas",
     "RendererError",
     "InvalidDraftError",
     "ContentIntegrityError",

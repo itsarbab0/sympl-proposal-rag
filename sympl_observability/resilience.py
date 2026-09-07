@@ -7,7 +7,9 @@ Includes:
 """
 
 import re
-from typing import Dict, Any, Optional
+import time
+import threading
+from typing import Dict, Any, Optional, Tuple, List, Set
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -49,6 +51,114 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
+class SlidingWindowRateLimiter:
+    """
+    In-memory thread-safe sliding window rate limiter.
+
+    Note on Architectural Scaling:
+    This in-memory implementation provides robust single-instance API protection.
+    For future multi-instance horizontal scaling (e.g. across multiple Kubernetes pods
+    or container nodes), this interface can be backed by a distributed Redis cache
+    using atomic Lua scripts or sliding sorted sets.
+    """
+
+    def __init__(self, max_requests: int = 60, window_seconds: int = 60):
+        self.max_requests = max_requests
+        self.window_seconds = window_seconds
+        self._requests: Dict[str, List[float]] = {}
+        self._lock = threading.Lock()
+
+    def is_allowed(self, client_key: str) -> Tuple[bool, int]:
+        """
+        Determines whether an incoming request from client_key is allowed.
+        Returns: (allowed: bool, retry_after_seconds: int)
+        """
+        now = time.time()
+        cutoff = now - self.window_seconds
+
+        with self._lock:
+            timestamps = self._requests.get(client_key, [])
+            # Prune timestamps outside the current sliding window
+            timestamps = [t for t in timestamps if t > cutoff]
+
+            if len(timestamps) < self.max_requests:
+                timestamps.append(now)
+                self._requests[client_key] = timestamps
+                return True, 0
+            else:
+                self._requests[client_key] = timestamps
+                earliest = timestamps[0]
+                retry_after = max(1, int(earliest + self.window_seconds - now) + 1)
+                return False, retry_after
+
+    def reset(self) -> None:
+        """Clears all tracked client sliding windows (for test reset)."""
+        with self._lock:
+            self._requests.clear()
+
+
+# Global default rate limiter instance
+default_rate_limiter = SlidingWindowRateLimiter(max_requests=60, window_seconds=60)
+
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    """
+    HTTP middleware enforcing rate limits across API endpoints.
+    Protects the backend from abusive automation bursts while exempting
+    critical health probe endpoints.
+    """
+
+    EXEMPT_PATHS: Set[str] = {
+        "/health",
+        "/api/v1/health",
+        "/docs",
+        "/redoc",
+        "/openapi.json"
+    }
+
+    def __init__(
+        self,
+        app,
+        limiter: Optional[SlidingWindowRateLimiter] = None,
+        enabled: bool = True,
+        exempt_paths: Optional[Set[str]] = None
+    ):
+        super().__init__(app)
+        self.limiter = limiter or default_rate_limiter
+        self.enabled = enabled
+        self.exempt_paths = exempt_paths or self.EXEMPT_PATHS
+
+    async def dispatch(self, request: Request, call_next):
+        if not self.enabled or request.url.path in self.exempt_paths:
+            return await call_next(request)
+
+        # Identify client by API Key if available, or client IP
+        api_key = request.headers.get("X-API-Key")
+        client_ip = request.client.host if request.client else "unknown_ip"
+        client_key = f"key:{api_key}" if api_key else f"ip:{client_ip}"
+
+        allowed, retry_after = self.limiter.is_allowed(client_key)
+        if not allowed:
+            req_id = get_current_request_id()
+            obs_logger.warning(f"Rate limit exceeded for {client_key} on {request.url.path} (retry_after={retry_after}s)")
+            return JSONResponse(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                headers={"Retry-After": str(retry_after)},
+                content={
+                    "error": "RATE_LIMIT_EXCEEDED",
+                    "message": f"Rate limit exceeded. Please retry after {retry_after} seconds.",
+                    "details": {
+                        "limit": self.limiter.max_requests,
+                        "window_seconds": self.limiter.window_seconds,
+                        "retry_after": retry_after
+                    },
+                    "request_id": req_id
+                }
+            )
+
+        return await call_next(request)
+
+
 def sanitize_error_message(message: str) -> str:
     """
     Strips sensitive credentials, database URLs, and file paths from error messages
@@ -65,3 +175,4 @@ def sanitize_error_message(message: str) -> str:
     sanitized = re.sub(r"(AIza[0-9A-Za-z-_]{35})", "[REDACTED_API_KEY]", sanitized)
 
     return sanitized
+

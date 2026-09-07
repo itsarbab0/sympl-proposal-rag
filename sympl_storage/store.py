@@ -55,6 +55,26 @@ class ArtifactStore(ABC):
         """Loads intake payload for a given job_id."""
         pass
 
+    @abstractmethod
+    def save_pdf(self, proposal_id: str, pdf_bytes: bytes) -> str:
+        """Persists proposal.pdf and returns uri/path."""
+        pass
+
+    @abstractmethod
+    def load_pdf(self, proposal_id: str) -> Optional[bytes]:
+        """Loads proposal.pdf bytes for a given proposal_id."""
+        pass
+
+    @abstractmethod
+    def save_manifest(self, proposal_id: str, manifest_dict: Dict[str, Any]) -> str:
+        """Persists manifest.json and returns uri/path."""
+        pass
+
+    @abstractmethod
+    def load_manifest(self, proposal_id: str) -> Optional[Dict[str, Any]]:
+        """Loads manifest.json for a given proposal_id."""
+        pass
+
 
 class LocalArtifactStore(ArtifactStore):
     """Local filesystem implementation storing artifacts under a base directory."""
@@ -129,6 +149,103 @@ class LocalArtifactStore(ArtifactStore):
         with open(target, "r", encoding="utf-8") as f:
             return json.load(f)
 
+    def save_pdf(self, proposal_id: str, pdf_bytes: bytes) -> str:
+        target = self._proposal_dir(proposal_id) / "proposal.pdf"
+        with open(target, "wb") as f:
+            f.write(pdf_bytes)
+        return str(target)
+
+    def load_pdf(self, proposal_id: str) -> Optional[bytes]:
+        target = self._proposal_dir(proposal_id) / "proposal.pdf"
+        if not target.exists():
+            return None
+        with open(target, "rb") as f:
+            return f.read()
+
+    def get_pdf_path(self, proposal_id: str) -> Optional[Path]:
+        target = self._proposal_dir(proposal_id) / "proposal.pdf"
+        return target if target.exists() else None
+
+    def save_manifest(self, proposal_id: str, manifest_dict: Dict[str, Any]) -> str:
+        target = self._proposal_dir(proposal_id) / "manifest.json"
+        with open(target, "w", encoding="utf-8") as f:
+            json.dump(manifest_dict, f, indent=2, ensure_ascii=False)
+        return str(target)
+
+    def load_manifest(self, proposal_id: str) -> Optional[Dict[str, Any]]:
+        target = self._proposal_dir(proposal_id) / "manifest.json"
+        if not target.exists():
+            return None
+        with open(target, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    def compile_manifest(self, proposal_id: str, client_name: str = "", title: str = "") -> Dict[str, Any]:
+        p_dir = self._proposal_dir(proposal_id)
+        artifacts = {}
+        expected_files = [
+            "proposal_plan.json",
+            "proposal_draft.json",
+            "rendered_proposal.json",
+            "proposal.pdf",
+            "manifest.json"
+        ]
+        import hashlib
+        import datetime
+
+        for fname in expected_files:
+            fpath = p_dir / fname
+            if fpath.exists():
+                stat = fpath.stat()
+                with open(fpath, "rb") as f:
+                    content_bytes = f.read()
+                    sha256 = hashlib.sha256(content_bytes).hexdigest()
+                artifacts[fname] = {
+                    "filename": fname,
+                    "path": str(fpath),
+                    "size_bytes": stat.st_size,
+                    "sha256": sha256,
+                    "created_at": datetime.datetime.fromtimestamp(stat.st_mtime, datetime.timezone.utc).isoformat(),
+                    "exists": True
+                }
+            else:
+                artifacts[fname] = {
+                    "filename": fname,
+                    "path": str(fpath),
+                    "exists": False
+                }
+
+        manifest = {
+            "proposal_id": proposal_id,
+            "title": title,
+            "client_name": client_name,
+            "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "artifact_count": sum(1 for a in artifacts.values() if a.get("exists")),
+            "expected_count": 5,
+            "all_artifacts_present": all(artifacts.get(f, {}).get("exists") for f in expected_files if f != "manifest.json"),
+            "artifacts": artifacts
+        }
+        # Save initial manifest to disk
+        self.save_manifest(proposal_id, manifest)
+        # Re-compute manifest.json's own stats
+        m_path = p_dir / "manifest.json"
+        if m_path.exists():
+            m_stat = m_path.stat()
+            with open(m_path, "rb") as f:
+                m_sha = hashlib.sha256(f.read()).hexdigest()
+            manifest["artifacts"]["manifest.json"] = {
+                "filename": "manifest.json",
+                "path": str(m_path),
+                "size_bytes": m_stat.st_size,
+                "sha256": m_sha,
+                "created_at": datetime.datetime.fromtimestamp(m_stat.st_mtime, datetime.timezone.utc).isoformat(),
+                "exists": True
+            }
+            manifest["artifact_count"] = sum(1 for a in manifest["artifacts"].values() if a.get("exists"))
+            with open(m_path, "w", encoding="utf-8") as f:
+                json.dump(manifest, f, indent=2, ensure_ascii=False)
+
+        return manifest
+
 
 class S3ArtifactStore(ArtifactStore):
     """
@@ -156,6 +273,30 @@ class S3ArtifactStore(ArtifactStore):
         return None
 
     def load_draft(self, proposal_id: str) -> Optional[Dict[str, Any]]:
+        return None
+
+    def load_render(self, proposal_id: str) -> Optional[Dict[str, Any]]:
+        return None
+
+    def save_intake(self, job_id: str, intake: Dict[str, Any]) -> str:
+        key = f"{self.prefix}/jobs/{job_id}/intake.json"
+        return f"s3://{self.bucket_name}/{key}"
+
+    def load_intake(self, job_id: str) -> Optional[Dict[str, Any]]:
+        return None
+
+    def save_pdf(self, proposal_id: str, pdf_bytes: bytes) -> str:
+        key = f"{self.prefix}/{proposal_id}/proposal.pdf"
+        return f"s3://{self.bucket_name}/{key}"
+
+    def load_pdf(self, proposal_id: str) -> Optional[bytes]:
+        return None
+
+    def save_manifest(self, proposal_id: str, manifest_dict: Dict[str, Any]) -> str:
+        key = f"{self.prefix}/{proposal_id}/manifest.json"
+        return f"s3://{self.bucket_name}/{key}"
+
+    def load_manifest(self, proposal_id: str) -> Optional[Dict[str, Any]]:
         return None
 
     def load_render(self, proposal_id: str) -> Optional[Dict[str, Any]]:

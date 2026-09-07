@@ -56,7 +56,10 @@ class ProposalGenerateResponse(BaseModel):
     plan: Dict[str, Any] = Field(..., description="Compiled proposal_plan.json structure")
     draft: Dict[str, Any] = Field(..., description="Validated proposal_draft.json structure")
     rendered_output: Dict[str, Any] = Field(..., description="Compiled rendered_proposal.json structure")
+    pdf_url: Optional[str] = Field(None, description="Direct download URL for generated proposal.pdf")
+    manifest: Optional[Dict[str, Any]] = Field(None, description="5-artifact package manifest")
     execution_metadata: ExecutionMetadata = Field(..., description="Pipeline execution metrics")
+
 
 
 class ErrorResponse(BaseModel):
@@ -65,3 +68,14 @@ class ErrorResponse(BaseModel):
     message: str = Field(..., description="Human-readable description of the error")
     details: Dict[str, Any] = Field(default_factory=dict, description="Detailed diagnostic context")
     request_id: str = Field(..., description="Request correlation tracking ID")
+
+
+class WebhookCallbackPayload(BaseModel):
+    """Schema for automated webhook callback payload sent to external orchestrators (n8n)."""
+    job_id: str = Field(..., description="Unique asynchronous job identifier")
+    proposal_id: str = Field(..., description="Unique generated proposal identifier")
+    status: str = Field("COMPLETED", description="Job completion status")
+    pdf_url: str = Field(..., description="URL endpoint to download the generated proposal.pdf")
+    manifest_url: str = Field(..., description="URL endpoint to retrieve the artifact manifest.json")
+    error_message: Optional[str] = Field(None, description="Error message if generation failed")
+

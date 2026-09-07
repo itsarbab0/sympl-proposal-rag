@@ -284,6 +284,24 @@ class OrchestrationService:
             default_store.save_render(proposal_id, rendered_dict)
             logger.info(f"Renderer stage completed in {renderer_ms}ms")
 
+            # Stage 4: PDF Generation & Manifest
+            from sympl_renderer.pdf_generator import PdfGenerationService
+            pdf_service = PdfGenerationService()
+            pdf_bytes = pdf_service.generate_pdf(rendered_dict)
+            default_store.save_pdf(proposal_id, pdf_bytes)
+
+            client_label = (
+                intake_data.get("organization", {}).get("name")
+                or intake_data.get("client_name")
+                or "Client Organization"
+            )
+            manifest = default_store.compile_manifest(
+                proposal_id=proposal_id,
+                client_name=client_label,
+                title=draft_dict.get("title", "Services Proposal")
+            )
+            logger.info(f"Generated PDF and compiled artifact manifest for {proposal_id}")
+
             telemetry_result = telemetry.complete()
             total_ms = telemetry_result["stages"]["total_ms"]
 
@@ -294,6 +312,8 @@ class OrchestrationService:
                 "plan": plan_dict,
                 "draft": draft_dict,
                 "rendered_output": rendered_dict,
+                "pdf_url": f"/proposal/{proposal_id}/pdf",
+                "manifest": manifest,
                 "execution_metadata": {
                     "planner_time_ms": planner_ms,
                     "writer_time_ms": writer_ms,

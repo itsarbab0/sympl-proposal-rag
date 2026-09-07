@@ -3,15 +3,16 @@ Sympl Solutions Proposal RAG — Proposal Renderer Branding Layer
 
 Defines official Sympl Solutions brand design tokens, color palettes,
 typography specifications, and styling rules for proposal presentation.
+Supports custom branding configurations (logos, palettes, typography, footer metadata).
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 
 @dataclass(frozen=True)
 class ColorPalette:
-    """Official Sympl Solutions harmonious color palette."""
+    """Harmonious color palette for proposal presentation."""
     primary: str = "#1A2E40"        # Deep Navy / Foundation
     secondary: str = "#008080"      # Deep Teal / Professional Accent
     accent: str = "#2B6CB0"         # Ocean Blue / Section Header Highlight
@@ -55,9 +56,56 @@ class SymplBranding:
     tagline: str = "Operational Financial Systems & Strategic Advisory"
     website: str = "https://symplsolutions.ca"
     email: str = "info@symplsolutions.ca"
+    phone: str = "+1 (647) 555-0199"
+    logo_url: Optional[str] = None
+    logo_path: Optional[str] = None
+    footer_text: str = "Confidential — Prepared by Sympl Solutions Inc."
     colors: ColorPalette = field(default_factory=ColorPalette)
     typography: Typography = field(default_factory=Typography)
     logo_svg_placeholder: str = "assets/sympl_logo.svg"
+
+    @classmethod
+    def from_dict(cls, data: Optional[Dict[str, Any]] = None) -> "SymplBranding":
+        """Builds a SymplBranding instance, overriding defaults with any provided values."""
+        if not data:
+            return cls()
+
+        # Parse custom colors
+        c_dict = data.get("colors") or {}
+        palette = ColorPalette(
+            primary=c_dict.get("primary") or data.get("primary_color", "#1A2E40"),
+            secondary=c_dict.get("secondary") or data.get("secondary_color", "#008080"),
+            accent=c_dict.get("accent", "#2B6CB0"),
+            neutral_dark=c_dict.get("neutral_dark", "#2D3748"),
+            neutral_light=c_dict.get("neutral_light", "#F7FAFC"),
+            surface=c_dict.get("surface", "#FFFFFF"),
+            border=c_dict.get("border", "#E2E8F0"),
+            callout_bg=c_dict.get("callout_bg", "#EDF2F7"),
+            table_header=c_dict.get("table_header", "#2A4365")
+        )
+
+        # Parse typography
+        t_dict = data.get("typography") or {}
+        font_family = data.get("font_family") or t_dict.get("body_font", "Inter, Arial, sans-serif")
+        typography = Typography(
+            heading_font=t_dict.get("heading_font", "Montserrat, Arial, sans-serif"),
+            body_font=font_family,
+            title_size=t_dict.get("title_size", "28pt"),
+            body_size=t_dict.get("body_size", "10.5pt")
+        )
+
+        return cls(
+            company_name=data.get("company_name") or "Sympl Solutions Inc.",
+            tagline=data.get("tagline") or "Operational Financial Systems & Strategic Advisory",
+            website=data.get("website") or "https://symplsolutions.ca",
+            email=data.get("email") or "info@symplsolutions.ca",
+            phone=data.get("phone") or "+1 (647) 555-0199",
+            logo_url=data.get("logo_url"),
+            logo_path=data.get("logo_path"),
+            footer_text=data.get("footer_text") or "Confidential — Prepared by Sympl Solutions Inc.",
+            colors=palette,
+            typography=typography
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -65,6 +113,10 @@ class SymplBranding:
             "tagline": self.tagline,
             "website": self.website,
             "email": self.email,
+            "phone": self.phone,
+            "logo_url": self.logo_url,
+            "logo_path": self.logo_path,
+            "footer_text": self.footer_text,
             "colors": {
                 "primary": self.colors.primary,
                 "secondary": self.colors.secondary,
