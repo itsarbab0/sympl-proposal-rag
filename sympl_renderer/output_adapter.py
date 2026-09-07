@@ -10,7 +10,7 @@ Converts the internal RenderedProposal data model into target delivery formats:
 
 import json
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from pathlib import Path
 
 from sympl_renderer.schema import RenderedProposal, RenderPage, RenderComponent, ComponentType
