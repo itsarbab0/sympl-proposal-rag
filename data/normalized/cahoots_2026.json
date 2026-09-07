@@ -1,0 +1,393 @@
+{
+  "proposal": {
+    "proposal_code": "CAHOOTS_2026",
+    "client_name": "CAHOOTS Theatre Company",
+    "proposal_title": "Bookkeeping Proposal",
+    "proposal_date": null,
+    "source_filename": "CAHOOTS x Sympl - Bookkeeping Proposal.pdf.pdf",
+    "organization_type": "unknown",
+    "sector": "arts_culture",
+    "engagement_type": "ongoing_bookkeeping",
+    "proposal_complexity": "compact",
+    "core_bookkeeping": true,
+    "raw_text": "BOOKKEEPING PROPOSAL\n\nCAHOOTS THEATRE COMPANY\n\nJULY 2026\n\nPROPOSED BY\nsympl\n\nSCOPE & SERVICES\n\nBiweekly Bookkeeping\n\n• Process all entries in QuickBooks Online (expenses and revenue)\n• Record and categorize all bank & credit card transactions\n• Project / class tracking on all transactions (data provided by Client)\n• Oversee Accounts Receivable and Payable functions\n\nMonthly Reconciliations\n\n• Monthly reconciliations of Payables, Receivables, Credit card & Bank accounts\n• All monthly reconciliations to be completed within 7 business days of receiving previous month’s credit card and bank statements\n\nExpense Management & Accounts Receivable via Google Form or HubDocs\n\n• Client responsible for uploading receipts either via Google Form or HubDocs\n• Client responsible for uploading approved grants through Google Form\n\nPayroll Processing via WagePoint (upto 3 Employees)\n\n• Payroll payments via direct deposit through WagePoint\n• Includes employee change management including adding employees, removing employees, issuign ROEs\n• Annual preparation and filing of T4s and T4As\n\nMonthly Financial Statements and Virtual Monthly or Biweekly Check-ins\n\n• Statement of Operations (P&L - including actuals bs budget)\n• Balance sheet\n• Cash flow statement\n• AR/AP aging report\n• Deferred revenue schedule\n\nSales Tax Compliance and Year-end\n\n• Detailed review of each ledger account & posting of accruals where necessary\n• Preparation of financial reports for the tax preparer or auditor\n• Coordination with the tax preparer & facilitation of any additional requests\n• GST/HST and/or PSB tax filing\n• Year-end meeting to review financial results and discuss the upcoming year\n• Annual budget posted to QBO for Actuals vs Budget tracking\n\nFEES\n\nMonthly Fees: $575/month + HST\n\nThis package includes:\n✔  Emails and biweekly / monthly meetings for inquiries and support\n✔  Ongoing support for bookkeeping, payroll processing and standard financial reporting\n\nThe following charges are not included in the monthly fee:\n\n• Software subscriptions: The cost of software subscriptions must be maintained by the Client. This includes QBO, Plooto, Wagepoint and HubDocs (if used). Following would be the approx add’t fees:\nQBO: $30/month (first 6 months $3/month - current offer)\nHubDocs: $12 USD (~16CAD / month) - optional\nPlooto + WagePoint: remain as per current since paid by client\n\n• Bookkeeping backlog: Any prior period bookkeeping clean-up or catch-up work will be quoted separately based on the volume and complexity",
+    "cleaned_text": "BOOKKEEPING PROPOSAL\n\nCAHOOTS THEATRE COMPANY\n\nJULY 2026\n\nPROPOSED BY\nSympl\n\nSCOPE & SERVICES\n\nBiweekly Bookkeeping\n\n• Process all entries in QuickBooks Online (expenses and revenue)\n• Record and categorize all bank & credit card transactions\n• Project / class tracking on all transactions (data provided by Client)\n• Oversee Accounts Receivable and Payable functions\n\nMonthly Reconciliations\n\n• Monthly reconciliations of Payables, Receivables, Credit card & Bank accounts\n• All monthly reconciliations to be completed within 7 business days of receiving previous month’s credit card and bank statements\n\nExpense Management & Accounts Receivable via Google Form or HubDocs\n\n• Client responsible for uploading receipts either via Google Form or HubDocs\n• Client responsible for uploading approved grants through Google Form\n\nPayroll Processing via WagePoint (up to 3 Employees)\n\n• Payroll payments via direct deposit through WagePoint\n• Includes employee change management including adding employees, removing employees, issuing ROEs\n• Annual preparation and filing of T4s and T4As\n\nMonthly Financial Statements and Virtual Monthly or Biweekly Check-ins\n\n• Statement of Operations (P&L - including actuals vs budget)\n• Balance sheet\n• Cash flow statement\n• AR/AP aging report\n• Deferred revenue schedule\n\nSales Tax Compliance and Year-end\n\n• Detailed review of each ledger account & posting of accruals where necessary\n• Preparation of financial reports for the tax preparer or auditor\n• Coordination with the tax preparer & facilitation of any additional requests\n• GST/HST and/or PSB tax filing\n• Year-end meeting to review financial results and discuss the upcoming year\n• Annual budget posted to QBO for Actuals vs Budget tracking\n\nFEES\n\nMonthly Fees: $575/month + HST\n\nThis package includes:\n• Emails and biweekly / monthly meetings for inquiries and support\n• Ongoing support for bookkeeping, payroll processing and standard financial reporting\n\nThe following charges are not included in the monthly fee:\n\n• Software subscriptions: The cost of software subscriptions must be maintained by the Client. This includes QBO, Plooto, WagePoint and HubDocs (if used). Following would be the approximate additional fees:\nQBO: $30/month (first 6 months $3/month - current offer)\nHubDocs: $12 USD (~16 CAD / month) - optional\nPlooto + WagePoint: remain as per current since paid by client\n\n• Bookkeeping backlog: Any prior period bookkeeping clean-up or catch-up work will be quoted separately based on the volume and complexity",
+    "metadata": {
+      "source_page_count": 3,
+      "proposal_month": "2026-07",
+      "curation_method": "manual_ai_assisted",
+      "curation_status": "approved_for_import"
+    }
+  },
+  "chunks": [
+    {
+      "chunk_key": "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+      "section_order": 1,
+      "section_type": "bookkeeping",
+      "section_title": "Biweekly Bookkeeping",
+      "service_modules": [
+        "bookkeeping",
+        "accounts_payable",
+        "accounts_receivable"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": true,
+      "accounting_systems": [
+        "QuickBooks Online"
+      ],
+      "payroll_systems": [],
+      "cadence": [
+        "biweekly"
+      ],
+      "special_requirements": [
+        "project_or_class_tracking_client_provided_data",
+        "accounts_receivable_and_payable_oversight"
+      ],
+      "raw_text": "Biweekly Bookkeeping\n\n• Process all entries in QuickBooks Online (expenses and revenue)\n• Record and categorize all bank & credit card transactions\n• Project / class tracking on all transactions (data provided by Client)\n• Oversee Accounts Receivable and Payable functions",
+      "cleaned_text": "Biweekly Bookkeeping\n\n• Process all entries in QuickBooks Online (expenses and revenue)\n• Record and categorize all bank & credit card transactions\n• Project / class tracking on all transactions (data provided by Client)\n• Oversee Accounts Receivable and Payable functions",
+      "retrieval_text": "Section: Biweekly Bookkeeping\nService modules: bookkeeping, accounts payable, accounts receivable\nAccounting systems: QuickBooks Online\nCadence: biweekly\nSpecial requirements: project or class tracking uses client-provided data; accounts receivable and accounts payable oversight\nContent:\nBiweekly Bookkeeping\n\n• Process all entries in QuickBooks Online (expenses and revenue)\n• Record and categorize all bank & credit card transactions\n• Project / class tracking on all transactions (data provided by Client)\n• Oversee Accounts Receivable and Payable functions",
+      "retrieval_enabled": true,
+      "commercial_reference_only": false,
+      "pricing_content": false,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          2
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_MONTHLY_RECONCILIATIONS",
+      "section_order": 2,
+      "section_type": "service_module",
+      "section_title": "Monthly Reconciliations",
+      "service_modules": [
+        "reconciliations"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": true,
+      "accounting_systems": [
+        "QuickBooks Online"
+      ],
+      "payroll_systems": [],
+      "cadence": [
+        "monthly",
+        "within_7_business_days_after_statements_received"
+      ],
+      "special_requirements": [
+        "reconcile_payables",
+        "reconcile_receivables",
+        "reconcile_credit_cards",
+        "reconcile_bank_accounts"
+      ],
+      "raw_text": "Monthly Reconciliations\n\n• Monthly reconciliations of Payables, Receivables, Credit card & Bank accounts\n• All monthly reconciliations to be completed within 7 business days of receiving previous month’s credit card and bank statements",
+      "cleaned_text": "Monthly Reconciliations\n\n• Monthly reconciliations of Payables, Receivables, Credit card & Bank accounts\n• All monthly reconciliations to be completed within 7 business days of receiving previous month’s credit card and bank statements",
+      "retrieval_text": "Section: Monthly Reconciliations\nService modules: reconciliations\nAccounting systems: QuickBooks Online\nCadence: monthly, within 7 business days after statements received\nSpecial requirements: reconcile payables, reconcile receivables, reconcile credit cards, reconcile bank accounts\nContent:\nMonthly Reconciliations\n\n• Monthly reconciliations of Payables, Receivables, Credit card & Bank accounts\n• All monthly reconciliations to be completed within 7 business days of receiving previous month’s credit card and bank statements",
+      "retrieval_enabled": true,
+      "commercial_reference_only": false,
+      "pricing_content": false,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          2
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_EXPENSE_AR",
+      "section_order": 3,
+      "section_type": "service_module",
+      "section_title": "Expense Management & Accounts Receivable via Google Form or HubDocs",
+      "service_modules": [
+        "bookkeeping",
+        "accounts_receivable"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": true,
+      "accounting_systems": [],
+      "payroll_systems": [],
+      "cadence": [],
+      "special_requirements": [
+        "client_responsible_for_uploading_receipts",
+        "receipts_via_google_form_or_hubdocs",
+        "client_responsible_for_uploading_approved_grants"
+      ],
+      "raw_text": "Expense Management & Accounts Receivable via Google Form or HubDocs\n\n• Client responsible for uploading receipts either via Google Form or HubDocs\n• Client responsible for uploading approved grants through Google Form",
+      "cleaned_text": "Expense Management & Accounts Receivable via Google Form or HubDocs\n\n• Client responsible for uploading receipts either via Google Form or HubDocs\n• Client responsible for uploading approved grants through Google Form",
+      "retrieval_text": "Section: Expense Management & Accounts Receivable via Google Form or HubDocs\nService modules: bookkeeping, accounts receivable\nWorkflow systems: Google Form, HubDocs\nSpecial requirements: client responsible for uploading receipts; receipts via Google Form or HubDocs; client responsible for uploading approved grants\nContent:\nExpense Management & Accounts Receivable via Google Form or HubDocs\n\n• Client responsible for uploading receipts either via Google Form or HubDocs\n• Client responsible for uploading approved grants through Google Form",
+      "retrieval_enabled": true,
+      "commercial_reference_only": false,
+      "pricing_content": false,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          2
+        ],
+        "workflow_systems": [
+          "Google Form",
+          "HubDocs"
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_PAYROLL",
+      "section_order": 4,
+      "section_type": "payroll",
+      "section_title": "Payroll Processing via WagePoint (up to 3 Employees)",
+      "service_modules": [
+        "payroll",
+        "compliance"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": false,
+      "accounting_systems": [],
+      "payroll_systems": [
+        "WagePoint"
+      ],
+      "cadence": [
+        "annual"
+      ],
+      "special_requirements": [
+        "up_to_3_employees",
+        "direct_deposit",
+        "employee_change_management",
+        "employee_additions_and_removals",
+        "roe_issuance",
+        "annual_t4_and_t4a_preparation_and_filing"
+      ],
+      "raw_text": "Payroll Processing via WagePoint (upto 3 Employees)\n\n• Payroll payments via direct deposit through WagePoint\n• Includes employee change management including adding employees, removing employees, issuign ROEs\n• Annual preparation and filing of T4s and T4As",
+      "cleaned_text": "Payroll Processing via WagePoint (up to 3 Employees)\n\n• Payroll payments via direct deposit through WagePoint\n• Includes employee change management including adding employees, removing employees, issuing ROEs\n• Annual preparation and filing of T4s and T4As",
+      "retrieval_text": "Section: Payroll Processing via WagePoint (up to 3 Employees)\nService modules: payroll, compliance\nPayroll systems: WagePoint\nCadence: annual\nSpecial requirements: up to 3 employees; direct deposit; employee change management; employee additions and removals; issuing ROEs; annual preparation and filing of T4s and T4As\nContent:\nPayroll Processing via WagePoint (up to 3 Employees)\n\n• Payroll payments via direct deposit through WagePoint\n• Includes employee change management including adding employees, removing employees, issuing ROEs\n• Annual preparation and filing of T4s and T4As",
+      "retrieval_enabled": true,
+      "commercial_reference_only": false,
+      "pricing_content": false,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          2
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_FINANCIAL_REPORTING",
+      "section_order": 5,
+      "section_type": "financial_reporting",
+      "section_title": "Monthly Financial Statements and Virtual Monthly or Biweekly Check-ins",
+      "service_modules": [
+        "financial_reporting",
+        "cash_flow",
+        "budgeting"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": false,
+      "accounting_systems": [
+        "QuickBooks Online"
+      ],
+      "payroll_systems": [],
+      "cadence": [
+        "monthly",
+        "monthly_or_biweekly_check_ins"
+      ],
+      "special_requirements": [
+        "statement_of_operations",
+        "profit_and_loss",
+        "actuals_vs_budget",
+        "balance_sheet",
+        "cash_flow_statement",
+        "accounts_receivable_and_payable_aging_report",
+        "deferred_revenue_schedule"
+      ],
+      "raw_text": "Monthly Financial Statements and Virtual Monthly or Biweekly Check-ins\n\n• Statement of Operations (P&L - including actuals bs budget)\n• Balance sheet\n• Cash flow statement\n• AR/AP aging report\n• Deferred revenue schedule",
+      "cleaned_text": "Monthly Financial Statements and Virtual Monthly or Biweekly Check-ins\n\n• Statement of Operations (P&L - including actuals vs budget)\n• Balance sheet\n• Cash flow statement\n• AR/AP aging report\n• Deferred revenue schedule",
+      "retrieval_text": "Section: Monthly Financial Statements and Virtual Monthly or Biweekly Check-ins\nService modules: financial reporting, cash flow, budgeting\nAccounting systems: QuickBooks Online\nCadence: monthly, monthly or biweekly check-ins\nSpecial requirements: statement of operations; profit and loss; actuals vs budget; balance sheet; cash flow statement; accounts receivable and accounts payable aging report; deferred revenue schedule\nContent:\nMonthly Financial Statements and Virtual Monthly or Biweekly Check-ins\n\n• Statement of Operations (P&L - including actuals vs budget)\n• Balance sheet\n• Cash flow statement\n• AR/AP aging report\n• Deferred revenue schedule",
+      "retrieval_enabled": true,
+      "commercial_reference_only": false,
+      "pricing_content": false,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          2
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+      "section_order": 6,
+      "section_type": "compliance",
+      "section_title": "Sales Tax Compliance and Year-end",
+      "service_modules": [
+        "compliance",
+        "year_end",
+        "budgeting"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": false,
+      "accounting_systems": [
+        "QuickBooks Online"
+      ],
+      "payroll_systems": [],
+      "cadence": [
+        "year_end",
+        "annual"
+      ],
+      "special_requirements": [
+        "ledger_account_review",
+        "accrual_posting",
+        "tax_preparer_or_auditor_reporting_support",
+        "tax_preparer_coordination",
+        "gst_hst_or_psb_filing",
+        "year_end_financial_review_meeting",
+        "annual_budget_posted_to_qbo",
+        "actuals_vs_budget_tracking"
+      ],
+      "raw_text": "Sales Tax Compliance and Year-end\n\n• Detailed review of each ledger account & posting of accruals where necessary\n• Preparation of financial reports for the tax preparer or auditor\n• Coordination with the tax preparer & facilitation of any additional requests\n• GST/HST and/or PSB tax filing\n• Year-end meeting to review financial results and discuss the upcoming year\n• Annual budget posted to QBO for Actuals vs Budget tracking",
+      "cleaned_text": "Sales Tax Compliance and Year-end\n\n• Detailed review of each ledger account & posting of accruals where necessary\n• Preparation of financial reports for the tax preparer or auditor\n• Coordination with the tax preparer & facilitation of any additional requests\n• GST/HST and/or PSB tax filing\n• Year-end meeting to review financial results and discuss the upcoming year\n• Annual budget posted to QBO for Actuals vs Budget tracking",
+      "retrieval_text": "Section: Sales Tax Compliance and Year-end\nService modules: compliance, year-end, budgeting\nAccounting systems: QuickBooks Online\nCadence: year-end, annual\nSpecial requirements: ledger account review; accrual posting; tax preparer or auditor reporting support; tax preparer coordination; GST/HST and/or PSB tax filing; year-end financial review meeting; annual budget posted to QBO; actuals vs budget tracking\nContent:\nSales Tax Compliance and Year-end\n\n• Detailed review of each ledger account & posting of accruals where necessary\n• Preparation of financial reports for the tax preparer or auditor\n• Coordination with the tax preparer & facilitation of any additional requests\n• GST/HST and/or PSB tax filing\n• Year-end meeting to review financial results and discuss the upcoming year\n• Annual budget posted to QBO for Actuals vs Budget tracking",
+      "retrieval_enabled": true,
+      "commercial_reference_only": false,
+      "pricing_content": false,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          2
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_MONTHLY_FEES",
+      "section_order": 7,
+      "section_type": "pricing",
+      "section_title": "Monthly Fees",
+      "service_modules": [
+        "bookkeeping",
+        "reconciliations",
+        "payroll",
+        "financial_reporting"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": false,
+      "accounting_systems": [],
+      "payroll_systems": [],
+      "cadence": [
+        "monthly"
+      ],
+      "special_requirements": [
+        "email_support",
+        "biweekly_or_monthly_support_meetings",
+        "ongoing_bookkeeping_payroll_and_standard_financial_reporting_support"
+      ],
+      "raw_text": "FEES\n\nMonthly Fees: $575/month + HST\n\nThis package includes:\n✔  Emails and biweekly / monthly meetings for inquiries and support\n✔  Ongoing support for bookkeeping, payroll processing and standard financial reporting",
+      "cleaned_text": "FEES\n\nMonthly Fees: $575/month + HST\n\nThis package includes:\n• Emails and biweekly / monthly meetings for inquiries and support\n• Ongoing support for bookkeeping, payroll processing and standard financial reporting",
+      "retrieval_text": "Section: Monthly Fees\nService modules: bookkeeping, reconciliations, payroll, financial reporting\nCadence: monthly\nSpecial requirements: email support; biweekly or monthly support meetings; ongoing bookkeeping, payroll processing, and standard financial reporting support\nContent:\nFEES\n\nMonthly Fees: $575/month + HST\n\nThis package includes:\n• Emails and biweekly / monthly meetings for inquiries and support\n• Ongoing support for bookkeeping, payroll processing and standard financial reporting",
+      "retrieval_enabled": false,
+      "commercial_reference_only": true,
+      "pricing_content": true,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          3
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_EXCLUSIONS",
+      "section_order": 8,
+      "section_type": "exclusions",
+      "section_title": "Charges Not Included in Monthly Fee",
+      "service_modules": [
+        "bookkeeping"
+      ],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": false,
+      "accounting_systems": [
+        "QuickBooks Online"
+      ],
+      "payroll_systems": [
+        "WagePoint"
+      ],
+      "cadence": [],
+      "special_requirements": [
+        "software_subscriptions_paid_by_client",
+        "bookkeeping_backlog_quoted_separately"
+      ],
+      "raw_text": "The following charges are not included in the monthly fee:\n\n• Software subscriptions: The cost of software subscriptions must be maintained by the Client. This includes QBO, Plooto, Wagepoint and HubDocs (if used).\n\n• Bookkeeping backlog: Any prior period bookkeeping clean-up or catch-up work will be quoted separately based on the volume and complexity",
+      "cleaned_text": "The following charges are not included in the monthly fee:\n\n• Software subscriptions: The cost of software subscriptions must be maintained by the Client. This includes QBO, Plooto, WagePoint and HubDocs (if used).\n\n• Bookkeeping backlog: Any prior period bookkeeping clean-up or catch-up work will be quoted separately based on the volume and complexity",
+      "retrieval_text": "Section: Charges Not Included in Monthly Fee\nService modules: bookkeeping\nAccounting systems: QuickBooks Online\nPayroll systems: WagePoint\nSpecial requirements: software subscriptions paid by client; bookkeeping backlog clean-up or catch-up quoted separately\nContent:\nThe following charges are not included in the monthly fee:\n\n• Software subscriptions: The cost of software subscriptions must be maintained by the Client. This includes QBO, Plooto, WagePoint and HubDocs (if used).\n\n• Bookkeeping backlog: Any prior period bookkeeping clean-up or catch-up work will be quoted separately based on the volume and complexity",
+      "retrieval_enabled": false,
+      "commercial_reference_only": true,
+      "pricing_content": false,
+      "boilerplate_content": true,
+      "metadata": {
+        "source_pages": [
+          3
+        ],
+        "software_references": [
+          "QBO",
+          "Plooto",
+          "WagePoint",
+          "HubDocs"
+        ]
+      }
+    },
+    {
+      "chunk_key": "CAHOOTS_2026_SOFTWARE_CHARGES",
+      "section_order": 9,
+      "section_type": "pricing",
+      "section_title": "Approximate Software Subscription Charges",
+      "service_modules": [],
+      "organization_type": "unknown",
+      "sector": "arts_culture",
+      "engagement_type": "ongoing_bookkeeping",
+      "core_bookkeeping": false,
+      "accounting_systems": [
+        "QuickBooks Online"
+      ],
+      "payroll_systems": [
+        "WagePoint"
+      ],
+      "cadence": [
+        "monthly"
+      ],
+      "special_requirements": [
+        "software_cost_reference",
+        "qbo_current_offer",
+        "hubdocs_optional",
+        "plooto_and_wagepoint_paid_by_client"
+      ],
+      "raw_text": "Following would be the approx add’t fees:\n\nQBO: $30/month (first 6 months $3/month - current offer)\nHubDocs: $12 USD (~16CAD / month) - optional\nPlooto + WagePoint: remain as per current since paid by client",
+      "cleaned_text": "Following would be the approximate additional fees:\n\nQBO: $30/month (first 6 months $3/month - current offer)\nHubDocs: $12 USD (~16 CAD / month) - optional\nPlooto + WagePoint: remain as per current since paid by client",
+      "retrieval_text": "Section: Approximate Software Subscription Charges\nAccounting systems: QuickBooks Online\nPayroll systems: WagePoint\nCadence: monthly\nSpecial requirements: software cost reference; QBO current offer; HubDocs optional; Plooto and WagePoint paid by client\nContent:\nFollowing would be the approximate additional fees:\n\nQBO: $30/month (first 6 months $3/month - current offer)\nHubDocs: $12 USD (~16 CAD / month) - optional\nPlooto + WagePoint: remain as per current since paid by client",
+      "retrieval_enabled": false,
+      "commercial_reference_only": true,
+      "pricing_content": true,
+      "boilerplate_content": false,
+      "metadata": {
+        "source_pages": [
+          3
+        ],
+        "software_references": [
+          "QBO",
+          "HubDocs",
+          "Plooto",
+          "WagePoint"
+        ]
+      }
+    }
+  ]
+}

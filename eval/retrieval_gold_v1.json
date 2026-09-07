@@ -1,0 +1,3948 @@
+{
+  "benchmark_name": "sympl_retrieval_gold",
+  "version": "1.1",
+  "created_from_corpus": {
+    "proposal_count": 7,
+    "total_chunks": 71,
+    "retrieval_enabled_chunks": 47,
+    "pricing_chunks_suppressed": 14,
+    "boilerplate_chunks_suppressed": 10
+  },
+  "split_policy": {
+    "dev": 60,
+    "holdout": 20,
+    "policy_description": "DEV split (60 queries) is designated for tuning retrieval parameters, prompt query augmentation, and metadata boost weights. HOLDOUT split (20 queries) is strictly reserved for unbiased evaluation of candidate embedding models and configurations."
+  },
+  "graded_relevance": {
+    "primary": 3,
+    "acceptable": 2,
+    "optional": 1,
+    "unrelated": 0
+  },
+  "queries": [
+    {
+      "query_id": "Q001",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Small community organization needs weekly vendor bill entry, corporate credit card expense verification, and management of reimbursement requests.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "expense_management",
+        "vendor_bills",
+        "credit_cards",
+        "reimbursements"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "community_services",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "weekly"
+        ],
+        "special_requirements": []
+      },
+      "primary_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_WEEKLY_BOOKKEEPING",
+        "CAHOOTS_2026_EXPENSE_AR"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING"
+      ],
+      "label_rationale": "CAREOF_2025_EXPENSE_MANAGEMENT specifically establishes weekly vendor invoice logging, expense reimbursement verification, and card tracking.",
+      "confuser_notes": "TACT AR Automation is an implementation initiative; here the client wants recurring ongoing payment runs.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q002",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Bi-weekly operational bookkeeping for a small arts charity, including coding expenses, verifying receipts, and monthly bank reconciliation.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "biweekly_bookkeeping",
+        "expense_coding",
+        "receipt_verification",
+        "bank_reconciliation"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "biweekly",
+          "monthly"
+        ],
+        "special_requirements": []
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_MONTHLY_RECONCILIATIONS",
+        "CAREOF_2025_WEEKLY_BOOKKEEPING"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "label_rationale": "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING matches the bi-weekly operational cadence and arts charity context.",
+      "confuser_notes": "Avoid confusing with monthly-only reconciliations or full digital transformation initiatives.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q003",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Monthly reconciliation of operating bank accounts, credit cards, and merchant clearing accounts for a performing arts organization.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "monthly_reconciliations",
+        "performing_arts",
+        "credit_cards",
+        "clearing_accounts"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "arts_reconciliations"
+        ]
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_MONTHLY_RECONCILIATIONS"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_MONTHLY_RECONCILIATIONS",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING"
+      ],
+      "label_rationale": "CAHOOTS_2026_MONTHLY_RECONCILIATIONS specifically covers monthly bank, credit card, and clearing account reconciliations in a performing arts charity setting.",
+      "confuser_notes": "General bookkeeping chunks include reconciliations as a sub-bullet, but this query seeks dedicated reconciliation scope.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q004",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Our arts festival needs help processing vendor disbursements for event production, paying artist fees, and invoicing community partners.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "artist_fees",
+        "festival_disbursements",
+        "sponsor_invoicing",
+        "accounts_payable_receivable"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "artist_payments",
+          "festival_invoicing"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_AP_AR"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_EXPENSE_AR",
+        "CAREOF_2025_EXPENSE_MANAGEMENT"
+      ],
+      "optional_relevant": [
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "label_rationale": "RPFF_2025_AP_AR explicitly covers artist fee payments, festival event production disbursements, and sponsor invoicing.",
+      "confuser_notes": "Corporate expense chunks lack the arts festival artist-fee and production disbursement specifics.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q005",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We operate a seasonal arts festival and need ongoing ledger maintenance, box office revenue reconciliation, and year-end project reconciliations.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "festival_bookkeeping",
+        "project_reconciliations",
+        "box_office",
+        "ledger_maintenance"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly",
+          "annual"
+        ],
+        "special_requirements": [
+          "festival_reconciliations",
+          "box_office_matching"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_FUNDING_FUND_TRACKING",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_MONTHLY_RECONCILIATIONS"
+      ],
+      "label_rationale": "RPFF_2025_BOOKKEEPING_RECONCILIATIONS is specifically dedicated to festival general ledger reconciliations and box office revenue tracking.",
+      "confuser_notes": "Standard non-profit bookkeeping lacks seasonal festival event reconciliations.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q006",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "We have an in-house junior bookkeeper handling daily data entry, but need senior oversight, monthly financial review, and complex balance sheet reconciliations.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "bookkeeping_oversight",
+        "junior_staff_review",
+        "senior_oversight",
+        "complex_reconciliations"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "internal_bookkeeper_review",
+          "supervisory_oversight"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 1: PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT is specifically designed around reviewing an existing internal bookkeeper rather than replacing day-to-day data entry.",
+      "confuser_notes": "Standard outsourced bookkeeping chunks assume Sympl does all data entry; PIRS oversight matches the supervisory boundary. Ineligible near-neighbor: GOODFOOT_2026_FINANCIAL_MANAGEMENT provides supervisory oversight and cash flow monitoring, but is filtered out under the bookkeeping family filter.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q007",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Small arts non-profit needs straightforward recurring weekly bookkeeping without multi-layered transformation initiatives or complex advisory overhead.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "compact_bookkeeping",
+        "low_complexity",
+        "weekly_routine",
+        "recurring_operations"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "weekly"
+        ],
+        "special_requirements": []
+      },
+      "primary_relevant": [
+        "CAREOF_2025_WEEKLY_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+        "CAREOF_2025_MONTHLY_RECONCILIATIONS"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 10: CAREOF_2025_WEEKLY_BOOKKEEPING provides a compact, lightweight scope that beats large multi-initiative chunks like TACT or Good Foot for simple recurring needs.",
+      "confuser_notes": "Comprehensive charity bookkeeping chunks contain extensive multi-program class allocations and committee structures that are inappropriate for this small entity.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q008",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Vendor invoice entry, department account coding, and preparation of electronic payment batches in Telpay within an existing Sage 50 accounting environment.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "sage_50",
+        "telpay",
+        "accounts_payable",
+        "payment_batches"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "weekly",
+          "monthly"
+        ],
+        "special_requirements": [
+          "maintain_existing_systems",
+          "telpay_batches"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_AP_EXPENDITURES"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT",
+        "RPFF_2025_AP_AR"
+      ],
+      "optional_relevant": [
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "label_rationale": "SYSTEM-STATE QUERY: YPT_2026_AP_EXPENDITURES specifically details accounts payable workflows operated on Sage 50 and Telpay.",
+      "confuser_notes": "Cloud-native AP chunks (Plooto/QBO) do not match the desktop Sage 50 / Telpay environment.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q009",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Need to record ticket sales, donation revenues, and workshop billings, reconciling payments weekly against bank deposits in Sage 50.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "sage_50",
+        "accounts_receivable",
+        "ticket_revenue",
+        "bank_matching"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "weekly"
+        ],
+        "special_requirements": [
+          "maintain_existing_systems",
+          "ticket_reconciliations"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_AR_REVENUES"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_AP_AR",
+        "CAHOOTS_2026_EXPENSE_AR"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "label_rationale": "YPT_2026_AR_REVENUES focuses on multi-stream receivables (ticketing, donations, workshops) and bank matching in Sage 50.",
+      "confuser_notes": "Standard commercial AR invoicing chunks miss the ticketing and donation reconciliation aspects.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q010",
+      "split": "holdout",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Comprehensive full-cycle bookkeeping for a mid-sized charity with multiple program classes, vendor bill payments, and monthly balance sheet close.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "full_cycle_bookkeeping",
+        "charity_bookkeeping",
+        "program_classes",
+        "month_end_close"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "five_program_classes"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING"
+      ],
+      "label_rationale": "TACT_2026_BOOKKEEPING is the canonical comprehensive multi-program charity bookkeeping chunk.",
+      "confuser_notes": "Compact bookkeeping chunks lack the multi-program departmental allocation depth required.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q011",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We operate a social enterprise with delivery and courier revenue streams alongside donations, needing daily expense processing and customer billing.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "social_enterprise",
+        "multi_division",
+        "customer_billing",
+        "expense_processing"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "earned_revenue_tracking"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_BOOKKEEPING",
+        "CAHOOTS_2026_EXPENSE_AR"
+      ],
+      "optional_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT"
+      ],
+      "label_rationale": "GOODFOOT_2026_BOOKKEEPING specializes in social enterprise bookkeeping with earned fee-for-service revenue streams.",
+      "confuser_notes": "Purely arts or grant-dependent bookkeeping chunks do not reflect commercial delivery/earned revenue operations.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q012",
+      "split": "holdout",
+      "query_class": "confuser",
+      "difficulty": "medium",
+      "query_text": "Sympl will enter invoices, verify approvals, and stage payment runs, but our Executive Director retains exclusive final payment release authority in online banking.",
+      "target_service_family": "bookkeeping",
+      "intent_tags": [
+        "responsibility_boundary",
+        "payment_release_authority",
+        "staged_payments",
+        "accounts_payable"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online",
+          "Plooto"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "no_direct_bank_release",
+          "executive_director_approval"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT",
+        "RPFF_2025_AP_AR"
+      ],
+      "optional_relevant": [
+        "YPT_2026_AP_EXPENDITURES"
+      ],
+      "label_rationale": "RESPONSIBILITY-BOUNDARY QUERY: TACT_2026_BOOKKEEPING explicitly enshrines the operational boundary where Sympl prepares batches but client management retains sole release authority.",
+      "confuser_notes": "TACT AP Plooto is an implementation chunk; for ongoing recurring operational responsibility, TACT Bookkeeping is primary. Ineligible near-neighbor: TACT_2026_TRANSFORMATION_AP_PLOOTO provides digital AP automation, but is filtered out under the bookkeeping family filter.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q013",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Bi-weekly payroll processing for 15 salaried and hourly staff including statutory source deductions, CRA remittances, and record maintenance.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "biweekly_payroll",
+        "source_deductions",
+        "cra_remittances",
+        "hourly_and_salaried"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "ADP"
+        ],
+        "cadence": [
+          "biweekly"
+        ],
+        "special_requirements": [
+          "fifteen_employees"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "CAREOF_2025_PAYROLL"
+      ],
+      "label_rationale": "TACT_2026_PAYROLL matches the bi-weekly schedule, 15-20 employee volume, and complete statutory remittance oversight.",
+      "confuser_notes": "Avoid TACT payroll migration chunk, as this query requests ongoing operational payroll processing rather than software transition.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q014",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Semi-monthly payroll administration in Wagepoint for hourly dispatch staff, managing direct deposits, WSIB remittances, and ROE filings.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "semi_monthly_payroll",
+        "wagepoint",
+        "hourly_staff",
+        "wsib_filings"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "Wagepoint"
+        ],
+        "cadence": [
+          "semi_monthly"
+        ],
+        "special_requirements": [
+          "hourly_staff_payroll"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_PAYROLL",
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "TACT_2026_PAYROLL"
+      ],
+      "label_rationale": "GOODFOOT_2026_PAYROLL specifically implements semi-monthly Wagepoint payroll with variable hourly staff and provincial remittances.",
+      "confuser_notes": "Do not retrieve ADP-based payroll chunks when Wagepoint is specified as the platform.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q015",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We run payroll twice a month for salaried employees and project contractors, needing year-end T4 slip preparation and vacation pay tracking.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "semi_monthly_payroll",
+        "t4_preparation",
+        "vacation_pay",
+        "contractor_payments"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "community_services",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "semi_monthly",
+          "annual"
+        ],
+        "special_requirements": [
+          "t4_preparation"
+        ]
+      },
+      "primary_relevant": [
+        "CAREOF_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_PAYROLL",
+        "RPFF_2025_PAYROLL"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "label_rationale": "CAREOF_2025_PAYROLL establishes a semi-monthly payroll schedule with annual T4 preparation and vacation liability tracking.",
+      "confuser_notes": "Compliance year-end chunks handle corporate/charity tax returns; T4 slip generation belongs to the payroll service module.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q016",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Seasonal non-profit needs bi-weekly payroll for core administrative staff and variable honoraria/fees for contract festival workers during event season.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "seasonal_payroll",
+        "biweekly_payroll",
+        "contract_workers",
+        "variable_stipends"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "biweekly",
+          "monthly"
+        ],
+        "special_requirements": [
+          "seasonal_variations"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_PAYROLL",
+        "CAREOF_2025_PAYROLL"
+      ],
+      "optional_relevant": [
+        "TACT_2026_PAYROLL"
+      ],
+      "label_rationale": "RPFF_2025_PAYROLL specifically addresses arts festival seasonal staff and contract fee processing.",
+      "confuser_notes": "Ongoing corporate payroll chunks assume steady salaried headcount year-round.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q017",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Our client currently runs payroll through ADP but has approved moving approximately 14 staff into QBO Payroll, requiring a parallel run before switchover.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "payroll_migration",
+        "adp_to_qbo_payroll",
+        "parallel_run",
+        "system_state_proposed"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "ADP",
+          "QuickBooks Online Payroll"
+        ],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "adp_to_qbo_migration",
+          "nineteen_employees",
+          "parallel_cycle"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "PIRS_2025_PAYROLL"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 4 & SYSTEM-STATE: TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION is the dedicated initiative chunk for ADP to QBO Payroll migration with parallel run testing.",
+      "confuser_notes": "Standard TACT_2026_PAYROLL is ongoing operational processing; the user's intent is the one-time migration and parallel testing.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q018",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Payroll is currently managed in PayWorks; we need ongoing bi-weekly processing while evaluating whether migrating to QBO Payroll makes operational sense.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "payworks",
+        "system_evaluation",
+        "ongoing_processing",
+        "system_state_under_evaluation"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "PayWorks"
+        ],
+        "cadence": [
+          "biweekly"
+        ],
+        "special_requirements": [
+          "maintain_payworks",
+          "evaluate_alternatives"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "label_rationale": "SYSTEM-STATE QUERY: PIRS_2025_PAYROLL represents operating an existing PayWorks system while maintaining flexibility for future platform evaluation.",
+      "confuser_notes": "TACT Payroll Migration assumes migration is approved; PIRS Payroll maintains current PayWorks while evaluating alternatives.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q019",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Sympl will manage all payroll deductions and tax remittances, but client program managers must submit timely approved hours and timesheets; Sympl does not handle HR administration.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "responsibility_boundary",
+        "manager_timesheet_responsibility",
+        "hr_boundary",
+        "payroll_processing"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "PayWorks"
+        ],
+        "cadence": [
+          "biweekly"
+        ],
+        "special_requirements": [
+          "hr_boundary",
+          "manager_input_requirement"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "CAREOF_2025_PAYROLL"
+      ],
+      "label_rationale": "RESPONSIBILITY-BOUNDARY QUERY: PIRS_2025_PAYROLL explicitly specifies that managers provide timely payroll data and that Sympl does not perform HR functions.",
+      "confuser_notes": "Standard payroll descriptions do not explicitly enforce the client HR vs Sympl payroll calculation demarcation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q020",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Bi-weekly payroll calculations, direct deposits, source deduction filings, and record-keeping for ten non-profit employees using Wagepoint.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "wagepoint",
+        "biweekly_payroll",
+        "source_deductions",
+        "ten_employees"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "Wagepoint"
+        ],
+        "cadence": [
+          "biweekly"
+        ],
+        "special_requirements": [
+          "ten_employees"
+        ]
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_PAYROLL",
+        "TACT_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "CAREOF_2025_PAYROLL"
+      ],
+      "label_rationale": "CAHOOTS_2026_PAYROLL implements bi-weekly Wagepoint payroll processing for a ten-person cultural non-profit team.",
+      "confuser_notes": "Avoid ADP-based payroll chunks when Wagepoint is the required platform.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q021",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Need ongoing support to calculate source deductions, remit CPP and EI to CRA, issue ROEs when workers depart, and reconcile payroll to the ledger.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "cra_source_deductions",
+        "cpp_ei_remittance",
+        "roe_issuance",
+        "general_ledger_reconciliation"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "ADP"
+        ],
+        "cadence": [
+          "biweekly"
+        ],
+        "special_requirements": [
+          "payroll_reconciliation"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "label_rationale": "TACT_2026_PAYROLL provides thorough coverage of ROE issuance, statutory remittances, and bi-weekly reconciliation to the general ledger.",
+      "confuser_notes": "General bookkeeping reconciliations do not encompass statutory payroll remittance reconciliation to CRA.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q022",
+      "split": "holdout",
+      "query_class": "confuser",
+      "difficulty": "medium",
+      "query_text": "The client wants advice on whether to switch payroll platforms, but their non-negotiable immediate priority is running regular bi-weekly payroll for 20 employees without disruption.",
+      "target_service_family": "payroll",
+      "intent_tags": [
+        "operational_priority",
+        "payroll_continuity",
+        "platform_advice",
+        "biweekly_payroll"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "PayWorks"
+        ],
+        "cadence": [
+          "biweekly"
+        ],
+        "special_requirements": [
+          "uninterrupted_payroll"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "label_rationale": "PIRS_2025_PAYROLL combines stable recurring payroll execution with platform evaluation without premature migration disruption.",
+      "confuser_notes": "Selecting TACT Payroll Migration as primary would prematurely force a migration project when immediate priority is uninterrupted payroll execution.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q023",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Monthly preparation of balance sheet, profit and loss statement, and accounts payable/receivable aging summaries for management review.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "monthly_reporting",
+        "balance_sheet",
+        "profit_and_loss",
+        "aging_reports"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "community_services",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": []
+      },
+      "primary_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "CAREOF_2025_FINANCIAL_REPORTING is a clear, standard monthly financial package including balance sheet, P&L, and AR/AP aging schedules.",
+      "confuser_notes": "Financial management chunks include forecasting and executive advisory; this query is strictly delivered historical statements.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q024",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Program-level financial reporting showing revenue and expense allocations across five distinct charitable program classes.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "program_reporting",
+        "class_allocations",
+        "charitable_programs",
+        "monthly_financials"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "five_program_classes"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "TACT_2026_FINANCIAL_REPORTING explicitly structures program-level profit and loss statements across five defined operational program classes.",
+      "confuser_notes": "Simple non-profit reporting chunks present only organization-wide P&L without detailed program class tracking.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q025",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "The Executive Director and Board require quarterly financial packages with variance analysis against approved annual budgets and written commentary.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "board_reporting",
+        "budget_variance",
+        "executive_commentary",
+        "quarterly_package"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly",
+          "quarterly"
+        ],
+        "special_requirements": [
+          "board_package",
+          "variance_analysis"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_FINANCIAL_REPORTING",
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "TACT_2026_FINANCIAL_REPORTING specifies quarterly board packages, budget-vs-actual variance schedules, and executive commentary.",
+      "confuser_notes": "Avoid confusing with forward-looking cash flow advisory in financial management chunks.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q026",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We report project finances to municipal arts councils and update the CADAC database, requiring clean class-based expenditure breakdowns.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "cadac_reporting",
+        "arts_councils",
+        "funder_compliance",
+        "class_breakdowns"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual",
+          "quarterly"
+        ],
+        "special_requirements": [
+          "cadac_reporting",
+          "arts_funder_compliance"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "RPFF_2025_FINANCIAL_REPORTING explicitly accommodates Canadian arts funder reporting requirements and CADAC financial inputs.",
+      "confuser_notes": "Corporate or social enterprise reporting lacks arts council and CADAC specialized terminology. Ineligible near-neighbor: RPFF_2025_FUNDING_FUND_TRACKING is restricted to funder and grant tracking, not general management/board statement packages.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q027",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Client requests delivered monthly departmental P&L and balance sheet statements for the board, but does NOT require cash flow forecasting or ongoing executive advisory.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "delivered_reports",
+        "board_statements",
+        "no_forecasting",
+        "reporting_only"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "no_cash_flow_forecasting"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 12: GOODFOOT_2026_FINANCIAL_REPORTING represents standard retrospective reporting packages without forward advisory scope.",
+      "confuser_notes": "GOODFOOT_2026_FINANCIAL_MANAGEMENT contains cash flow modeling and executive advisory, which are explicitly excluded by the query.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q028",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "medium",
+      "query_text": "Our leadership team wants monthly delivered financial packages with summaries ready for the board, rather than raw account reconciliation spreadsheets.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "board_package",
+        "executive_summary",
+        "management_reporting",
+        "not_raw_recs"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "formal_board_package"
+        ]
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING",
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "CAHOOTS_2026_FINANCIAL_REPORTING emphasizes delivered monthly management reports over internal operational reconciliation tasks.",
+      "confuser_notes": "CAHOOTS_2026_MONTHLY_RECONCILIATIONS represents back-office reconciliation mechanics, not formal executive presentation deliverables.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q029",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Standard monthly financial reporting package for small non-profit organization including comparative income statement and balance sheet.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "standard_package",
+        "comparative_income_statement",
+        "balance_sheet",
+        "small_nonprofit"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": []
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "CAHOOTS_2026_FINANCIAL_REPORTING provides an appropriately sized, clear reporting package for a compact non-profit team.",
+      "confuser_notes": "High-complexity 5-program charity reporting (TACT) is overly detailed for this compact scope.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q030",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We need monthly financial statements sent to department heads and board members to track grant spend-down progress across various funders.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "grant_spenddown",
+        "funder_tracking",
+        "department_reporting",
+        "board_statements"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "grant_expenditure_tracking"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FUNDING_FUND_TRACKING"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "RPFF_2025_FINANCIAL_REPORTING links monthly financial reporting directly with grant spend-down tracking across funders.",
+      "confuser_notes": "Standard commercial reporting chunks do not include multi-grant spend-down visibility.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q031",
+      "split": "holdout",
+      "query_class": "confuser",
+      "difficulty": "medium",
+      "query_text": "Generate customized contribution expenditure reports and track deferred grant contributions to comply with public funder audit guidelines.",
+      "target_service_family": "financial_reporting",
+      "intent_tags": [
+        "public_funder_guidelines",
+        "contribution_reports",
+        "deferred_grants",
+        "funder_tracking"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "quarterly",
+          "annual"
+        ],
+        "special_requirements": [
+          "funder_contribution_reporting"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_FUNDING_FUND_TRACKING"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "label_rationale": "RPFF_2025_FUNDING_FUND_TRACKING specifically focuses on deferred contribution schedules and tracking restricted funding for public audits.",
+      "confuser_notes": "RPFF Financial Reporting generates general financial statements; RPFF Funding Fund Tracking isolates deferred contribution grant tracking.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q032",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Monthly 12-month rolling cash flow forecasting and budget monitoring to support executive decision-making.",
+      "target_service_family": "financial_management",
+      "intent_tags": [
+        "cash_flow_forecasting",
+        "rolling_forecast",
+        "budget_monitoring",
+        "executive_support"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "cash_flow_model",
+          "budget_monitoring"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "GOODFOOT_2026_FINANCIAL_MANAGEMENT is the definitive exemplar for monthly 12-month rolling cash flow modeling and executive budget advisory.",
+      "confuser_notes": "Retrospective reporting chunks produce static balance sheets; financial management focuses on predictive cash flow runways. Ineligible near-neighbors: GOODFOOT_2026_FINANCIAL_REPORTING and TACT_2026_FINANCIAL_REPORTING provide historical statements, not forward-looking cash flow forecasting.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q033",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Our leadership team needs strategic financial advisory, scenario modeling, and monthly working capital visibility as we expand our operations.",
+      "target_service_family": "financial_management",
+      "intent_tags": [
+        "scenario_modeling",
+        "strategic_advisory",
+        "working_capital",
+        "operational_expansion"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "strategic_advisory",
+          "scenario_analysis"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "GOODFOOT_2026_FINANCIAL_MANAGEMENT incorporates operational scenario planning, financial health reviews, and executive decision guidance.",
+      "confuser_notes": "Standard bookkeeping chunks do not encompass executive advisory or forward-looking scenario modeling. Ineligible near-neighbors: GOODFOOT_2026_CONTEXT_OBJECTIVES and GOODFOOT_2026_FINANCIAL_REPORTING lack operational financial management scope.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q034",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "The board is concerned about cash runway and requires rolling 13-week cash flow projections, budget variance commentary, and strategic capital discussions.",
+      "target_service_family": "financial_management",
+      "intent_tags": [
+        "cash_runway",
+        "thirteen_week_cash_flow",
+        "strategic_capital",
+        "financial_management"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly",
+          "weekly"
+        ],
+        "special_requirements": [
+          "cash_runway_modeling",
+          "capital_planning"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "SPECIAL HARD CASE 12: GOODFOOT_2026_FINANCIAL_MANAGEMENT directly addresses cash runway management and rolling cash projections.",
+      "confuser_notes": "TACT or Good Foot financial reporting chunks provide historical accounting summaries, but do not provide rolling forward cash runway projections. Ineligible near-neighbors: TACT_2026_FINANCIAL_REPORTING and GOODFOOT_2026_FINANCIAL_REPORTING compile statements, but do not provide 13-week cash flow forecasts.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q035",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Client board and Executive Director retain sole authority for approving annual budgets; Sympl provides budget modeling templates and historical spending analyses.",
+      "target_service_family": "financial_management",
+      "intent_tags": [
+        "responsibility_boundary",
+        "budget_approval",
+        "budget_modeling",
+        "governance"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual",
+          "monthly"
+        ],
+        "special_requirements": [
+          "governance_boundary",
+          "budget_modeling"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "RESPONSIBILITY-BOUNDARY QUERY: GOODFOOT_2026_FINANCIAL_MANAGEMENT models collaborative financial advisory while respecting client governance over formal budget approvals.",
+      "confuser_notes": "Bookkeeping chunks omit budget modeling scope entirely. Ineligible near-neighbors: TACT_2026_FINANCIAL_REPORTING and GOODFOOT_2026_FINANCIAL_REPORTING are filtered out because financial management requires operational budget oversight.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q036",
+      "split": "holdout",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Financial leadership oversight, cash management planning, and supervisory financial management for an organization undergoing leadership transition.",
+      "target_service_family": "financial_management",
+      "intent_tags": [
+        "financial_leadership",
+        "supervisory_oversight",
+        "cash_management",
+        "transition_support"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "transition_oversight",
+          "cash_planning"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT combines high-level supervisory leadership, cash management, and transition support.",
+      "confuser_notes": "Good Foot financial management is embedded in a full outsourced model, whereas PIRS provides supervisory management over an existing team. Ineligible near-neighbors: GOODFOOT_2026_CONTEXT_OBJECTIVES and TACT_2026_FINANCIAL_REPORTING are filtered out under the financial management family filter.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q037",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "hard",
+      "query_text": "We do not need basic transaction entry; our organization requires fractional financial controller guidance, internal control assessment, and financial management.",
+      "target_service_family": "financial_management",
+      "intent_tags": [
+        "fractional_controller",
+        "internal_controls",
+        "financial_management",
+        "non_bookkeeping"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "monthly"
+        ],
+        "special_requirements": [
+          "fractional_controller_oversight"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT represents controller-level financial review, internal control testing, and executive financial management.",
+      "confuser_notes": "Pure bookkeeping chunks focus on bill processing and bank reconciliations rather than controller oversight. Ineligible near-neighbors: PIRS_2025_TRANSFORMATION_STRATEGY and GOODFOOT_2026_CONTEXT_OBJECTIVES describe systems strategy and context rather than recurring financial management.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q038",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Preparation and filing of annual CRA GST/HST returns and year-end working paper compilation for external tax accountant.",
+      "target_service_family": "compliance",
+      "intent_tags": [
+        "hst_return",
+        "cra_compliance",
+        "working_papers",
+        "tax_accountant_liaison"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "community_services",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "hst_filing",
+          "year_end_close"
+        ]
+      },
+      "primary_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "optional_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "label_rationale": "CAREOF_2025_COMPLIANCE_YEAR_END directly covers annual GST/HST returns and compilation of year-end schedules for the external CPA.",
+      "confuser_notes": "Audit support chunks assume a full financial audit; this query is statutory tax compliance for an unaudited entity.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q039",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Registered charity statutory compliance including annual T3010 information return financial schedules and public service bodies (PSB) rebate claims.",
+      "target_service_family": "compliance",
+      "intent_tags": [
+        "t3010_filing",
+        "psb_rebate",
+        "registered_charity",
+        "cra_statutory_compliance"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual",
+          "semi_annual"
+        ],
+        "special_requirements": [
+          "psb_rebate_claims",
+          "t3010_financial_inputs"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "TACT_2026_COMPLIANCE explicitly details public service body (PSB) rebate claims and T3010 financial return coordination for charities.",
+      "confuser_notes": "Standard non-profit compliance chunks do not address registered charity PSB rebates or T3010 schedules.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q040",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Ensuring our arts charity remains in good standing with CRA, filing our annual returns and charity information return schedules on time.",
+      "target_service_family": "compliance",
+      "intent_tags": [
+        "arts_charity",
+        "cra_standing",
+        "annual_returns",
+        "charity_schedules"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "charity_annual_filing"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+        "TACT_2026_COMPLIANCE"
+      ],
+      "optional_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "RPFF_2025_COMPLIANCE_YEAR_END combines arts non-profit charity compliance, CRA return filing, and year-end liaison.",
+      "confuser_notes": "Corporate compliance for taxable entities does not include charity information return schedules.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q041",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Filing annual HST/GST returns and preparing fiscal year-end statutory compliance filings for CRA, with no external auditor involved.",
+      "target_service_family": "compliance",
+      "intent_tags": [
+        "statutory_compliance",
+        "hst_returns",
+        "no_external_audit",
+        "cra_filings"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "no_audit_required",
+          "cra_filings"
+        ]
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "optional_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 11 (PAIR B - COMPLIANCE): CAHOOTS_2026_COMPLIANCE_YEAR_END is dedicated to statutory tax compliance without an independent external audit.",
+      "confuser_notes": "TACT Audit Support or PIRS Audit Preparation are confusers because they require an external CPA audit firm, which is explicitly absent here.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q042",
+      "split": "holdout",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Assessment of HST tax-exempt status and preparation of semi-annual public service body rebate claims for a non-profit community organization.",
+      "target_service_family": "compliance",
+      "intent_tags": [
+        "hst_exempt_status",
+        "psb_rebate_claims",
+        "semi_annual_claims",
+        "cra_rules"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "semi_annual",
+          "annual"
+        ],
+        "special_requirements": [
+          "psb_rebate_eligibility"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "TACT_2026_COMPLIANCE specifically details PSB rebate eligibility assessments and semi-annual claim filings with CRA.",
+      "confuser_notes": "Standard commercial HST filing chunks assume commercial taxable supplies, not non-profit PSB rebate mechanics.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q043",
+      "split": "holdout",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Our fiscal year just ended and we need our general ledger finalized, working paper files assembled, and tax schedules handed over to our external CPA tax preparer.",
+      "target_service_family": "compliance",
+      "intent_tags": [
+        "working_papers",
+        "tax_preparer_handover",
+        "year_end_close",
+        "cpa_liaison"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "tax_accountant_liaison"
+        ]
+      },
+      "primary_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "optional_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "label_rationale": "CAHOOTS_2026_COMPLIANCE_YEAR_END explicitly models preparing clean working papers for a CPA tax accountant handling the Notice to Reader / tax return.",
+      "confuser_notes": "Full audit preparation chunks involve independent audit committees and extensive PBC testing unsuitable for a tax-only year end.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q044",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Coordinating with an external audit firm, compiling the Prepared by Client (PBC) document list, and responding to auditor sampling requests.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "pbc_list",
+        "auditor_liaison",
+        "sampling_requests",
+        "external_audit"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "pbc_coordination",
+          "auditor_queries"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "TACT_2026_AUDIT_SUPPORT is the canonical audit coordination chunk covering PBC list fulfillment and responding to auditor queries.",
+      "confuser_notes": "Statutory compliance chunks (e.g. CRA/HST filing) do not address independent CPA audit committee coordination or PBC lists.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q045",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Year-end audit preparation, balance sheet reconciliation schedules, and auditor liaison for an organization with multiple government grant agreements.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "grant_audit_schedules",
+        "balance_sheet_reconciliations",
+        "government_grants",
+        "auditor_liaison"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "multi_grant_audit",
+          "deferred_revenue_schedules"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "PIRS_2025_AUDIT_PREPARATION specifically details audit preparation for multi-funder organizations with extensive deferred revenue schedules.",
+      "confuser_notes": "TACT audit support has fewer complex multi-grant government schedules than PIRS audit prep.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q046",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Our annual audit is approaching in two months; we need someone to build the lead sheets, pull sampling invoices, and manage auditor questions directly.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "audit_lead_sheets",
+        "sampling_invoices",
+        "auditor_questions",
+        "audit_prep"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "two_month_deadline",
+          "lead_sheets"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "label_rationale": "TACT_2026_AUDIT_SUPPORT matches the operational workflow of generating audit lead sheets and handling auditor queries.",
+      "confuser_notes": "Avoid confusing with monthly bookkeeping vendor invoice pulling. Ineligible near-neighbor: CAHOOTS_2026_COMPLIANCE_YEAR_END covers statutory compliance without external audit liaison, so it is filtered out under the audit family filter.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q047",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Outgoing finance director departure left historical accounting records incomplete; need audit cleanup, reconciliations, and direct support during upcoming financial audit.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "staff_departure_cleanup",
+        "historical_audit_prep",
+        "auditor_liaison",
+        "deferred_revenue"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time",
+          "annual"
+        ],
+        "special_requirements": [
+          "staff_transition_cleanup",
+          "audit_readiness"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 2: PIRS_2025_AUDIT_PREPARATION addresses audit preparation following a senior finance staff departure and historical cleanup.",
+      "confuser_notes": "Standard audit support chunks assume current-year books were kept clean and up-to-date month by month. Ineligible near-neighbor: YPT_2026_CONTEXT_TRANSITION covers interim staffing continuity, not audit preparation, and is filtered out under the audit filter.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q048",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "We need comprehensive liaison support for our independent CPA audit firm, resolving PBC queries and delivering audit-ready lead sheets.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "cpa_audit_liaison",
+        "pbc_queries",
+        "audit_lead_sheets",
+        "independent_audit"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "external_audit_liaison"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 11 (PAIR A - AUDIT): TACT_2026_AUDIT_SUPPORT specifically serves the independent CPA auditor liaison function.",
+      "confuser_notes": "TACT_2026_COMPLIANCE addresses CRA/HST/T3010 filings; it is a confuser because statutory compliance is distinct from the independent financial audit.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q049",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Sympl will organize working papers and answer auditor questions, but does not conduct the independent financial audit or issue the auditor's opinion.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "responsibility_boundary",
+        "audit_boundary",
+        "working_papers_only",
+        "no_audit_opinion"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "audit_boundary_clarity"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "RESPONSIBILITY-BOUNDARY QUERY: TACT_2026_AUDIT_SUPPORT preserves the precise boundary between Sympl's preparation/liaison role and the external auditor's attestation.",
+      "confuser_notes": "Do not retrieve general accounting chunks that fail to distinguish management preparation from external attestation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q050",
+      "split": "holdout",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Preparing audit lead schedules and supporting documentation for an annual charitable financial audit and board audit committee.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "audit_lead_schedules",
+        "charitable_audit",
+        "audit_committee",
+        "supporting_documentation"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "annual"
+        ],
+        "special_requirements": [
+          "audit_committee_reporting"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "label_rationale": "GOODFOOT_2026_COMPLIANCE_AUDIT integrates annual charitable audit preparation and audit committee reporting schedules.",
+      "confuser_notes": "Standard monthly reporting does not prepare the specialized lead sheets required by the audit committee.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q051",
+      "split": "holdout",
+      "query_class": "confuser",
+      "difficulty": "medium",
+      "query_text": "The books are behind for the prior fiscal year; we need catch-up reconciliations and schedule preparation strictly to satisfy our external auditor's PBC requirements.",
+      "target_service_family": "audit",
+      "intent_tags": [
+        "prior_year_catchup",
+        "pbc_satisfaction",
+        "backlog_audit_prep",
+        "reconciliations"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "prior_year_backlog",
+          "pbc_readiness"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "optional_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "label_rationale": "PIRS_2025_AUDIT_PREPARATION is specifically structured for prior-year catch-up reconciliations aimed directly at audit readiness.",
+      "confuser_notes": "Standard recurring bookkeeping chunks handle current-period transactions, not prior-period audit backlog reconciliations. Ineligible near-neighbor: PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT includes supervisory oversight, but is filtered out under the audit family filter.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q052",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Implementation of Plooto integrated with QuickBooks Online to establish digital vendor bill payment and approval workflows.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "plooto_implementation",
+        "qbo_integration",
+        "digital_ap",
+        "approval_workflow"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online",
+          "Plooto"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "plooto_qbo_integration",
+          "approval_matrix"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "label_rationale": "SYSTEM-STATE QUERY: TACT_2026_TRANSFORMATION_AP_PLOOTO is the dedicated initiative chunk for implementing Plooto with QuickBooks Online.",
+      "confuser_notes": "Ongoing bookkeeping chunks cover entering bills; this chunk handles the one-time software setup and workflow integration. Ineligible near-neighbor: TACT_2026_BOOKKEEPING covers recurring bill entry, but is filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q053",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Automating client billing with standardized recurring invoice templates and pre-authorized debit (PAD) collections.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "ar_automation",
+        "recurring_invoices",
+        "pad_collections",
+        "invoicing_workflow"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "recurring_invoices",
+          "pad_agreement_workflow"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "label_rationale": "TACT_2026_TRANSFORMATION_AR_AUTOMATION specifically defines the initiative to automate invoicing, recurring PAD payments, and collections.",
+      "confuser_notes": "Manual accounts receivable logging in bookkeeping chunks does not include configuring automated PAD workflows. Ineligible near-neighbor: CAHOOTS_2026_EXPENSE_AR is a service module for recurring invoicing, filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q054",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Comprehensive diagnostic review of finance systems and software tools to recommend a modern cloud architecture and workflow roadmap.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "diagnostic_assessment",
+        "systems_review",
+        "cloud_architecture",
+        "technology_roadmap"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "technology_assessment",
+          "workflow_roadmap"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "optional_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "label_rationale": "PIRS_2025_TRANSFORMATION_STRATEGY is specifically the advisory and diagnostic phase of finance technology modernization.",
+      "confuser_notes": "Implementation chunks execute hands-on software configuration; strategy chunks conduct diagnostic evaluations and recommend architectures.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q055",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Configuration and setup of QuickBooks Online, chart of accounts redesign, and historical balance migration from legacy accounting software.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "qbo_configuration",
+        "chart_of_accounts_redesign",
+        "historical_migration",
+        "opening_balances"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "coa_redesign",
+          "qbo_setup"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "optional_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "label_rationale": "SYSTEM-STATE QUERY: PIRS_2025_TRANSFORMATION_IMPLEMENTATION represents the active setup of QBO, chart of accounts structure, and balance migration.",
+      "confuser_notes": "Do not confuse with strategy chunks that merely evaluate options without hands-on system building.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q056",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Our accounts payable relies on paper checks and manual emails; we want a paperless approval and electronic payment system.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "paperless_ap",
+        "electronic_payments",
+        "workflow_modernization",
+        "digital_approvals"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online",
+          "Plooto"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "eliminate_paper_checks"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "label_rationale": "TACT_2026_TRANSFORMATION_AP_PLOOTO addresses replacing paper checks and email threads with Plooto digital approvals.",
+      "confuser_notes": "Regular bill payment chunks describe ongoing execution, whereas this query describes a digital transformation need. Ineligible near-neighbor: CAREOF_2025_EXPENSE_MANAGEMENT is an operational bookkeeping service module, filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q057",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We are tired of chasing overdue program invoices manually and need automated payment reminders and electronic payment collection.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "automated_payment_reminders",
+        "electronic_collection",
+        "overdue_invoices",
+        "ar_workflow"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "automated_reminders",
+          "electronic_pad"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "label_rationale": "TACT_2026_TRANSFORMATION_AR_AUTOMATION specifically introduces automated email payment reminders and pre-authorized debit integration.",
+      "confuser_notes": "Standard AR chunks focus on manual monthly invoicing rather than automated collection systems. Ineligible near-neighbor: CAHOOTS_2026_EXPENSE_AR is an operational bookkeeping module, filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q058",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Implement Plooto for electronic accounts payable, configure dual-approval limits, and eliminate manual payment checks across departments.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "plooto_implementation",
+        "dual_approval",
+        "eliminate_manual_checks",
+        "system_implementation"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online",
+          "Plooto"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "plooto_dual_approval"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 3: TACT_2026_TRANSFORMATION_AP_PLOOTO is the specific transformation initiative to implement Plooto and approval limits.",
+      "confuser_notes": "TACT_2026_BOOKKEEPING is an ongoing operational chunk; retrieving it as primary would mistake ongoing bill entry for the implementation initiative. Ineligible near-neighbor: TACT_2026_BOOKKEEPING represents operational bookkeeping execution, filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q059",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Design automated invoicing workflows, client billing templates, and pre-authorized payment capture to reduce accounts receivable aging.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "invoicing_workflow_design",
+        "billing_templates",
+        "pre_authorized_debit",
+        "ar_aging_reduction"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "billing_template_design",
+          "pad_workflow"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 5: TACT_2026_TRANSFORMATION_AR_AUTOMATION models the system design and workflow automation for receivables.",
+      "confuser_notes": "Standard bookkeeping chunks record receivables; transformation chunks design the automated billing architecture. Ineligible near-neighbors: TACT_2026_BOOKKEEPING and CAHOOTS_2026_EXPENSE_AR represent recurring bookkeeping execution, filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q060",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Conduct a formal diagnostic review of our accounting workflows, evaluate software options, and deliver a phased digital roadmap.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "diagnostic_review",
+        "software_options",
+        "phased_roadmap",
+        "transformation_strategy"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "phased_roadmap",
+          "diagnostic_deliverable"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "optional_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 6A: PIRS_2025_TRANSFORMATION_STRATEGY is specifically the diagnostic roadmap and assessment deliverable.",
+      "confuser_notes": "PIRS Implementation is a confuser because it represents hands-on system setup, whereas this query is exclusively strategic diagnostic review.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q061",
+      "split": "holdout",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Migrating financial records and chart of accounts structure from desktop spreadsheets into a modern cloud accounting platform.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "cloud_migration",
+        "spreadsheet_to_cloud",
+        "chart_of_accounts",
+        "system_modernization"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "arts_culture",
+        "engagement_type": "recurring_bookkeeping",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "cloud_transition",
+          "spreadsheet_migration"
+        ]
+      },
+      "primary_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "label_rationale": "SYSTEM-STATE QUERY: RPFF_2025_PROCESS_TECHNOLOGY details transitioning from legacy desktop and spreadsheet workflows to modern cloud systems.",
+      "confuser_notes": "Ongoing bookkeeping chunks operate in already-migrated systems, not during the migration process.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q062",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "hard",
+      "query_text": "Hands-on setup of QuickBooks Online, importing vendor lists, restructuring chart of accounts classes, and testing opening balance transfers.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "hands_on_setup",
+        "vendor_list_import",
+        "coa_restructure",
+        "opening_balances"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "opening_balance_testing",
+          "vendor_import"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "optional_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 6B: PIRS_2025_TRANSFORMATION_IMPLEMENTATION represents technical configuration, importing lists, and opening balance reconciliation.",
+      "confuser_notes": "PIRS Strategy represents the preceding assessment; this query describes hands-on implementation tasks.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q063",
+      "split": "holdout",
+      "query_class": "confuser",
+      "difficulty": "medium",
+      "query_text": "The client is considering upgrading their software in the future, but needs an immediate assessment of digital bottlenecks before approving any migration.",
+      "target_service_family": "digital_transformation",
+      "intent_tags": [
+        "digital_assessment",
+        "bottleneck_analysis",
+        "future_upgrade",
+        "advisory_first"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "pre_migration_assessment"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "optional_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "label_rationale": "GOODFOOT_2026_DIGITAL_TRANSFORMATION explicitly details evaluating current operational tools and identifying software bottlenecks prior to system changes.",
+      "confuser_notes": "YPT Systems Continuity is maintaining existing systems without any assessment; Good Foot Digital Transformation provides the evaluation. Ineligible near-neighbor: YPT_2026_SYSTEMS_CONTINUITY focuses on maintaining legacy systems during transitions, filtered out under digital_transformation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q064",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Role-specific staff training sessions, standard operating procedure (SOP) manuals, and change management support for new financial workflows.",
+      "target_service_family": "training",
+      "intent_tags": [
+        "role_specific_training",
+        "sop_manuals",
+        "change_management",
+        "staff_adoption"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "role_specific_training",
+          "sop_creation"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "optional_relevant": [
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 7: PIRS_2025_TRAINING_CHANGE_MANAGEMENT is the dedicated training chunk featuring role-specific workshops, SOPs, and adoption support.",
+      "confuser_notes": "General digital transformation implementation chunks focus on system setup, not user training and change management.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q065",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "We need hands-on training for our non-financial program managers so they understand how to code expenses and approve vendor invoices correctly.",
+      "target_service_family": "training",
+      "intent_tags": [
+        "non_financial_staff_training",
+        "expense_coding",
+        "approval_training",
+        "user_coaching"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online",
+          "Plooto"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "staff_onboarding_training"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "PIRS_2025_TRAINING_CHANGE_MANAGEMENT directly addresses coaching non-financial staff on basic finance protocols and expense submissions.",
+      "confuser_notes": "TACT AP Plooto contains an onboarding component, but PIRS Training Change Management is the primary specialized training module. Ineligible near-neighbors: TACT_2026_TRANSFORMATION_AP_PLOOTO configures bill payment without training, and GOODFOOT_2026_SETUP_TRANSITION_SCOPE provides written setup SOPs without live training sessions.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q066",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Create written standard operating procedures (SOPs) and workflow documentation for finance processes, with no staff training sessions required.",
+      "target_service_family": "training",
+      "intent_tags": [
+        "process_documentation_only",
+        "sop_creation",
+        "no_training_sessions",
+        "workflow_mapping"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "process_documentation_only",
+          "no_live_training"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "optional_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 8: GOODFOOT_2026_SETUP_TRANSITION_SCOPE explicitly features process documentation and workflow mapping without mandatory live training.",
+      "confuser_notes": "PIRS Training Change Management emphasizes interactive training sessions; when only written documentation is requested, process-documentation chunks take precedence.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q067",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Staff training, employee onboarding guides, and procedural handoff for internal administrative personnel following a payroll software migration.",
+      "target_service_family": "training",
+      "intent_tags": [
+        "payroll_training",
+        "onboarding_guides",
+        "system_handoff",
+        "administrative_training"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "QuickBooks Online Payroll"
+        ],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "payroll_training",
+          "process_documentation"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "optional_relevant": [
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "label_rationale": "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION explicitly integrates staff training and procedural documentation for payroll handoff.",
+      "confuser_notes": "Generic ongoing payroll administration chunks do not include training or procedure creation.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q068",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "hard",
+      "query_text": "The accounting software is already set up; our team specifically needs interactive walkthroughs, quick-reference guides, and support to build staff confidence.",
+      "target_service_family": "training",
+      "intent_tags": [
+        "interactive_walkthroughs",
+        "quick_guides",
+        "user_confidence",
+        "post_implementation"
+      ],
+      "query_context": {
+        "organization_type": "nonprofit",
+        "sector": "immigrant_services",
+        "engagement_type": "supervisory_oversight",
+        "core_bookkeeping": false,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "walkthrough_sessions",
+          "quick_reference_guides"
+        ]
+      },
+      "primary_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "label_rationale": "PIRS_2025_TRAINING_CHANGE_MANAGEMENT is specifically tailored to post-implementation adoption, quick guides, and user coaching.",
+      "confuser_notes": "Software implementation chunks focus on system setup; this query starts after setup is complete and focuses strictly on user coaching. Ineligible near-neighbor: TACT_2026_TRANSFORMATION_AP_PLOOTO configures software without training, filtered out under training.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q069",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Temporary interim bookkeeping support for three months during finance staff leave, ensuring uninterrupted day-to-day operations.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "three_month_transition",
+        "staff_leave_coverage",
+        "interim_bookkeeping",
+        "operational_continuity"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "temporary_3_months"
+        ],
+        "special_requirements": [
+          "three_month_horizon",
+          "interim_continuity"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "optional_relevant": [
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "label_rationale": "YPT_2026_CONTEXT_TRANSITION is the canonical exemplar for a temporary three-month interim finance engagement during staff transition.",
+      "confuser_notes": "Standard ongoing bookkeeping chunks assume indefinite permanent engagements, missing the 3-month transition horizon. Ineligible near-neighbor: CAREOF_2025_WEEKLY_BOOKKEEPING is an ongoing bookkeeping engagement, filtered out under transition.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q070",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Maintaining existing legacy desktop accounting software, file access permissions, and approval workflows without system migration during an interim period.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "legacy_system_maintenance",
+        "sage_50",
+        "no_migration",
+        "workflow_continuity"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "temporary_3_months"
+        ],
+        "special_requirements": [
+          "maintain_existing_systems",
+          "no_migration_commitment"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "label_rationale": "SYSTEM-STATE QUERY: YPT_2026_SYSTEMS_CONTINUITY explicitly guarantees maintaining existing desktop systems and file structures without premature migration.",
+      "confuser_notes": "Digital transformation chunks advocate migrating to modern cloud tools, directly contradicting the requirement to preserve legacy systems.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q071",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Our Director of Finance just resigned; we need someone to shadow the outgoing lead for two days, map existing workflows, and step in immediately.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "shadowing_outgoing_staff",
+        "in_person_onboarding",
+        "process_mapping",
+        "immediate_step_in"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "in_person_shadowing",
+          "cross_department_mapping"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "optional_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "label_rationale": "YPT_2026_ONBOARDING_SETUP uniquely models 1-2 days of in-person onboarding, shadowing outgoing staff, and cross-department process mapping.",
+      "confuser_notes": "Standard recurring bookkeeping chunks do not detail shadowing outgoing personnel or rapid knowledge transfer protocols.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q072",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Provide fixed-term operational continuity for the next 90 days while leadership recruits a permanent in-house finance manager.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "fixed_term_continuity",
+        "ninety_days",
+        "in_house_recruitment",
+        "interim_management"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "temporary_3_months"
+        ],
+        "special_requirements": [
+          "recruitment_bridge",
+          "interim_continuity"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "optional_relevant": [
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "label_rationale": "SPECIAL HARD CASE 9: YPT_2026_CONTEXT_TRANSITION is built specifically around bridging a fixed-term staffing void while permanent recruitment occurs.",
+      "confuser_notes": "CAREOF_2025_WEEKLY_BOOKKEEPING is an ongoing multi-year operational engagement that fails to capture the fixed-term interim horizon. Ineligible near-neighbor: CAREOF_2025_WEEKLY_BOOKKEEPING represents recurring operational services, filtered out under transition.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q073",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Phase 1 initial onboarding, reviewing chart of accounts, configuring folder permissions, and documenting internal workflows before recurring bookkeeping begins.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "phase_1_setup",
+        "folder_permissions",
+        "onboarding_workflow",
+        "pre_service_stabilization"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "setup_phase",
+          "documentation_protocols"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "optional_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "label_rationale": "GOODFOOT_2026_SETUP_TRANSITION_SCOPE defines an initial stabilization and onboarding setup phase preceding recurring bookkeeping.",
+      "confuser_notes": "Good Foot Bookkeeping represents recurring services after onboarding is complete; this query focuses on the setup period. Ineligible near-neighbors: GOODFOOT_2026_CONTEXT_OBJECTIVES and TACT_2026_TRANSFORMATION_AP_PLOOTO are context and transformation modules, filtered out under transition.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q074",
+      "split": "holdout",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "Short-term operational finance bridge to maintain transaction approvals, bank oversight, and vendor payments without software modifications while the permanent finance manager is on leave.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "interim_coverage",
+        "maintain_sage_50",
+        "maintain_telpay",
+        "zero_software_modifications"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "arts_culture",
+        "engagement_type": "transition_finance_support",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "Sage 50"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "temporary_3_months"
+        ],
+        "special_requirements": [
+          "no_system_changes",
+          "telpay_continuity"
+        ]
+      },
+      "primary_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "optional_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "label_rationale": "YPT_2026_SYSTEMS_CONTINUITY explicitly commits to maintaining existing Sage 50 and Telpay systems without forced software changes.",
+      "confuser_notes": "Do not retrieve cloud transformation initiatives when client explicitly requires maintaining desktop tools without change. Ineligible near-neighbor: YPT_2026_AP_EXPENDITURES is an operational service module, filtered out under transition.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q075",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "hard",
+      "query_text": "Initial multi-week setup and knowledge transfer phase to establish operational protocols and stabilize books before ongoing bookkeeping.",
+      "target_service_family": "transition",
+      "intent_tags": [
+        "multi_week_setup",
+        "knowledge_transfer",
+        "protocol_establishment",
+        "pre_bookkeeping_stabilization"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [
+          "one_time"
+        ],
+        "special_requirements": [
+          "initial_stabilization_phase"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "optional_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "label_rationale": "GOODFOOT_2026_SETUP_TRANSITION_SCOPE focuses on the initial transition runway where files, accounts, and protocols are standardized.",
+      "confuser_notes": "Training chunks focus on user coaching; this chunk focuses on setup, access configuration, and workflow stabilization. Ineligible near-neighbors: GOODFOOT_2026_BOOKKEEPING and TACT_2026_CONTEXT_OBJECTIVES are filtered out under transition.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q076",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "easy",
+      "query_text": "Executive summary and operational context for a dual-mission non-profit social enterprise seeking financial restructuring and modernized systems.",
+      "target_service_family": "context",
+      "intent_tags": [
+        "executive_summary",
+        "social_enterprise",
+        "dual_mission",
+        "financial_restructuring"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [],
+        "special_requirements": [
+          "dual_mission_context",
+          "operational_restructuring"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "GOODFOOT_2026_CONTEXT_OBJECTIVES establishes the diagnostic background for an earned-revenue social enterprise undergoing financial renewal.",
+      "confuser_notes": "Service scope chunks describe specific operational tasks; context chunks define organizational background and strategic drivers. Ineligible near-neighbors: YPT_2026_CONTEXT_TRANSITION (transition) and GOODFOOT_2026_FINANCIAL_MANAGEMENT (financial_management) are filtered out under context.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q077",
+      "split": "dev",
+      "query_class": "direct_intent",
+      "difficulty": "medium",
+      "query_text": "High-level background and engagement context for a registered charity needing comprehensive ongoing finance services alongside digital transformation initiatives.",
+      "target_service_family": "context",
+      "intent_tags": [
+        "charity_background",
+        "engagement_structure",
+        "three_part_scope",
+        "ongoing_plus_transformation"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "ADP"
+        ],
+        "cadence": [],
+        "special_requirements": [
+          "three_part_engagement",
+          "charitable_status"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "TACT_2026_CONTEXT_OBJECTIVES presents a comprehensive three-part engagement context (ongoing services, transformation, and audit support).",
+      "confuser_notes": "Individual service chunks describe only one part of the engagement; context unifies the multi-part structure. Ineligible near-neighbors: YPT_2026_CONTEXT_TRANSITION (transition) and TACT_2026_BOOKKEEPING (bookkeeping) are filtered out under context.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q078",
+      "split": "dev",
+      "query_class": "natural_discovery",
+      "difficulty": "medium",
+      "query_text": "Background context for an organization transitioning between finance models, establishing clear scope boundaries and three-part engagement objectives.",
+      "target_service_family": "context",
+      "intent_tags": [
+        "finance_model_transition",
+        "scope_boundaries",
+        "three_part_structure",
+        "strategic_objectives"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [],
+        "special_requirements": [
+          "three_part_model",
+          "boundary_setting"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "TACT_2026_CONTEXT_OBJECTIVES provides the strategic framing that delineates Part A ongoing services, Part B transformation, and Part C year-end audit.",
+      "confuser_notes": "Avoid single-stream service modules when the requirement is high-level framing and engagement architecture. Ineligible near-neighbors: YPT_2026_CONTEXT_TRANSITION (transition) and GOODFOOT_2026_SETUP_TRANSITION_SCOPE (onboarding) are filtered out under context.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q079",
+      "split": "dev",
+      "query_class": "confuser",
+      "difficulty": "hard",
+      "query_text": "Engagement background detailing organization operating scale, multi-program charitable activities, diverse funding streams, and multi-part project objectives.",
+      "target_service_family": "context",
+      "intent_tags": [
+        "organization_scale",
+        "operating_budget",
+        "staff_count",
+        "strategic_framing"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_plus_transformation",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [
+          "ADP"
+        ],
+        "cadence": [],
+        "special_requirements": [
+          "scale_definition",
+          "operating_budget_context"
+        ]
+      },
+      "primary_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "TACT_2026_CONTEXT_OBJECTIVES specifically defines organizational scale ($1.4M budget, 19 staff, 5 programs) in the narrative context.",
+      "confuser_notes": "Service modules (e.g. bookkeeping or payroll) deliver tactical tasks; the context chunk sets the operational parameters and organizational scale. Ineligible near-neighbors: PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT (financial_management) and YPT_2026_CONTEXT_TRANSITION (transition) are filtered out under context.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    },
+    {
+      "query_id": "Q080",
+      "split": "holdout",
+      "query_class": "natural_discovery",
+      "difficulty": "hard",
+      "query_text": "Context and strategic objectives for a community organization balancing charitable mission delivery with earned fee-for-service operations.",
+      "target_service_family": "context",
+      "intent_tags": [
+        "earned_revenue_balance",
+        "mission_delivery",
+        "social_enterprise_context",
+        "strategic_drivers"
+      ],
+      "query_context": {
+        "organization_type": "charity",
+        "sector": "social_services",
+        "engagement_type": "ongoing_finance",
+        "core_bookkeeping": true,
+        "accounting_systems": [
+          "QuickBooks Online"
+        ],
+        "payroll_systems": [],
+        "cadence": [],
+        "special_requirements": [
+          "dual_mission_strategic_drivers"
+        ]
+      },
+      "primary_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "optional_relevant": [],
+      "label_rationale": "GOODFOOT_2026_CONTEXT_OBJECTIVES frames the delicate operational balance between charitable mission delivery and commercial earned revenue.",
+      "confuser_notes": "Purely arts-based context chunks do not capture the dual-mission commercial dynamic of a social enterprise. Ineligible near-neighbors: YPT_2026_CONTEXT_TRANSITION (transition) and GOODFOOT_2026_FINANCIAL_MANAGEMENT (financial_management) are filtered out under context.",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      }
+    }
+  ],
+  "safety_filter_tests": [
+    {
+      "test_id": "P001",
+      "safety_category": "pricing_suppression",
+      "query_text": "We need ongoing monthly bookkeeping services and our approved operational budget is $2,500 per month.",
+      "target_service_family": "bookkeeping",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "pricing_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Even though dollar figures and monthly budget ceilings are present in the query, semantic writer retrieval must NOT retrieve historical pricing chunks (e.g. TACT_2026_PRICING or GOODFOOT_2026_PRICING). Writer prompts take current approved commercial pricing exclusively from human intake."
+    },
+    {
+      "test_id": "P002",
+      "safety_category": "pricing_suppression",
+      "query_text": "What is the fee quote and hourly rate for processing bi-weekly payroll for a team of 15 employees?",
+      "target_service_family": "payroll",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "pricing_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Queries asking for quotes or fee schedules must only retrieve operational payroll scope exemplars (e.g. TACT_2026_PAYROLL), never historical fee tables."
+    },
+    {
+      "test_id": "P003",
+      "safety_category": "pricing_suppression",
+      "query_text": "Please provide your hourly billing rate and total estimated cost for external audit preparation and PBC schedule compilation.",
+      "target_service_family": "audit",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "pricing_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Historical audit chunks with pricing details must be strictly filtered out by the pricing_content=false hard filter."
+    },
+    {
+      "test_id": "P004",
+      "safety_category": "pricing_suppression",
+      "query_text": "We need a fixed-fee implementation quote for migrating from desktop Sage 50 to QuickBooks Online.",
+      "target_service_family": "digital_transformation",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "pricing_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "One-time digital transformation implementation queries must retrieve technical and workflow scope, suppressing all historical fixed-fee quotes."
+    },
+    {
+      "test_id": "P005",
+      "safety_category": "pricing_suppression",
+      "query_text": "What are your monthly retainer fees for fractional CFO oversight and cash flow forecasting?",
+      "target_service_family": "financial_management",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "pricing_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Retainer fee queries must retrieve operational financial management scope, preventing commercial rate anchoring from past proposals."
+    },
+    {
+      "test_id": "B001",
+      "safety_category": "boilerplate_suppression",
+      "query_text": "Why should we choose Sympl Solutions? Tell us about your team's values and decade-long non-profit experience.",
+      "target_service_family": "context",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "boilerplate_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Why Us narrative copy is managed deterministically via sympl_reference_blocks and must NEVER be retrieved via semantic RAG vector search from historical boilerplate chunks."
+    },
+    {
+      "test_id": "B002",
+      "safety_category": "boilerplate_suppression",
+      "query_text": "What standard exclusions apply to software subscription fees and external audit fees?",
+      "target_service_family": "compliance",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "boilerplate_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Exclusions and disclaimers are injected deterministically from sympl_reference_blocks based on explicit planner flags, not retrieved semantically."
+    },
+    {
+      "test_id": "B003",
+      "safety_category": "boilerplate_suppression",
+      "query_text": "Include your standard terms regarding prior period bookkeeping backlog and clean-up quotes.",
+      "target_service_family": "bookkeeping",
+      "expected_hard_filters": {
+        "retrieval_enabled": true,
+        "pricing_content": false,
+        "boilerplate_content": false
+      },
+      "prohibited_chunk_types": [
+        "boilerplate_content"
+      ],
+      "expected_unsafe_chunks_count": 0,
+      "safety_rationale": "Backlog exclusions are canonical reference blocks (REF_BLOCK_EXCLUSIONS_BACKLOG). Semantic vector retrieval must suppress all historical boilerplate chunks."
+    }
+  ],
+  "revision_notes": "v1.1 = family-filter-aligned and source-fingerprint-hardened revision. Eliminates cross-family relevance leaks, removes historical client-specific numeric fingerprints (Q079, Q017), ensures distinct Holdout scenarios (Q074), and aligns all relevance tiers with Service-Family Eligibility Version 2.0.",
+  "service_family_eligibility_version": "2.0"
+}

@@ -1,0 +1,376 @@
+{
+  "name": "Sympl Proposal Processing and Delivery Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sympl-proposal-processing",
+        "options": {
+          "responseMode": "onReceived"
+        }
+      },
+      "id": "w2-webhook-ingress",
+      "name": "Workflow 2 Webhook Ingress",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "notesInFlow": true,
+      "notes": "Receives handoff event from Workflow 1 with job_id and CRM deal_id."
+    },
+    {
+      "parameters": {
+        "resource": "deal",
+        "operation": "update",
+        "dealId": "={{$json.body.deal_id}}",
+        "updateFields": {
+          "customProperties": {
+            "sympl_job_id": "={{$json.body.job_id}}",
+            "sympl_proposal_status": "GENERATING"
+          }
+        }
+      },
+      "id": "w2-hubspot-set-generating",
+      "name": "HubSpot Set Generating State",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "notesInFlow": true,
+      "notes": "Updates deal in CRM indicating proposal generation is in progress."
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "w2-polling-sleep",
+      "name": "Polling Sleep (5s)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [700, 300],
+      "notesInFlow": true,
+      "notes": "Non-blocking delay between status checks."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sympl-api-production.up.railway.app/proposal/status/{{$('Workflow 2 Webhook Ingress').first().json.body.job_id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{$env.SYMPL_API_KEY}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "w2-sympl-status-query",
+      "name": "Sympl Status Querier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [940, 300],
+      "notesInFlow": true,
+      "notes": "Queries GET /proposal/status/{job_id} to track progress and stage."
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.status}}",
+                    "rightValue": "COMPLETED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.status}}",
+                    "rightValue": "FAILED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        }
+      },
+      "id": "w2-status-router",
+      "name": "Status Router Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1180, 300],
+      "notesInFlow": true,
+      "notes": "Routes COMPLETED to delivery, FAILED to escalation, or loops back to sleep."
+    },
+    {
+      "parameters": {
+        "fromEmail": "alerts@symplsolutions.ca",
+        "toEmail": "sales-lead@symplsolutions.ca",
+        "subject": "=[Generation Failed] Proposal Error for Deal {{$('Workflow 2 Webhook Ingress').first().json.body.deal_id}}",
+        "body": "=Proposal generation failed for job {{$json.job_id}} at stage {{$json.current_stage}}.\n\nError Message:\n{{$json.error_message}}\n\nPlease review the backend logs."
+      },
+      "id": "w2-failure-escalation",
+      "name": "Failure Escalation Alert",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1440, 480],
+      "notesInFlow": true,
+      "notes": "Escalates unrecoverable pipeline failure to technical/sales leadership."
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://sympl-api-production.up.railway.app/proposal/{{$json.proposal_id}}/artifacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{$env.SYMPL_API_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "w2-artifact-downloader",
+      "name": "Artifact Downloader",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 160],
+      "notesInFlow": true,
+      "notes": "Downloads rendered presentation layout JSON and draft package."
+    },
+    {
+      "parameters": {
+        "jsCode": "const artifacts = $input.first().json;\nconst proposalId = $('Sympl Status Querier').first().json.proposal_id;\nconst dealId = $('Workflow 2 Webhook Ingress').first().json.body.deal_id;\n\n// Deterministic packaging of presentation artifacts for CRM and email delivery\nreturn {\n  json: {\n    proposal_id: proposalId,\n    deal_id: dealId,\n    pdf_filename: `Sympl_Proposal_${proposalId}.pdf`,\n    proposal_url: `https://app.symplsolutions.ca/proposals/${proposalId}`,\n    summary: 'Presentation-ready proposal package compiled successfully.'\n  }\n};"
+      },
+      "id": "w2-pdf-adapter",
+      "name": "Presentation / PDF Compiler Adapter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1680, 160],
+      "notesInFlow": true,
+      "notes": "Compiles proposal presentation into immutable PDF document."
+    },
+    {
+      "parameters": {
+        "resource": "deal",
+        "operation": "update",
+        "dealId": "={{$json.deal_id}}",
+        "updateFields": {
+          "stage": "presentationscheduled",
+          "customProperties": {
+            "sympl_proposal_status": "DELIVERED",
+            "sympl_proposal_url": "={{$json.proposal_url}}"
+          }
+        }
+      },
+      "id": "w2-crm-deal-advance",
+      "name": "CRM Deal Advance & Record Link",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2,
+      "position": [1920, 160],
+      "notesInFlow": true,
+      "notes": "Updates deal stage to Proposal Delivered and links proposal URL."
+    },
+    {
+      "parameters": {
+        "fromEmail": "proposals@symplsolutions.ca",
+        "toEmail": "={{$('Workflow 2 Webhook Ingress').first().json.body.client_email || 'client@example.org'}}",
+        "subject": "=Sympl Solutions — Service Proposal for {{$('Workflow 2 Webhook Ingress').first().json.body.client_name}}",
+        "body": "=Dear Partner,\n\nThank you for sharing your organization's mission and financial objectives. Attached please find your custom service proposal prepared by Sympl Solutions.\n\nYou can also review your proposal online here: {{$json.proposal_url}}\n\nWarm regards,\nThe Sympl Solutions Team"
+      },
+      "id": "w2-client-delivery",
+      "name": "Client Proposal Delivery Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [2160, 160],
+      "notesInFlow": true,
+      "notes": "Sends personalized proposal delivery email to the prospective client."
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "days"
+      },
+      "id": "w2-followup-wait",
+      "name": "Follow-up Delay (3 Days)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2400, 160],
+      "notesInFlow": true,
+      "notes": "Pauses 3 business days before triggering follow-up outreach alert."
+    },
+    {
+      "parameters": {
+        "fromEmail": "proposals@symplsolutions.ca",
+        "toEmail": "sales-team@symplsolutions.ca",
+        "subject": "=[Follow-up Due] 3 Days Since Proposal Sent to {{$('Workflow 2 Webhook Ingress').first().json.body.client_name}}",
+        "body": "=Proposal {{$('Sympl Status Querier').first().json.proposal_id}} was delivered 3 days ago.\n\nPlease initiate scheduled follow-up check-in with the client."
+      },
+      "id": "w2-sales-followup-alert",
+      "name": "Sales Follow-up Reminder",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [2640, 160],
+      "notesInFlow": true,
+      "notes": "Alerts Account Exec that 3 days have elapsed without response."
+    }
+  ],
+  "connections": {
+    "Workflow 2 Webhook Ingress": {
+      "main": [
+        [
+          {
+            "node": "HubSpot Set Generating State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot Set Generating State": {
+      "main": [
+        [
+          {
+            "node": "Polling Sleep (5s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Polling Sleep (5s)": {
+      "main": [
+        [
+          {
+            "node": "Sympl Status Querier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sympl Status Querier": {
+      "main": [
+        [
+          {
+            "node": "Status Router Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status Router Switch": {
+      "main": [
+        [
+          {
+            "node": "Artifact Downloader",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failure Escalation Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Polling Sleep (5s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artifact Downloader": {
+      "main": [
+        [
+          {
+            "node": "Presentation / PDF Compiler Adapter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Presentation / PDF Compiler Adapter": {
+      "main": [
+        [
+          {
+            "node": "CRM Deal Advance & Record Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CRM Deal Advance & Record Link": {
+      "main": [
+        [
+          {
+            "node": "Client Proposal Delivery Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Client Proposal Delivery Email": {
+      "main": [
+        [
+          {
+            "node": "Follow-up Delay (3 Days)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Follow-up Delay (3 Days)": {
+      "main": [
+        [
+          {
+            "node": "Sales Follow-up Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

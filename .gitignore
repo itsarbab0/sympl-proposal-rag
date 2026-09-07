@@ -1,0 +1,29 @@
+# Environment configuration and secrets
+.env
+*.env.local
+
+# Python virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Do NOT ignore normalized JSON datasets (they are version-controlled dataset artifacts)
+!data/normalized/*.json
+
+# Runtime generated proposal artifacts
+data/proposals/
+proposal_draft.json
+proposal_plan.json
+proposal_render.json
+rendered_proposal.json

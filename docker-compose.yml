@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  sympl-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sympl-proposal-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - API_AUTH_ENABLED=false
+      - API_KEY=sympl-proposal-secret-key-2026
+      - LLM_PROVIDER=mock
+      - RENDERER_MODE=mock
+      - DATABASE_URL=${DATABASE_URL:-postgres://postgres:sW4BToE1PaHEtVaNRuGb6962DsNAp2r-@junction.proxy.rlwy.net:20463/railway}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

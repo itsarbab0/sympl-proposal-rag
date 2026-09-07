@@ -1,0 +1,2674 @@
+{
+  "benchmark_name": "sympl_pgvector_retrieval_benchmark",
+  "benchmark_version": "1.1",
+  "embedding_model": "BAAI/bge-m3",
+  "embedding_dimension": 1024,
+  "retrieval_engine": "PostgreSQL pgvector (<=> cosine distance)",
+  "corpus_chunks_total": 71,
+  "retrieval_enabled_chunks": 47,
+  "execution_timestamp": "2026-09-06T19:19:20Z",
+  "dev_summary": {
+    "query_count": 60,
+    "metrics": {
+      "Hit@1": 0.9,
+      "Hit@3": 1.0,
+      "Recall@3": 0.7166666666666667,
+      "MRR": 0.9444444444444445,
+      "nDCG@3": 0.7711932916407122,
+      "Family Eligibility Accuracy": 1.0,
+      "Unsafe Retrieval Count": 0
+    },
+    "dev_selection_score": 0.8554732076298047,
+    "avg_latency_ms": 535.8326916660493
+  },
+  "holdout_summary": {
+    "query_count": 20,
+    "metrics": {
+      "Hit@1": 0.85,
+      "Hit@3": 1.0,
+      "Recall@3": 0.6583333333333333,
+      "MRR": 0.925,
+      "nDCG@3": 0.6804003804433999,
+      "Family Eligibility Accuracy": 1.0,
+      "Unsafe Retrieval Count": 0
+    },
+    "avg_latency_ms": 512.3775399959413
+  },
+  "safety_summary": {
+    "test_count": 8,
+    "violations": 0
+  },
+  "dev_detailed_results": [
+    {
+      "query_id": "Q001",
+      "query_text": "Small community organization needs weekly vendor bill entry, corporate credit card expense verification, and management of reimbursement requests.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_WEEKLY_BOOKKEEPING",
+        "CAHOOTS_2026_EXPENSE_AR"
+      ],
+      "retrieved_keys": [
+        "CAREOF_2025_WEEKLY_BOOKKEEPING",
+        "YPT_2026_AP_EXPENDITURES",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.6320687155682625,
+        0.6128254763588036,
+        0.6122624509178142
+      ],
+      "latency_ms": 725.258800026495,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.28866167924141933,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q002",
+      "query_text": "Bi-weekly operational bookkeeping for a small arts charity, including coding expenses, verifying receipts, and monthly bank reconciliation.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_MONTHLY_RECONCILIATIONS",
+        "CAREOF_2025_WEEKLY_BOOKKEEPING"
+      ],
+      "retrieved_keys": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.6475314094880646,
+        0.6183011347561761,
+        0.6140635426621598
+      ],
+      "latency_ms": 479.5193999889307,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.7342523322797491,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q003",
+      "query_text": "Monthly reconciliation of operating bank accounts, credit cards, and merchant clearing accounts for a performing arts organization.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "CAHOOTS_2026_MONTHLY_RECONCILIATIONS"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_MONTHLY_RECONCILIATIONS",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "retrieved_keys": [
+        "CAREOF_2025_MONTHLY_RECONCILIATIONS",
+        "CAHOOTS_2026_MONTHLY_RECONCILIATIONS",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "similarities": [
+        0.6614618301391602,
+        0.653640052459238,
+        0.6228276119930987
+      ],
+      "latency_ms": 486.705300048925,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8579514172105233,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q004",
+      "query_text": "Our arts festival needs help processing vendor disbursements for event production, paying artist fees, and invoicing community partners.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "RPFF_2025_AP_AR"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_EXPENSE_AR",
+        "CAREOF_2025_EXPENSE_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "CAHOOTS_2026_EXPENSE_AR",
+        "YPT_2026_AR_REVENUES",
+        "RPFF_2025_FUNDING_FUND_TRACKING"
+      ],
+      "similarities": [
+        0.5347347536841192,
+        0.5297480505855062,
+        0.5275406490193646
+      ],
+      "latency_ms": 477.8253000113182,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.28866167924141933,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q005",
+      "query_text": "We operate a seasonal arts festival and need ongoing ledger maintenance, box office revenue reconciliation, and year-end project reconciliations.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_FUNDING_FUND_TRACKING",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS",
+        "YPT_2026_AR_REVENUES",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.6280401196431971,
+        0.604730093197222,
+        0.5788525844988126
+      ],
+      "latency_ms": 464.4920999999158,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8178747578506881,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q006",
+      "query_text": "We have an in-house junior bookkeeper handling daily data entry, but need senior oversight, monthly financial review, and complex balance sheet reconciliations.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT",
+        "TACT_2026_BOOKKEEPING",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "similarities": [
+        0.6672921776771545,
+        0.6323433737550166,
+        0.613068365271786
+      ],
+      "latency_ms": 751.8571999971755,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q007",
+      "query_text": "Small arts non-profit needs straightforward recurring weekly bookkeeping without multi-layered transformation initiatives or complex advisory overhead.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "CAREOF_2025_WEEKLY_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+        "CAREOF_2025_MONTHLY_RECONCILIATIONS"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT",
+        "CAREOF_2025_WEEKLY_BOOKKEEPING",
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.5547676947851373,
+        0.5485292019213197,
+        0.5422460709663597
+      ],
+      "latency_ms": 474.8740999493748,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 0.5,
+        "ndcg3": 0.5692897379691039,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q008",
+      "query_text": "Vendor invoice entry, department account coding, and preparation of electronic payment batches in Telpay within an existing Sage 50 accounting environment.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "YPT_2026_AP_EXPENDITURES"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT",
+        "RPFF_2025_AP_AR"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_AP_EXPENDITURES",
+        "YPT_2026_AR_REVENUES",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.7805769705084598,
+        0.5798942697111218,
+        0.5786519552884155
+      ],
+      "latency_ms": 482.73000004701316,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.7216541981035484,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q009",
+      "query_text": "Need to record ticket sales, donation revenues, and workshop billings, reconciling payments weekly against bank deposits in Sage 50.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "YPT_2026_AR_REVENUES"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_AP_AR",
+        "CAHOOTS_2026_EXPENSE_AR"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_AR_REVENUES",
+        "YPT_2026_AP_EXPENDITURES",
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.720553951230411,
+        0.6562539748842746,
+        0.6095476615968154
+      ],
+      "latency_ms": 483.15170005662367,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.6735439182299785,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q013",
+      "query_text": "Bi-weekly payroll processing for 15 salaried and hourly staff including statutory source deductions, CRA remittances, and record maintenance.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "TACT_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL",
+        "RPFF_2025_PAYROLL"
+      ],
+      "similarities": [
+        0.7279876470565796,
+        0.6951474729092447,
+        0.6824761411576151
+      ],
+      "latency_ms": 477.02579997712746,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q014",
+      "query_text": "Semi-monthly payroll administration in Wagepoint for hourly dispatch staff, managing direct deposits, WSIB remittances, and ROE filings.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_PAYROLL",
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "CAHOOTS_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL",
+        "TACT_2026_PAYROLL"
+      ],
+      "similarities": [
+        0.6973564264007123,
+        0.6708629131317186,
+        0.6285645144322236
+      ],
+      "latency_ms": 481.9854000234045,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.7617308574633834,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q015",
+      "query_text": "We run payroll twice a month for salaried employees and project contractors, needing year-end T4 slip preparation and vacation pay tracking.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "CAREOF_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_PAYROLL",
+        "RPFF_2025_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_PAYROLL",
+        "PIRS_2025_PAYROLL",
+        "CAREOF_2025_PAYROLL"
+      ],
+      "similarities": [
+        0.6434994168878343,
+        0.6307832598686218,
+        0.6098262304171197
+      ],
+      "latency_ms": 482.3696999810636,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.6254336383564085,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q016",
+      "query_text": "Seasonal non-profit needs bi-weekly payroll for core administrative staff and variable honoraria/fees for contract festival workers during event season.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "RPFF_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_PAYROLL",
+        "CAREOF_2025_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_PAYROLL",
+        "PIRS_2025_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "similarities": [
+        0.6452640717906912,
+        0.5801655650138855,
+        0.5632412097906355
+      ],
+      "latency_ms": 475.9507999988273,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.6735439182299785,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q017",
+      "query_text": "Our client currently runs payroll through ADP but has approved moving approximately 14 staff into QBO Payroll, requiring a parallel run before switchover.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "PIRS_2025_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+        "TACT_2026_PAYROLL",
+        "CAREOF_2025_PAYROLL"
+      ],
+      "similarities": [
+        0.7409241420306013,
+        0.709064564378994,
+        0.6443832324629084
+      ],
+      "latency_ms": 488.56239998713136,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q018",
+      "query_text": "Payroll is currently managed in PayWorks; we need ongoing bi-weekly processing while evaluating whether migrating to QBO Payroll makes operational sense.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "PIRS_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_PAYROLL",
+        "CAREOF_2025_PAYROLL",
+        "RPFF_2025_PAYROLL"
+      ],
+      "similarities": [
+        0.6881156153609994,
+        0.6801778459336941,
+        0.6786224820692881
+      ],
+      "latency_ms": 486.1466999864206,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.6735439182299785,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q019",
+      "query_text": "Sympl will manage all payroll deductions and tax remittances, but client program managers must submit timely approved hours and timesheets; Sympl does not handle HR administration.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "PIRS_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_PAYROLL",
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "similarities": [
+        0.633364401259161,
+        0.6143958202364562,
+        0.6132191880680098
+      ],
+      "latency_ms": 484.5929000293836,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q020",
+      "query_text": "Bi-weekly payroll calculations, direct deposits, source deduction filings, and record-keeping for ten non-profit employees using Wagepoint.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "CAHOOTS_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_PAYROLL",
+        "TACT_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "CAHOOTS_2026_PAYROLL",
+        "CAREOF_2025_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "similarities": [
+        0.7312211669947108,
+        0.678636312484746,
+        0.6133864521980329
+      ],
+      "latency_ms": 480.35969998454675,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q023",
+      "query_text": "Monthly preparation of balance sheet, profit and loss statement, and accounts payable/receivable aging summaries for management review.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.7172507812231326,
+        0.7132728099822998,
+        0.7098749279975891
+      ],
+      "latency_ms": 475.04940000362694,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8075588805057204,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q024",
+      "query_text": "Program-level financial reporting showing revenue and expense allocations across five distinct charitable program classes.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_REPORTING",
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.5905513939425767,
+        0.5759588308346643,
+        0.5606080984525654
+      ],
+      "latency_ms": 479.41019997233525,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8579514172105233,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q025",
+      "query_text": "The Executive Director and Board require quarterly financial packages with variance analysis against approved annual budgets and written commentary.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_FINANCIAL_REPORTING",
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.7017225800918008,
+        0.6347760558128357,
+        0.6173652410507202
+      ],
+      "latency_ms": 477.922199992463,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q026",
+      "query_text": "We report project finances to municipal arts councils and update the CADAC database, requiring clean class-based expenditure breakdowns.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FUNDING_FUND_TRACKING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.5539956624513075,
+        0.5515804496561687,
+        0.5487972170831441
+      ],
+      "latency_ms": 502.5475000147708,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 0.3333333333333333,
+        "ndcg3": 0.24055139936784944,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q027",
+      "query_text": "Client requests delivered monthly departmental P&L and balance sheet statements for the board, but does NOT require cash flow forecasting or ongoing executive advisory.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.6521252808421515,
+        0.6483655008616159,
+        0.6341784814489804
+      ],
+      "latency_ms": 464.5433000405319,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.33677195911498925,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q028",
+      "query_text": "Our leadership team wants monthly delivered financial packages with summaries ready for the board, rather than raw account reconciliation spreadsheets.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING",
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.6469474049241909,
+        0.6208357666926706,
+        0.5978223085403442
+      ],
+      "latency_ms": 491.1619999911636,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 0.5,
+        "ndcg3": 0.6151177610114408,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q029",
+      "query_text": "Standard monthly financial reporting package for small non-profit organization including comparative income statement and balance sheet.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING",
+        "CAREOF_2025_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.6674435535140569,
+        0.6402917718713431,
+        0.6379356004038107
+      ],
+      "latency_ms": 455.8093000086956,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 0.5,
+        "ndcg3": 0.6655102977162437,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q032",
+      "query_text": "Monthly 12-month rolling cash flow forecasting and budget monitoring to support executive decision-making.",
+      "target_family": "financial_management",
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT",
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "similarities": [
+        0.7258215546607971,
+        0.6142705678939819
+      ],
+      "latency_ms": 466.15439996821806,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q033",
+      "query_text": "Our leadership team needs strategic financial advisory, scenario modeling, and monthly working capital visibility as we expand our operations.",
+      "target_family": "financial_management",
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT",
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "similarities": [
+        0.6695106822543941,
+        0.569598044777034
+      ],
+      "latency_ms": 2147.5690999650396,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q034",
+      "query_text": "The board is concerned about cash runway and requires rolling 13-week cash flow projections, budget variance commentary, and strategic capital discussions.",
+      "target_family": "financial_management",
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT",
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "similarities": [
+        0.6357128620147705,
+        0.5240710377693176
+      ],
+      "latency_ms": 515.2439999510534,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q035",
+      "query_text": "Client board and Executive Director retain sole authority for approving annual budgets; Sympl provides budget modeling templates and historical spending analyses.",
+      "target_family": "financial_management",
+      "primary_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT",
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "similarities": [
+        0.5899493342668225,
+        0.5608305000763844
+      ],
+      "latency_ms": 513.6166999582201,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8339912323981488,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q038",
+      "query_text": "Preparation and filing of annual CRA GST/HST returns and year-end working paper compilation for external tax accountant.",
+      "target_family": "compliance",
+      "primary_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "CAREOF_2025_COMPLIANCE_YEAR_END",
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "similarities": [
+        0.6794221783373143,
+        0.6634723148660484,
+        0.629091068614594
+      ],
+      "latency_ms": 493.22010000469163,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8579514172105233,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q039",
+      "query_text": "Registered charity statutory compliance including annual T3010 information return financial schedules and public service bodies (PSB) rebate claims.",
+      "target_family": "compliance",
+      "primary_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_COMPLIANCE",
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.7664346516547244,
+        0.7551876744292378,
+        0.7129534825142098
+      ],
+      "latency_ms": 540.1168999960646,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q040",
+      "query_text": "Ensuring our arts charity remains in good standing with CRA, filing our annual returns and charity information return schedules on time.",
+      "target_family": "compliance",
+      "primary_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+        "TACT_2026_COMPLIANCE"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "TACT_2026_COMPLIANCE",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.6030786870075066,
+        0.5680205483424347,
+        0.5193164944648743
+      ],
+      "latency_ms": 499.01049997424707,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q041",
+      "query_text": "Filing annual HST/GST returns and preparing fiscal year-end statutory compliance filings for CRA, with no external auditor involved.",
+      "target_family": "compliance",
+      "primary_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "TACT_2026_COMPLIANCE",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.6724225673171798,
+        0.6377693846500654,
+        0.6268595083439654
+      ],
+      "latency_ms": 488.47250000108033,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.34937009329118995,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q044",
+      "query_text": "Coordinating with an external audit firm, compiling the Prepared by Client (PBC) document list, and responding to auditor sampling requests.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "similarities": [
+        0.677843251485437,
+        0.6345641830823323,
+        0.6158079962959294
+      ],
+      "latency_ms": 509.28130000829697,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.5188972012643011,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q045",
+      "query_text": "Year-end audit preparation, balance sheet reconciliation schedules, and auditor liaison for an organization with multiple government grant agreements.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.6571055259045657,
+        0.6417394493973595,
+        0.639184832572937
+      ],
+      "latency_ms": 518.9289000118151,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q046",
+      "query_text": "Our annual audit is approaching in two months; we need someone to build the lead sheets, pull sampling invoices, and manage auditor questions directly.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT",
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "similarities": [
+        0.6275209632490917,
+        0.5761726155178191,
+        0.5699609178327977
+      ],
+      "latency_ms": 509.7884999704547,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8075588805057204,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q047",
+      "query_text": "Outgoing finance director departure left historical accounting records incomplete; need audit cleanup, reconciliations, and direct support during upcoming financial audit.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.6154627066299073,
+        0.541364366845564,
+        0.5381264961882544
+      ],
+      "latency_ms": 512.431800016202,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q048",
+      "query_text": "We need comprehensive liaison support for our independent CPA audit firm, resolving PBC queries and delivering audit-ready lead sheets.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "TACT_2026_AUDIT_SUPPORT",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "similarities": [
+        0.6466699453192993,
+        0.5673397779464722,
+        0.5665812750708307
+      ],
+      "latency_ms": 517.3335000290535,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.7136205775898136,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q049",
+      "query_text": "Sympl will organize working papers and answer auditor questions, but does not conduct the independent financial audit or issue the auditor's opinion.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_COMPLIANCE_AUDIT",
+        "PIRS_2025_AUDIT_PREPARATION",
+        "TACT_2026_AUDIT_SUPPORT"
+      ],
+      "similarities": [
+        0.5811201833343329,
+        0.5281874785088051,
+        0.47822886964931
+      ],
+      "latency_ms": 518.5163999558426,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8075588805057204,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q052",
+      "query_text": "Implementation of Plooto integrated with QuickBooks Online to establish digital vendor bill payment and approval workflows.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "similarities": [
+        0.7565790865766471,
+        0.7488188743591309,
+        0.5950872898101807
+      ],
+      "latency_ms": 513.0556999938563,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.7136205775898136,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q053",
+      "query_text": "Automating client billing with standardized recurring invoice templates and pre-authorized debit (PAD) collections.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "similarities": [
+        0.7451851671713444,
+        0.5979404449462891,
+        0.5802508938462085
+      ],
+      "latency_ms": 552.6367999846116,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.9037794402528602,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q054",
+      "query_text": "Comprehensive diagnostic review of finance systems and software tools to recommend a modern cloud architecture and workflow roadmap.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY",
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "similarities": [
+        0.68813075493987,
+        0.6162313406536385,
+        0.6101634734771576
+      ],
+      "latency_ms": 507.08100001793355,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q055",
+      "query_text": "Configuration and setup of QuickBooks Online, chart of accounts redesign, and historical balance migration from legacy accounting software.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "similarities": [
+        0.6289313656728657,
+        0.605191707611084,
+        0.5939373970031738
+      ],
+      "latency_ms": 513.6966000427492,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.28866167924141933,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q056",
+      "query_text": "Our accounts payable relies on paper checks and manual emails; we want a paperless approval and electronic payment system.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "similarities": [
+        0.600369846842877,
+        0.5924738049507141,
+        0.5636897011173168
+      ],
+      "latency_ms": 502.7066000038758,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.7617308574633834,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q057",
+      "query_text": "We are tired of chasing overdue program invoices manually and need automated payment reminders and electronic payment collection.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "similarities": [
+        0.6231406184267305,
+        0.5995997547864779,
+        0.5690665245056152
+      ],
+      "latency_ms": 502.28779995813966,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q058",
+      "query_text": "Implement Plooto for electronic accounts payable, configure dual-approval limits, and eliminate manual payment checks across departments.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "similarities": [
+        0.7406099438667297,
+        0.7245425417746642,
+        0.6250276193006277
+      ],
+      "latency_ms": 528.3392000128515,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q059",
+      "query_text": "Design automated invoicing workflows, client billing templates, and pre-authorized payment capture to reduce accounts receivable aging.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "similarities": [
+        0.6926577457597608,
+        0.5903812646865845,
+        0.5898890250855113
+      ],
+      "latency_ms": 514.1588000115007,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.9037794402528602,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q060",
+      "query_text": "Conduct a formal diagnostic review of our accounting workflows, evaluate software options, and deliver a phased digital roadmap.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "similarities": [
+        0.6896752673968207,
+        0.653750421926305,
+        0.6384270812487303
+      ],
+      "latency_ms": 511.3621999626048,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q064",
+      "query_text": "Role-specific staff training sessions, standard operating procedure (SOP) manuals, and change management support for new financial workflows.",
+      "target_family": "training",
+      "primary_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "similarities": [
+        0.7685407400131226,
+        0.6966633381448198,
+        0.675281286239624
+      ],
+      "latency_ms": 548.4081000322476,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8178747578506881,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q065",
+      "query_text": "We need hands-on training for our non-financial program managers so they understand how to code expenses and approve vendor invoices correctly.",
+      "target_family": "training",
+      "primary_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "similarities": [
+        0.5227068662643433,
+        0.46435385942459106
+      ],
+      "latency_ms": 510.6773000443354,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q066",
+      "query_text": "Create written standard operating procedures (SOPs) and workflow documentation for finance processes, with no staff training sessions required.",
+      "target_family": "training",
+      "primary_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "TACT_2026_TRANSFORMATION_AR_AUTOMATION"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "similarities": [
+        0.5893706572806051,
+        0.5816698919731453,
+        0.579714442508553
+      ],
+      "latency_ms": 501.89359998330474,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 0.3333333333333333,
+        "ndcg3": 0.2050392536704803,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q067",
+      "query_text": "Staff training, employee onboarding guides, and procedural handoff for internal administrative personnel following a payroll software migration.",
+      "target_family": "training",
+      "primary_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "similarities": [
+        0.7077744603157043,
+        0.6929114643984172,
+        0.6590322256088257
+      ],
+      "latency_ms": 543.1004000129178,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.6254336383564085,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q069",
+      "query_text": "Temporary interim bookkeeping support for three months during finance staff leave, ensuring uninterrupted day-to-day operations.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "similarities": [
+        0.6207963228225708,
+        0.5986146926879883,
+        0.5576194192397951
+      ],
+      "latency_ms": 491.9372000149451,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q070",
+      "query_text": "Maintaining existing legacy desktop accounting software, file access permissions, and approval workflows without system migration during an interim period.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "YPT_2026_CONTEXT_TRANSITION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "similarities": [
+        0.6492306412183474,
+        0.5308278482658962,
+        0.529586581612434
+      ],
+      "latency_ms": 509.53979999758303,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.9037794402528602,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q071",
+      "query_text": "Our Director of Finance just resigned; we need someone to shadow the outgoing lead for two days, map existing workflows, and step in immediately.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "similarities": [
+        0.5566411282634073,
+        0.5345891395456122,
+        0.521666138072841
+      ],
+      "latency_ms": 527.7005999814719,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q072",
+      "query_text": "Provide fixed-term operational continuity for the next 90 days while leadership recruits a permanent in-house finance manager.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_CONTEXT_TRANSITION",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "similarities": [
+        0.5834250102385883,
+        0.5727104203277585,
+        0.5724189536321797
+      ],
+      "latency_ms": 488.1912000128068,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 0.5,
+        "ndcg3": 0.6655102977162437,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q073",
+      "query_text": "Phase 1 initial onboarding, reviewing chart of accounts, configuring folder permissions, and documenting internal workflows before recurring bookkeeping begins.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "similarities": [
+        0.6993493616968787,
+        0.662337263683245,
+        0.6125333771069792
+      ],
+      "latency_ms": 547.7511999779381,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q076",
+      "query_text": "Executive summary and operational context for a dual-mission non-profit social enterprise seeking financial restructuring and modernized systems.",
+      "target_family": "context",
+      "primary_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES",
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "similarities": [
+        0.5525213479995766,
+        0.5411140918731728
+      ],
+      "latency_ms": 499.07650001114234,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q077",
+      "query_text": "High-level background and engagement context for a registered charity needing comprehensive ongoing finance services alongside digital transformation initiatives.",
+      "target_family": "context",
+      "primary_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_CONTEXT_OBJECTIVES",
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "similarities": [
+        0.6016085622777269,
+        0.5963106040584321
+      ],
+      "latency_ms": 491.58089997945353,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q078",
+      "query_text": "Background context for an organization transitioning between finance models, establishing clear scope boundaries and three-part engagement objectives.",
+      "target_family": "context",
+      "primary_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES",
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "similarities": [
+        0.614634238801347,
+        0.5808213603006993
+      ],
+      "latency_ms": 519.8004000121728,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8339912323981488,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q079",
+      "query_text": "Engagement background detailing organization operating scale, multi-program charitable activities, diverse funding streams, and multi-part project objectives.",
+      "target_family": "context",
+      "primary_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_CONTEXT_OBJECTIVES",
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "similarities": [
+        0.5810261272160855,
+        0.5485296787584211
+      ],
+      "latency_ms": 545.4437999869697,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    }
+  ],
+  "holdout_detailed_results": [
+    {
+      "query_id": "Q010",
+      "query_text": "Comprehensive full-cycle bookkeeping for a mid-sized charity with multiple program classes, vendor bill payments, and monthly balance sheet close.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_BOOKKEEPING",
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+        "RPFF_2025_FUNDING_FUND_TRACKING"
+      ],
+      "similarities": [
+        0.6136920912632834,
+        0.5797252309486143,
+        0.5756710334412406
+      ],
+      "latency_ms": 511.7200000095181,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.34937009329118995,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q011",
+      "query_text": "We operate a social enterprise with delivery and courier revenue streams alongside donations, needing daily expense processing and customer billing.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "GOODFOOT_2026_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_BOOKKEEPING",
+        "CAHOOTS_2026_EXPENSE_AR"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_BOOKKEEPING",
+        "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+        "YPT_2026_AR_REVENUES"
+      ],
+      "similarities": [
+        0.557862215296958,
+        0.55190381098367,
+        0.5484383971429836
+      ],
+      "latency_ms": 507.8386000241153,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.6735439182299785,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q012",
+      "query_text": "Sympl will enter invoices, verify approvals, and stage payment runs, but our Executive Director retains exclusive final payment release authority in online banking.",
+      "target_family": "bookkeeping",
+      "primary_relevant": [
+        "TACT_2026_BOOKKEEPING"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_EXPENSE_MANAGEMENT",
+        "RPFF_2025_AP_AR"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_AP_EXPENDITURES",
+        "TACT_2026_BOOKKEEPING",
+        "GOODFOOT_2026_BOOKKEEPING"
+      ],
+      "similarities": [
+        0.6406385516739767,
+        0.6368567563976802,
+        0.6110949748101856
+      ],
+      "latency_ms": 512.852500018198,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 0.5,
+        "ndcg3": 0.521179458095534,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q021",
+      "query_text": "Need ongoing support to calculate source deductions, remit CPP and EI to CRA, issue ROEs when workers depart, and reconcile payroll to the ledger.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "TACT_2026_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "CAREOF_2025_PAYROLL",
+        "TACT_2026_PAYROLL",
+        "RPFF_2025_PAYROLL"
+      ],
+      "similarities": [
+        0.6958040776369537,
+        0.6797477006912231,
+        0.6590467501823055
+      ],
+      "latency_ms": 524.1008999873884,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 0.5,
+        "ndcg3": 0.42495889834839423,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q022",
+      "query_text": "The client wants advice on whether to switch payroll platforms, but their non-negotiable immediate priority is running regular bi-weekly payroll for 20 employees without disruption.",
+      "target_family": "payroll",
+      "primary_relevant": [
+        "PIRS_2025_PAYROLL"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_PAYROLL",
+        "CAREOF_2025_PAYROLL",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "similarities": [
+        0.591920340542774,
+        0.5755548983150842,
+        0.5672346015432724
+      ],
+      "latency_ms": 524.3066999828443,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.33677195911498925,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q030",
+      "query_text": "We need monthly financial statements sent to department heads and board members to track grant spend-down progress across various funders.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FUNDING_FUND_TRACKING"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_FINANCIAL_REPORTING",
+        "RPFF_2025_FUNDING_FUND_TRACKING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.6833096712870006,
+        0.6386909750244677,
+        0.6367389396740315
+      ],
+      "latency_ms": 499.9268999672495,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.47078692139073114,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q031",
+      "query_text": "Generate customized contribution expenditure reports and track deferred grant contributions to comply with public funder audit guidelines.",
+      "target_family": "financial_reporting",
+      "primary_relevant": [
+        "RPFF_2025_FUNDING_FUND_TRACKING"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "TACT_2026_FINANCIAL_REPORTING"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_FUNDING_FUND_TRACKING",
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "GOODFOOT_2026_FINANCIAL_REPORTING"
+      ],
+      "similarities": [
+        0.67396751952559,
+        0.6050534719165044,
+        0.5863628387451172
+      ],
+      "latency_ms": 511.0417999676429,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q036",
+      "query_text": "Financial leadership oversight, cash management planning, and supervisory financial management for an organization undergoing leadership transition.",
+      "target_family": "financial_management",
+      "primary_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT",
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "similarities": [
+        0.7162498404830802,
+        0.6351383545912304
+      ],
+      "latency_ms": 496.76699994597584,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8339912323981488,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q037",
+      "query_text": "We do not need basic transaction entry; our organization requires fractional financial controller guidance, internal control assessment, and financial management.",
+      "target_family": "financial_management",
+      "primary_relevant": [
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT",
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "similarities": [
+        0.6627051636332125,
+        0.5658903639447296
+      ],
+      "latency_ms": 506.3213999965228,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8339912323981488,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q042",
+      "query_text": "Assessment of HST tax-exempt status and preparation of semi-annual public service body rebate claims for a non-profit community organization.",
+      "target_family": "compliance",
+      "primary_relevant": [
+        "TACT_2026_COMPLIANCE"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_COMPLIANCE",
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.6451442068643324,
+        0.6351278263178078,
+        0.5922764186694383
+      ],
+      "latency_ms": 509.1713999863714,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q043",
+      "query_text": "Our fiscal year just ended and we need our general ledger finalized, working paper files assembled, and tax schedules handed over to our external CPA tax preparer.",
+      "target_family": "compliance",
+      "primary_relevant": [
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END"
+      ],
+      "acceptable_relevant": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "retrieved_keys": [
+        "CAREOF_2025_COMPLIANCE_YEAR_END",
+        "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "similarities": [
+        0.6472367241155128,
+        0.6277108601417907,
+        0.55882583383245
+      ],
+      "latency_ms": 536.7426000302657,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8579514172105233,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q050",
+      "query_text": "Preparing audit lead schedules and supporting documentation for an annual charitable financial audit and board audit committee.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "retrieved_keys": [
+        "RPFF_2025_COMPLIANCE_YEAR_END",
+        "PIRS_2025_AUDIT_PREPARATION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "similarities": [
+        0.6365570046569714,
+        0.6069131727866438,
+        0.5943246483802795
+      ],
+      "latency_ms": 493.29760001273826,
+      "metrics": {
+        "hit1": 0.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 0.5,
+        "ndcg3": 0.6151177610114408,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q051",
+      "query_text": "The books are behind for the prior fiscal year; we need catch-up reconciliations and schedule preparation strictly to satisfy our external auditor's PBC requirements.",
+      "target_family": "audit",
+      "primary_relevant": [
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "TACT_2026_AUDIT_SUPPORT",
+        "RPFF_2025_COMPLIANCE_YEAR_END"
+      ],
+      "similarities": [
+        0.6572494115084773,
+        0.6007412672042847,
+        0.5950305107217734
+      ],
+      "latency_ms": 516.921500035096,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8556691603792903,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q061",
+      "query_text": "Migrating financial records and chart of accounts structure from desktop spreadsheets into a modern cloud accounting platform.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "similarities": [
+        0.5947029413371425,
+        0.5856169360140638,
+        0.56932875100799
+      ],
+      "latency_ms": 499.09549998119473,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.5188972012643011,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q062",
+      "query_text": "Hands-on setup of QuickBooks Online, importing vendor lists, restructuring chart of accounts classes, and testing opening balance transfers.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "acceptable_relevant": [
+        "RPFF_2025_PROCESS_TECHNOLOGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+        "TACT_2026_TRANSFORMATION_AP_PLOOTO"
+      ],
+      "similarities": [
+        0.5906738286808841,
+        0.5620706081390381,
+        0.5585285425186157
+      ],
+      "latency_ms": 521.5433999546804,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.3333333333333333,
+        "mrr": 1.0,
+        "ndcg3": 0.28866167924141933,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q063",
+      "query_text": "The client is considering upgrading their software in the future, but needs an immediate assessment of digital bottlenecks before approving any migration.",
+      "target_family": "digital_transformation",
+      "primary_relevant": [
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION"
+      ],
+      "acceptable_relevant": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY",
+        "RPFF_2025_PROCESS_TECHNOLOGY"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRANSFORMATION_STRATEGY",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "PIRS_2025_TRANSFORMATION_IMPLEMENTATION"
+      ],
+      "similarities": [
+        0.6024110137697777,
+        0.5712784358478081,
+        0.5412732685371201
+      ],
+      "latency_ms": 522.9538999847136,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.7136205775898136,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q068",
+      "query_text": "The accounting software is already set up; our team specifically needs interactive walkthroughs, quick-reference guides, and support to build staff confidence.",
+      "target_family": "training",
+      "primary_relevant": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_TRAINING_CHANGE_MANAGEMENT",
+        "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+        "PIRS_2025_TRANSFORMATION_STRATEGY"
+      ],
+      "similarities": [
+        0.6223254203796387,
+        0.6128868691392629,
+        0.5887767321600488
+      ],
+      "latency_ms": 509.14630002807826,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.5,
+        "mrr": 1.0,
+        "ndcg3": 0.7452525342261976,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q074",
+      "query_text": "Short-term operational finance bridge to maintain transaction approvals, bank oversight, and vendor payments without software modifications while the permanent finance manager is on leave.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "YPT_2026_SYSTEMS_CONTINUITY"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_CONTEXT_TRANSITION",
+        "YPT_2026_ONBOARDING_SETUP"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "similarities": [
+        0.6274121029727409,
+        0.5870465040206909,
+        0.5796068906784058
+      ],
+      "latency_ms": 518.9733000006527,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 0.6666666666666666,
+        "mrr": 1.0,
+        "ndcg3": 0.8785831719004588,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q075",
+      "query_text": "Initial multi-week setup and knowledge transfer phase to establish operational protocols and stabilize books before ongoing bookkeeping.",
+      "target_family": "transition",
+      "primary_relevant": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE"
+      ],
+      "acceptable_relevant": [
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+        "YPT_2026_ONBOARDING_SETUP",
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "similarities": [
+        0.6842058489199979,
+        0.5987711787956261,
+        0.5904514437644823
+      ],
+      "latency_ms": 511.42400002572685,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 1.0,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    },
+    {
+      "query_id": "Q080",
+      "query_text": "Context and strategic objectives for a community organization balancing charitable mission delivery with earned fee-for-service operations.",
+      "target_family": "context",
+      "primary_relevant": [
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "acceptable_relevant": [
+        "TACT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_CONTEXT_OBJECTIVES",
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES"
+      ],
+      "similarities": [
+        0.5862799183988668,
+        0.5447273797121788
+      ],
+      "latency_ms": 513.4054999798536,
+      "metrics": {
+        "hit1": 1.0,
+        "hit3": 1.0,
+        "recall3": 1.0,
+        "mrr": 1.0,
+        "ndcg3": 0.8339912323981488,
+        "unsafe_count": 0,
+        "fam_accuracy": 1.0
+      }
+    }
+  ],
+  "safety_detailed_results": [
+    {
+      "test_id": "P001",
+      "query_text": "We need ongoing monthly bookkeeping services and our approved operational budget is $2,500 per month.",
+      "prohibited_types": [
+        "pricing_content"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_BOOKKEEPING",
+        "GOODFOOT_2026_CONTEXT_OBJECTIVES",
+        "PIRS_2025_BOOKKEEPING_OVERSIGHT_FINANCIAL_MANAGEMENT"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "P002",
+      "query_text": "What is the fee quote and hourly rate for processing bi-weekly payroll for a team of 15 employees?",
+      "prohibited_types": [
+        "pricing_content"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_PAYROLL",
+        "GOODFOOT_2026_PAYROLL",
+        "CAREOF_2025_PAYROLL"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "P003",
+      "query_text": "Please provide your hourly billing rate and total estimated cost for external audit preparation and PBC schedule compilation.",
+      "prohibited_types": [
+        "pricing_content"
+      ],
+      "retrieved_keys": [
+        "PIRS_2025_AUDIT_PREPARATION",
+        "TACT_2026_AUDIT_SUPPORT",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "P004",
+      "query_text": "We need a fixed-fee implementation quote for migrating from desktop Sage 50 to QuickBooks Online.",
+      "prohibited_types": [
+        "pricing_content"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+        "YPT_2026_CONTEXT_TRANSITION"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "P005",
+      "query_text": "What are your monthly retainer fees for fractional CFO oversight and cash flow forecasting?",
+      "prohibited_types": [
+        "pricing_content"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_FINANCIAL_MANAGEMENT",
+        "RPFF_2025_FINANCIAL_REPORTING",
+        "CAHOOTS_2026_FINANCIAL_REPORTING"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "B001",
+      "query_text": "Why should we choose Sympl Solutions? Tell us about your team's values and decade-long non-profit experience.",
+      "prohibited_types": [
+        "boilerplate_content"
+      ],
+      "retrieved_keys": [
+        "YPT_2026_SYSTEMS_CONTINUITY",
+        "YPT_2026_CONTEXT_TRANSITION",
+        "GOODFOOT_2026_COMPLIANCE_AUDIT"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "B002",
+      "query_text": "What standard exclusions apply to software subscription fees and external audit fees?",
+      "prohibited_types": [
+        "boilerplate_content"
+      ],
+      "retrieved_keys": [
+        "GOODFOOT_2026_COMPLIANCE_AUDIT",
+        "TACT_2026_COMPLIANCE",
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "violation": false
+    },
+    {
+      "test_id": "B003",
+      "query_text": "Include your standard terms regarding prior period bookkeeping backlog and clean-up quotes.",
+      "prohibited_types": [
+        "boilerplate_content"
+      ],
+      "retrieved_keys": [
+        "TACT_2026_BOOKKEEPING",
+        "RPFF_2025_BOOKKEEPING_RECONCILIATIONS",
+        "PIRS_2025_AUDIT_PREPARATION"
+      ],
+      "violation": false
+    }
+  ]
+}

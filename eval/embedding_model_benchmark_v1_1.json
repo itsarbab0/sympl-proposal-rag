@@ -1,0 +1,85 @@
+{
+  "benchmark_name": "sympl_embedding_model_benchmark",
+  "benchmark_version": "1.1",
+  "execution_timestamp": "2026-09-06T18:03:38Z",
+  "provider_access": {
+    "gemini": "AVAILABLE",
+    "voyage": "AVAILABLE",
+    "openai": "AVAILABLE"
+  },
+  "configurations_tested": {
+    "GEMINI2_768": {
+      "status": "FAILED: Gemini API error (HTTP 429): {\n  \"error\": {\n    \"code\": 429,",
+      "actual_dimension": "N/A"
+    },
+    "GEMINI2_1536": {
+      "status": "FAILED: Gemini API error (HTTP 429): {\n  \"error\": {\n    \"code\": 429,",
+      "actual_dimension": "N/A"
+    },
+    "GEMINI2_3072": {
+      "status": "FAILED: Gemini API error (HTTP 429): {\n  \"error\": {\n    \"code\": 429,",
+      "actual_dimension": "N/A"
+    },
+    "VOYAGE4L_1024": {
+      "status": "FAILED: Voyage API error (HTTP 429): {\"detail\":\"You have not yet add",
+      "actual_dimension": "N/A"
+    },
+    "VOYAGE4L_2048": {
+      "status": "FAILED: Voyage API error (HTTP 429): {\"detail\":\"You have not yet add",
+      "actual_dimension": "N/A"
+    },
+    "OPENAI3L_DEFAULT": {
+      "status": "FAILED: OpenAI Quota Exhausted: {\n    \"error\": {\n        \"message\": ",
+      "actual_dimension": "N/A"
+    },
+    "OPENAI3L_1536": {
+      "status": "FAILED: OpenAI Quota Exhausted: {\n    \"error\": {\n        \"message\": ",
+      "actual_dimension": "N/A"
+    }
+  },
+  "dev_results": {},
+  "failed_configurations": [
+    {
+      "config_id": "GEMINI2_768",
+      "reason": "Gemini API error (HTTP 429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\n    \"status\": \"RESOURCE_EXHAUSTED\"\n  }\n}\n"
+    },
+    {
+      "config_id": "GEMINI2_1536",
+      "reason": "Gemini API error (HTTP 429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\n    \"status\": \"RESOURCE_EXHAUSTED\"\n  }\n}\n"
+    },
+    {
+      "config_id": "GEMINI2_3072",
+      "reason": "Gemini API error (HTTP 429): {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/embed_content_free_tier_requests, limit: 100, model: gemini-embedding-2\\nPlease retry in 32.789534317s.\",\n    \"status\": \"RESOURCE_EXHAUSTED\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.Help\",\n        \"links\": [\n          {\n            \"description\": \"Learn more about Gemini API quotas\",\n            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",\n        \"violations\": [\n          {\n            \"quotaMetric\": \"generativelanguage.googleapis.com/embed_content_free_tier_requests\",\n            \"quotaId\": \"EmbedContentRequestsPerMinutePerUserPerProjectPerModel-FreeTier\",\n            \"quotaDimensions\": {\n              \"location\": \"global\",\n              \"model\": \"gemini-embedding-2\"\n            },\n            \"quotaValue\": \"100\"\n          }\n        ]\n      },\n      {\n        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",\n        \"retryDelay\": \"32s\"\n      }\n    ]\n  }\n}\n"
+    },
+    {
+      "config_id": "VOYAGE4L_1024",
+      "reason": "Voyage API error (HTTP 429): {\"detail\":\"You have not yet added your payment method in the billing page and will have reduced rate limits of 3 RPM and 10K TPM. To unlock our standard rate limits, please add a payment method in the billing page for the appropriate organization in the user dashboard (https://dashboard.voyageai.com/). Even with payment methods entered, the free tokens (200M tokens for Voyage series 3) will still apply. After adding a payment method, you should see your rate limits increase after several minutes. See our pricing docs (https://docs.voyageai.com/docs/pricing) for the free tokens for your model.\"}"
+    },
+    {
+      "config_id": "VOYAGE4L_2048",
+      "reason": "Voyage API error (HTTP 429): {\"detail\":\"You have not yet added your payment method in the billing page and will have reduced rate limits of 3 RPM and 10K TPM. To unlock our standard rate limits, please add a payment method in the billing page for the appropriate organization in the user dashboard (https://dashboard.voyageai.com/). Even with payment methods entered, the free tokens (200M tokens for Voyage series 3) will still apply. After adding a payment method, you should see your rate limits increase after several minutes. See our pricing docs (https://docs.voyageai.com/docs/pricing) for the free tokens for your model.\"}"
+    },
+    {
+      "config_id": "OPENAI3L_DEFAULT",
+      "reason": "OpenAI Quota Exhausted: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.\",\n        \"type\": \"insufficient_quota\",\n        \"param\": null,\n        \"code\": \"credit_balance_exhausted\"\n    }\n}\n"
+    },
+    {
+      "config_id": "OPENAI3L_1536",
+      "reason": "OpenAI Quota Exhausted: {\n    \"error\": {\n        \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.\",\n        \"type\": \"insufficient_quota\",\n        \"param\": null,\n        \"code\": \"credit_balance_exhausted\"\n    }\n}\n"
+    }
+  ],
+  "dev_winner": {
+    "config_id": null,
+    "provider": null,
+    "model": null,
+    "dimension": null,
+    "dev_selection_score": null,
+    "tie_triggered": false
+  },
+  "holdout_results": {},
+  "hard_cases_matrix": [],
+  "system_state_metrics": {},
+  "responsibility_metrics": {},
+  "per_family_results": {},
+  "final_status": "EMBEDDING_BENCHMARK_BLOCKED_MISSING_PROVIDER_ACCESS"
+}

@@ -1,0 +1,110 @@
+version: "3.8"
+
+# ==============================================================================
+# Sympl Solutions Proposal RAG — Production Multi-Container Orchestration
+# ==============================================================================
+# Services:
+#   1. api:    FastAPI application served by Gunicorn + 4 Uvicorn workers
+#   2. worker: Dedicated background consumer executing asynchronous proposal jobs
+#   3. nginx:  Reverse proxy enforcing 1MB limit, proxy timeouts, security headers
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. Production API Service (FastAPI + Gunicorn + Uvicorn)
+  # ----------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sympl-proposal-api
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    command: >
+      gunicorn sympl_api.main:app
+      -w 4
+      -k uvicorn.workers.UvicornWorker
+      -b 0.0.0.0:8000
+      --timeout 60
+      --graceful-timeout 30
+      --keep-alive 5
+      --access-logfile -
+      --error-logfile -
+    volumes:
+      - shared_artifacts:/app/data/proposals
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    stop_grace_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4096M
+        reservations:
+          cpus: "0.5"
+          memory: 1024M
+
+  # ----------------------------------------------------------------------------
+  # 2. Dedicated Asynchronous Proposal Worker Service
+  # ----------------------------------------------------------------------------
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sympl-proposal-worker
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WORKER_POLL_INTERVAL=2.0
+    command: ["python", "-m", "sympl_observability.worker"]
+    volumes:
+      - shared_artifacts:/app/data/proposals
+    depends_on:
+      api:
+        condition: service_healthy
+    stop_grace_period: 45s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4096M
+        reservations:
+          cpus: "0.5"
+          memory: 1024M
+
+  # ----------------------------------------------------------------------------
+  # 3. Nginx Reverse Proxy (Edge / Ingress Gateway)
+  # ----------------------------------------------------------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: sympl-proposal-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:80/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  shared_artifacts:
+    name: sympl_proposal_shared_artifacts
