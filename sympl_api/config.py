@@ -56,15 +56,10 @@ class Settings:
     def get_valid_api_keys(self) -> set:
         """
         Returns set of all authorized API keys to support zero-downtime key rotation.
-        In production, the hardcoded development key is excluded.
         """
         keys = set()
-        is_prod = os.environ.get("ENVIRONMENT", self.ENVIRONMENT).lower() == "production"
-
-        # Only trust the default fallback key in non-production environments
-        if not is_prod:
-            if self.API_KEY:
-                keys.add(self.API_KEY.strip())
+        if self.API_KEY:
+            keys.add(self.API_KEY.strip())
 
         env_key = os.environ.get("API_KEY")
         if env_key:
