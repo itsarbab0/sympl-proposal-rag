@@ -8,14 +8,17 @@ Implements API key authentication middleware and dependency injection:
 """
 
 import os
-from fastapi import Header, HTTPException, status
+from fastapi import Security, HTTPException, status
+from fastapi.security import APIKeyHeader
 from typing import Optional
 
 from sympl_api.config import settings
 from sympl_api.logging import get_current_request_id, logger
 
+api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
-async def verify_api_key(x_api_key: Optional[str] = Header(None, alias="X-API-Key")) -> Optional[str]:
+
+async def verify_api_key(x_api_key: Optional[str] = Security(api_key_header)) -> Optional[str]:
     """
     Dependency that enforces API key authentication when enabled.
     Returns the valid API key or raises HTTP 401.

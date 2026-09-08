@@ -50,8 +50,8 @@ class Settings:
     API_KEY: str = os.environ.get("API_KEY", ENV.get("API_KEY", "sympl-proposal-secret-key-2026"))
     API_KEYS: str = os.environ.get("API_KEYS", ENV.get("API_KEYS", ""))
 
-    # Documentation visibility
-    DOCS_ENABLED: bool = os.environ.get("DOCS_ENABLED", "true" if ENVIRONMENT.lower() != "production" else "false").lower() in ("true", "1", "yes")
+    # Documentation visibility (enabled by default, can be disabled with DOCS_ENABLED=false)
+    DOCS_ENABLED: bool = os.environ.get("DOCS_ENABLED", "true").lower() in ("true", "1", "yes")
 
     def get_valid_api_keys(self) -> set:
         """
