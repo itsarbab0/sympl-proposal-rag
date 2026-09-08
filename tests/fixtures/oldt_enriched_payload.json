@@ -1,0 +1,87 @@
+{
+  "client_name": "OldT Community Arts Workshop",
+  "organization_type": "nonprofit",
+  "sector": "arts_culture",
+  "client_situation_summary": "Mid-sized arts and cultural organization undergoing a key administrative transition following the departure of their long-time in-house bookkeeper. Operations span seasonal performance productions and educational workshops.",
+  "client_challenges_summary": "Accumulated backlog of 4 months in vendor payments and credit card reconciliations. Financial records reside in legacy desktop software with high reliance on paper receipts and manual approvals, creating risk for upcoming annual grant compliance deadlines.",
+  "organization_description": "Nonprofit performing arts company dedicated to innovative puppetry, community youth workshops, and multidisciplinary theatrical productions.",
+  "industry_context": "Charitable arts and culture sector with complex multi-funder grant tracking requirements (Canada Council for the Arts, provincial, and municipal arts councils).",
+  "employee_count": 16,
+  "organization_size": "medium",
+  "annual_budget_or_revenue_range": "$1.2M - $1.8M",
+  "current_accounting_system": "Sage 50 Desktop",
+  "current_finance_process": "Paper invoice approvals, manual check printing, physical receipt envelopes, spreadsheet-based budget tracking.",
+  "current_finance_team_structure": "1 departing part-time bookkeeper, Managing Director handling approvals and grant reporting, external CPA firm handling year-end compilation.",
+  "current_finance_challenges": [
+    "4-month backlog in reconciliations and vendor disbursements",
+    "Lack of real-time visibility into production budgets and grant drawdowns",
+    "Heavy reliance on paper processes hindering remote collaboration"
+  ],
+  "reason_for_engagement": "Transition from vulnerable single in-house bookkeeper model to a modern, reliable outsourced managed accounting partner with robust internal controls.",
+  "desired_outcomes": [
+    "Catch-up and clean reconciliation of prior 4 months of records",
+    "Seamless migration to QuickBooks Online and Dext for paperless workflow",
+    "Audit-ready financial statements and quarterly board reporting packages",
+    "Consistent, timely bi-weekly payroll for core staff and seasonal guest artists"
+  ],
+  "client_priorities": [
+    "Rapid catch-up cleanup before upcoming fiscal year-end",
+    "Seamless artist payroll continuity",
+    "Funder-compliant grant tracking"
+  ],
+  "approved_scope": {
+    "bookkeeping": {
+      "cadence": "weekly",
+      "ap_ar": true,
+      "reconciliations": true,
+      "expense_management": true,
+      "catchup_cleanup": true
+    },
+    "payroll": {
+      "cadence": "biweekly",
+      "headcount_employees": 12,
+      "headcount_contractors": 4,
+      "sympl_processes_payroll": true
+    },
+    "financial_reporting": {
+      "cadence": "monthly",
+      "funder_tracking": true,
+      "board_package": true,
+      "budget_vs_actual": true
+    },
+    "compliance": {
+      "gst_hst_filing": true,
+      "audit_support": true
+    }
+  },
+  "service_context": {
+    "bookkeeping": {
+      "bookkeeping_volume": "150-250 monthly transactions across 3 operating accounts",
+      "bookkeeping_frequency": "weekly",
+      "ap_ar_requirements": "Bi-weekly vendor check runs and EFT payments, quarterly customer box-office invoicing",
+      "reconciliation_requirements": "3 bank accounts, 2 credit cards, and PayPal box-office gateway monthly",
+      "cleanup_requirements": "Complete catch-up cleanup for FY2025 Q3 and Q4"
+    },
+    "payroll": {
+      "employee_count_for_payroll": 16,
+      "payroll_frequency": "biweekly",
+      "current_payroll_system": "Manual bank EFT and spreadsheet calculations",
+      "payroll_transition_requirements": "Parallel run for 1 pay period, ROE preparation for seasonal contract staff"
+    },
+    "reporting": {
+      "reporting_requirements": "Monthly departmental P&L, balance sheet, and grant drawdown reports",
+      "board_reporting_requirements": "Quarterly board governance package delivered by 15th of following month",
+      "budgeting_requirements": "Production-level budget vs actual variance analysis"
+    },
+    "compliance": {
+      "compliance_requirements": "Quarterly GST/HST filings, annual T3010 charity return coordination",
+      "regulatory_requirements": "Funder audit compliance and grant expenditure certification"
+    }
+  },
+  "commercial_terms": {
+    "pricing_model": "fixed_retainer",
+    "currency": "CAD",
+    "monthly_retainer": 3200.0,
+    "setup_fee": 1500.0
+  }
+}

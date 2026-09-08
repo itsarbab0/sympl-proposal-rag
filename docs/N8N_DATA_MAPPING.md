@@ -263,3 +263,142 @@ Each service family maps to its respective typed dataclass in `sympl_planner.sch
 - `onboarding_duration_weeks`: `integer` (Default: `4`)
 - `historical_access`: `boolean` (Read-only access to legacy records)
 - `handover_continuity`: `boolean` (Structured handover protocol)
+
+---
+
+## 4. Context Enrichment Mapping Reference
+
+To support rich client storytelling and consultative proposal generation without requiring a full CRM implementation, the proposal intake schema supports optional high-value narrative and operational fields.
+
+### 4.1 Narrative Context Fields (`sympl_planner.schema.ClientNarrativeContext`)
+
+| Intake Field | Type | Importance | Description |
+| :--- | :--- | :--- | :--- |
+| `client_situation_summary` | `string` | **High (15 pts)** | Background story, organizational lifecycle, or administrative transition context |
+| `client_challenges_summary` | `string` | **High (15 pts)** | Core pain points, operational backlogs, compliance risks, or internal bottlenecks |
+| `current_finance_challenges` | `list[string]` | **High (15 pts)** | Specific financial symptoms (e.g. 4-month reconciliation backlog, manual checks) |
+| `organization_description` | `string` | **High (10 pts)** | What the client does, their mission, community impact, or core business |
+| `reason_for_engagement` | `string` | **High (10 pts)** | Why the client is hiring Sympl right now (catalyst for change) |
+| `desired_outcomes` | `list[string]` | **High (10 pts)** | Client's explicit success criteria (e.g., audit-readiness, paperless migration) |
+| `industry_context` | `string` | Low | Specific regulatory or funder requirements for client's industry |
+| `client_priorities` | `list[string]` | Low | Ordered ranking of immediate priorities (e.g., rapid catch-up, payroll continuity) |
+
+### 4.2 Structured & Operational Context Fields
+
+| Intake Field | Type | Weight | Target Path |
+| :--- | :--- | :--- | :--- |
+| `current_accounting_system` | `string` | 5 pts | `client_context.current_accounting_system` |
+| `current_finance_process` | `string` | 5 pts | `client_context.current_finance_process` |
+| `current_finance_team_structure`| `string` | (shared) | `client_context.current_finance_team_structure` |
+| `employee_count` / `org_size`  | `int`/`str`| 5 pts | `client_context.employee_count` / `org_size` |
+| `service_context.bookkeeping.*`| `object` | 10 pts | `approved_scope.bookkeeping.*` |
+| `service_context.payroll.*`    | `object` | (shared) | `approved_scope.payroll.*` |
+| `service_context.reporting.*`  | `object` | (shared) | `approved_scope.financial_reporting.*` |
+| `service_context.compliance.*` | `object` | (shared) | `approved_scope.compliance.*` |
+
+---
+
+## 5. Context Quality Scoring Matrix & Classification
+
+The intake pipeline automatically scores inbound context on a 0–100 weighted scale:
+- **Narrative Fields (75%)**: 6 core narrative fields drive consultative voice and storytelling.
+- **Structured Fields (25%)**: Current systems, processes, scale, and operational specifics.
+
+### Quality Thresholds
+- **`HIGH` (70–100 pts)**: Rich context available. Writer generates deeply tailored, consultative narrative.
+- **`MEDIUM` (30–69 pts)**: Standard context available. Sufficient for customized service delivery.
+- **`LOW` (0–29 pts)**: Minimal/legacy payload. Pipeline generates valid proposals but logs a warning: `Low proposal intake context quality (<score>/100)`.
+
+---
+
+## 6. Enriched Payload Example (OldT Needs Assessment)
+
+```json
+{
+  "client_name": "OldT Community Arts Workshop",
+  "organization_type": "nonprofit",
+  "sector": "arts_culture",
+  "client_situation_summary": "Mid-sized arts and cultural organization undergoing a key administrative transition following the departure of their long-time in-house bookkeeper. Operations span seasonal performance productions and educational workshops.",
+  "client_challenges_summary": "Accumulated backlog of 4 months in vendor payments and credit card reconciliations. Financial records reside in legacy desktop software with high reliance on paper receipts and manual approvals, creating risk for upcoming annual grant compliance deadlines.",
+  "organization_description": "Nonprofit performing arts company dedicated to innovative puppetry, community youth workshops, and multidisciplinary theatrical productions.",
+  "industry_context": "Charitable arts and culture sector with complex multi-funder grant tracking requirements (Canada Council for the Arts, provincial, and municipal arts councils).",
+  "employee_count": 16,
+  "organization_size": "medium",
+  "annual_budget_or_revenue_range": "$1.2M - $1.8M",
+  "current_accounting_system": "Sage 50 Desktop",
+  "current_finance_process": "Paper invoice approvals, manual check printing, physical receipt envelopes, spreadsheet-based budget tracking.",
+  "current_finance_team_structure": "1 departing part-time bookkeeper, Managing Director handling approvals and grant reporting, external CPA firm handling year-end compilation.",
+  "current_finance_challenges": [
+    "4-month backlog in reconciliations and vendor disbursements",
+    "Lack of real-time visibility into production budgets and grant drawdowns",
+    "Heavy reliance on paper processes hindering remote collaboration"
+  ],
+  "reason_for_engagement": "Transition from vulnerable single in-house bookkeeper model to a modern, reliable outsourced managed accounting partner with robust internal controls.",
+  "desired_outcomes": [
+    "Catch-up and clean reconciliation of prior 4 months of records",
+    "Seamless migration to QuickBooks Online and Dext for paperless workflow",
+    "Audit-ready financial statements and quarterly board reporting packages",
+    "Consistent, timely bi-weekly payroll for core staff and seasonal guest artists"
+  ],
+  "client_priorities": [
+    "Rapid catch-up cleanup before upcoming fiscal year-end",
+    "Seamless artist payroll continuity",
+    "Funder-compliant grant tracking"
+  ],
+  "approved_scope": {
+    "bookkeeping": {
+      "cadence": "weekly",
+      "ap_ar": true,
+      "reconciliations": true,
+      "expense_management": true,
+      "catchup_cleanup": true
+    },
+    "payroll": {
+      "cadence": "biweekly",
+      "headcount_employees": 12,
+      "headcount_contractors": 4,
+      "sympl_processes_payroll": true
+    },
+    "financial_reporting": {
+      "cadence": "monthly",
+      "funder_tracking": true,
+      "board_package": true,
+      "budget_vs_actual": true
+    },
+    "compliance": {
+      "gst_hst_filing": true,
+      "audit_support": true
+    }
+  },
+  "service_context": {
+    "bookkeeping": {
+      "bookkeeping_volume": "150-250 monthly transactions across 3 operating accounts",
+      "bookkeeping_frequency": "weekly",
+      "ap_ar_requirements": "Bi-weekly vendor check runs and EFT payments, quarterly customer box-office invoicing",
+      "reconciliation_requirements": "3 bank accounts, 2 credit cards, and PayPal box-office gateway monthly",
+      "cleanup_requirements": "Complete catch-up cleanup for FY2025 Q3 and Q4"
+    },
+    "payroll": {
+      "employee_count_for_payroll": 16,
+      "payroll_frequency": "biweekly",
+      "current_payroll_system": "Manual bank EFT and spreadsheet calculations",
+      "payroll_transition_requirements": "Parallel run for 1 pay period, ROE preparation for seasonal contract staff"
+    },
+    "reporting": {
+      "reporting_requirements": "Monthly departmental P&L, balance sheet, and grant drawdown reports",
+      "board_reporting_requirements": "Quarterly board governance package delivered by 15th of following month",
+      "budgeting_requirements": "Production-level budget vs actual variance analysis"
+    },
+    "compliance": {
+      "compliance_requirements": "Quarterly GST/HST filings, annual T3010 charity return coordination",
+      "regulatory_requirements": "Funder audit compliance and grant expenditure certification"
+    }
+  },
+  "commercial_terms": {
+    "pricing_model": "fixed_retainer",
+    "currency": "CAD",
+    "monthly_retainer": 3200.0,
+    "setup_fee": 1500.0
+  }
+}
+```

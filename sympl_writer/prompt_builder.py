@@ -145,6 +145,35 @@ CORE OPERATIONAL INVARIANTS:
             f"Current Systems:   {', '.join(current_systems) if current_systems else 'None specified'}",
             f"Target Systems:    {', '.join(target_systems) if target_systems else 'None specified'}",
             f"Engagement Type:   {eng_type} ({complexity})" + (f", Duration: {fixed_term}" if fixed_term else ""),
+        ]
+
+        # Enriched Client Narrative Context (appended when provided)
+        if client_ctx.get("organization_description"):
+            parts.append(f"Org Description:   {client_ctx['organization_description']}")
+        if client_ctx.get("client_situation_summary"):
+            parts.append(f"Client Situation:  {client_ctx['client_situation_summary']}")
+        if client_ctx.get("client_challenges_summary"):
+            parts.append(f"Client Challenges: {client_ctx['client_challenges_summary']}")
+        if client_ctx.get("current_finance_challenges"):
+            fc = client_ctx["current_finance_challenges"]
+            fc_str = ", ".join(fc) if isinstance(fc, list) else str(fc)
+            parts.append(f"Finance Challenges:{fc_str}")
+        if client_ctx.get("current_finance_process"):
+            parts.append(f"Finance Process:   {client_ctx['current_finance_process']}")
+        if client_ctx.get("current_finance_team_structure"):
+            parts.append(f"Finance Team:      {client_ctx['current_finance_team_structure']}")
+        if client_ctx.get("reason_for_engagement"):
+            parts.append(f"Engagement Reason: {client_ctx['reason_for_engagement']}")
+        if client_ctx.get("desired_outcomes"):
+            do = client_ctx["desired_outcomes"]
+            do_str = ", ".join(do) if isinstance(do, list) else str(do)
+            parts.append(f"Desired Outcomes:  {do_str}")
+        if client_ctx.get("client_priorities"):
+            cp = client_ctx["client_priorities"]
+            cp_str = ", ".join(cp) if isinstance(cp, list) else str(cp)
+            parts.append(f"Client Priorities: {cp_str}")
+
+        parts.extend([
             "",
             "--- APPROVED SERVICE SCOPE (AUTHORITATIVE & COMPLETE) ---",
             "Every generated service MUST belong to this approved scope:",
@@ -156,7 +185,7 @@ CORE OPERATIONAL INVARIANTS:
             "--- COMMERCIAL SCHEDULE & TERMS ---",
             json.dumps(pricing_data, indent=2),
             ""
-        ]
+        ])
 
         # 6. If feedback errors present (Regeneration Loop)
         if feedback_errors:

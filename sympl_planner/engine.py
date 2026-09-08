@@ -177,6 +177,25 @@ class ProposalPlanner:
             "diagnostic_focus": client_input.engagement.diagnostic_focus
         }
 
+        # Merge narrative and contextual intelligence if provided
+        if getattr(client_input, "narrative_context", None):
+            from dataclasses import asdict
+            narrative_dict = asdict(client_input.narrative_context)
+            for k, v in narrative_dict.items():
+                if v is not None and (k not in client_context or not client_context[k]):
+                    client_context[k] = v
+
+        if getattr(client_input, "enriched_context", None):
+            for k, v in client_input.enriched_context.items():
+                if v is not None and (k not in client_context or not client_context[k]):
+                    client_context[k] = v
+
+        if getattr(client_input, "service_context", None):
+            client_context["service_context"] = client_input.service_context
+
+        client_context["context_quality"] = getattr(client_input, "context_quality", "LOW")
+        client_context["context_score"] = getattr(client_input, "context_score", 0)
+
         approved_scope_dict = {}
         for fam in client_input.approved_scope.active_families():
             item = getattr(client_input.approved_scope, fam, None)
@@ -207,6 +226,8 @@ class ProposalPlanner:
                 "plan_id": plan_id,
                 "created_at": created_at,
                 "overall_confidence": overall_conf,
-                "flags": flags
+                "flags": flags,
+                "context_quality": getattr(client_input, "context_quality", "LOW"),
+                "context_score": getattr(client_input, "context_score", 0)
             }
         )

@@ -131,7 +131,7 @@
         },
         "options": {}
       },
-      "id": "node-user-proposal-form",
+      "id": "node-form-trigger",
       "name": "User Proposal Form",
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
@@ -140,7 +140,7 @@
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 1: Temporary proposal intake form capturing client info, engagement parameters, requested services, and pricing."
+      "notes": "NODE 1: Proposal intake form capturing client details, scope checkboxes, and commercial terms."
     },
     {
       "parameters": {
@@ -201,7 +201,7 @@
         },
         "options": {}
       },
-      "id": "node-human-approval-gate",
+      "id": "node-human-approval",
       "name": "Human Approval Gate",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -210,7 +210,7 @@
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 2: Mandatory human approval gate. Halts generation until reviewer verifies client data, approved scope, and commercial terms."
+      "notes": "NODE 2: Human approval review step before any backend generation is triggered."
     },
     {
       "parameters": {
@@ -234,7 +234,7 @@
           "combinator": "and"
         }
       },
-      "id": "node-approval-decision-check",
+      "id": "node-approval-check",
       "name": "Approval Decision Check",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
@@ -243,7 +243,7 @@
         300
       ],
       "notesInFlow": true,
-      "notes": "Routes approved leads to payload preparation; routes rejections to clean exit."
+      "notes": "Branches on reviewer approval: APPROVE continues to payload prep, REJECT halts workflow."
     },
     {
       "parameters": {
@@ -260,13 +260,13 @@
             {
               "id": "rej-msg",
               "name": "message",
-              "value": "Proposal generation rejected",
+              "value": "Proposal generation rejected by human approver.",
               "type": "string"
             }
           ]
         }
       },
-      "id": "node-approval-rejected",
+      "id": "node-rejected-response",
       "name": "Proposal Generation Rejected",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -275,13 +275,13 @@
         520
       ],
       "notesInFlow": true,
-      "notes": "Error handling: stops execution and emits rejection payload."
+      "notes": "Emits rejection payload if human approver selects REJECT."
     },
     {
       "parameters": {
         "jsCode": "const approval = $input.first().json;\nconst form = $('User Proposal Form').first().json;\n\n// Build approved_scope strictly from reviewer human selections\nconst approvedScope = {\n  bookkeeping: Boolean(approval['Approve Bookkeeping'] !== undefined ? approval['Approve Bookkeeping'] : form.bookkeeping),\n  payroll: Boolean(approval['Approve Payroll'] !== undefined ? approval['Approve Payroll'] : form.payroll),\n  financial_reporting: Boolean(approval['Approve Financial Reporting'] !== undefined ? approval['Approve Financial Reporting'] : form.financial_reporting),\n  compliance: Boolean(approval['Approve Compliance'] !== undefined ? approval['Approve Compliance'] : form.compliance),\n  digital_transformation: Boolean(approval['Approve Digital Transformation'] !== undefined ? approval['Approve Digital Transformation'] : form.digital_transformation),\n  transition: Boolean(approval['Approve Transition'] !== undefined ? approval['Approve Transition'] : form.transition)\n};\n\nreturn [{\n  json: {\n    client_name: String(form.client_name || '').trim(),\n    organization_type: String(form.organization_type || 'Nonprofit').trim().toLowerCase(),\n    sector: String(form.sector || 'community_services').trim(),\n    engagement_type: String(form.engagement_type || 'Recurring').trim().toLowerCase(),\n    complexity: String(form.complexity || 'Standard').trim().toLowerCase(),\n    approved_scope: approvedScope,\n    commercial_terms: {\n      pricing_model: String(form.pricing_model || 'fixed_retainer').trim(),\n      currency: String(form.currency || 'CAD').trim(),\n      amount: Number(form.amount || 0)\n    },\n    callback_url: ''\n  }\n}];"
       },
-      "id": "node-prepare-rag-payload",
+      "id": "node-prepare-payload",
       "name": "Prepare Proposal Payload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -290,7 +290,99 @@
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 3: Transforms human-approved data into contract JSON. Never invents scope."
+      "notes": "NODE 3: Formats approved form inputs into strict RAG intake schema."
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = $input.first().json;\nconst errors = [];\n\n// 1. Client information check\nif (!payload.client_name || typeof payload.client_name !== 'string' || !payload.client_name.trim()) {\n  errors.push('client_name is required and must be a non-empty string.');\n}\n\n// 2. Approved scope validation: at least one service must be approved\nconst scope = payload.approved_scope || {};\nconst activeServices = Object.keys(scope).filter(k => Boolean(scope[k]));\nif (activeServices.length === 0) {\n  errors.push('approved_scope must contain at least one approved service family.');\n}\n\n// 3. Commercial terms validation\nconst terms = payload.commercial_terms || {};\nif (!terms.pricing_model || typeof terms.pricing_model !== 'string' || !terms.pricing_model.trim()) {\n  errors.push('commercial_terms.pricing_model is required.');\n}\nif (!terms.currency || typeof terms.currency !== 'string' || !terms.currency.trim()) {\n  errors.push('commercial_terms.currency is required.');\n}\nif (typeof terms.amount !== 'number' || terms.amount <= 0 || isNaN(terms.amount)) {\n  errors.push('commercial_terms.amount must be a positive number greater than 0.');\n}\n\nconst isValid = errors.length === 0;\n\nreturn [{\n  json: {\n    ...payload,\n    is_valid_request: isValid,\n    validation_errors: errors\n  }\n}];"
+      },
+      "id": "node-validate-proposal-request",
+      "name": "Validate Proposal Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "Commercial & scope validation gatekeeper before external RAG API call."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-valid-request",
+              "leftValue": "={{$json.is_valid_request}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "node-if-request-valid",
+      "name": "IF Request Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1400,
+        300
+      ],
+      "notesInFlow": true,
+      "notes": "Routes valid submissions to RAG API; halts invalid submissions with error response."
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "val-status",
+              "name": "status",
+              "value": "failed",
+              "type": "string"
+            },
+            {
+              "id": "val-stage",
+              "name": "stage",
+              "value": "payload_validation",
+              "type": "string"
+            },
+            {
+              "id": "val-msg",
+              "name": "message",
+              "value": "Commercial or scope validation failed before RAG execution.",
+              "type": "string"
+            },
+            {
+              "id": "val-errs",
+              "name": "errors",
+              "value": "={{$json.validation_errors}}",
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "id": "node-validation-error-response",
+      "name": "Validation Error Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1400,
+        520
+      ],
+      "notesInFlow": true,
+      "notes": "Emits validation failure payload if commercial or scope constraints are violated."
     },
     {
       "parameters": {
@@ -311,7 +403,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{JSON.stringify($json)}}",
+        "jsonBody": "={{JSON.stringify($('Prepare Proposal Payload').first().json)}}",
         "options": {
           "timeout": 30000
         }
@@ -321,11 +413,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1160,
+        1640,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 4: Invokes asynchronous RAG generation endpoint on Railway."
+      "notes": "NODE 4: Triggers async generation on Railway proposal backend (/api/v1/proposal/generate/async)."
     },
     {
       "parameters": {
@@ -348,16 +440,16 @@
           "combinator": "and"
         }
       },
-      "id": "node-if-rag-success",
+      "id": "node-rag-success-check",
       "name": "IF RAG Succeeded?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1400,
+        1880,
         300
       ],
       "notesInFlow": true,
-      "notes": "Validates that Railway issued a valid job_id."
+      "notes": "Verifies that backend returned HTTP 202 with valid job_id."
     },
     {
       "parameters": {
@@ -380,16 +472,16 @@
           ]
         }
       },
-      "id": "node-rag-error",
+      "id": "node-rag-error-response",
       "name": "RAG API Error Response",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1400,
+        1880,
         520
       ],
       "notesInFlow": true,
-      "notes": "Error handling: emits failure payload if Railway API call fails."
+      "notes": "Error handler returning { status: 'failed', stage: 'rag_generation' } on API failure."
     },
     {
       "parameters": {
@@ -408,6 +500,12 @@
               "name": "poll_count",
               "value": 0,
               "type": "number"
+            },
+            {
+              "id": "field-status",
+              "name": "status",
+              "value": "CREATED",
+              "type": "string"
             }
           ]
         }
@@ -417,11 +515,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1640,
+        2120,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 5: Persists job_id and initializes loop counter."
+      "notes": "NODE 5: Initializes polling state with job_id and initial poll_count = 0."
     },
     {
       "parameters": {
@@ -433,16 +531,16 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1880,
+        2360,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 7: Non-blocking 5-second pause between status checks."
+      "notes": "NODE 6: Non-blocking 5-second pause between status checks."
     },
     {
       "parameters": {
         "method": "GET",
-        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/status/{{$json.job_id}}",
+        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/status/{{$json.job_id || $('Store Job ID').first().json.job_id}}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -461,11 +559,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2120,
+        2600,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 8: Polls job status from Railway backend."
+      "notes": "NODE 7: Queries /api/v1/proposal/status/{job_id} for RUNNING or COMPLETED status."
     },
     {
       "parameters": {
@@ -494,26 +592,26 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2360,
+        2840,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 9: Verifies whether generation reached COMPLETED status."
+      "notes": "NODE 8: Checks if backend status is COMPLETED. YES -> download PDF; NO -> timeout check & loop."
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst currentCount = $('Store Job ID').first().json.poll_count || 0;\nconst newCount = currentCount + 1;\n\n// 60 iterations * 5 seconds = 300 seconds (5 minutes maximum timeout)\nconst isTimeout = newCount >= 60;\n\nreturn [{\n  json: {\n    job_id: $('Store Job ID').first().json.job_id,\n    status: isTimeout ? 'timeout' : (item.status || 'RUNNING'),\n    poll_count: newCount\n  }\n}];"
+        "jsCode": "const item = $input.first().json;\nconst jobId = item.job_id || $('Store Job ID').first().json.job_id;\n\n// In n8n, $runIndex tracks how many times this node has executed in this workflow run (0, 1, 2, ...)\nlet attempt = 1;\nif (typeof $runIndex === 'number') {\n  attempt = $runIndex + 1;\n}\n\n// 60 iterations * 5 seconds = 300 seconds (5 minutes maximum timeout bound)\nconst maxAttempts = 60;\nconst isTimeout = attempt >= maxAttempts;\n\nreturn [{\n  json: {\n    job_id: jobId,\n    status: isTimeout ? 'timeout' : (item.status || 'RUNNING'),\n    poll_count: attempt,\n    max_attempts: maxAttempts,\n    is_timeout: isTimeout\n  }\n}];"
       },
       "id": "node-check-timeout-counter",
       "name": "Check Timeout Counter",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2360,
+        2840,
         520
       ],
       "notesInFlow": true,
-      "notes": "Increments polling counter and bounds execution to 5 minutes."
+      "notes": "NODE 9: Preserves and increments poll_count on each status check, bounding polling to max 60 attempts (5 minutes)."
     },
     {
       "parameters": {
@@ -525,11 +623,11 @@
           },
           "conditions": [
             {
-              "id": "cond-timeout-check",
-              "leftValue": "={{$json.status}}",
-              "rightValue": "timeout",
+              "id": "cond-is-timeout",
+              "leftValue": "={{$json.is_timeout}}",
+              "rightValue": true,
               "operator": {
-                "type": "string",
+                "type": "boolean",
                 "operation": "equals"
               }
             }
@@ -542,11 +640,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2120,
+        2600,
         520
       ],
       "notesInFlow": true,
-      "notes": "Branches on 5-minute timeout."
+      "notes": "Checks if max poll attempts (60 = 5 minutes) reached. True -> Timeout Response; False -> Loop to Wait."
     },
     {
       "parameters": {
@@ -559,6 +657,24 @@
               "name": "status",
               "value": "timeout",
               "type": "string"
+            },
+            {
+              "id": "to-job-id",
+              "name": "job_id",
+              "value": "={{$json.job_id || $('Store Job ID').first().json.job_id}}",
+              "type": "string"
+            },
+            {
+              "id": "to-attempts",
+              "name": "poll_attempts",
+              "value": "={{$json.poll_count}}",
+              "type": "number"
+            },
+            {
+              "id": "to-msg",
+              "name": "message",
+              "value": "Proposal generation polling timed out after 5 minutes (60 attempts).",
+              "type": "string"
             }
           ]
         }
@@ -568,16 +684,16 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2120,
+        2600,
         720
       ],
       "notesInFlow": true,
-      "notes": "Error handling: emits timeout payload after 5 minutes of polling."
+      "notes": "Emits timeout response payload when max polling duration is exceeded."
     },
     {
       "parameters": {
         "method": "GET",
-        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/{{$json.proposal_id}}/pdf",
+        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/{{$('IF Completed?').first().json.proposal_id || $json.proposal_id}}/pdf",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -598,16 +714,16 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2600,
+        3080,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 10: Downloads the binary vector PDF proposal generated by ReportLab Platypus."
+      "notes": "NODE 10: Downloads binary proposal.pdf using hardened reference to IF Completed? proposal_id."
     },
     {
       "parameters": {
         "method": "GET",
-        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/{{$('IF Completed?').first().json.proposal_id}}/manifest",
+        "url": "=https://sympl-proposal-rag-production.up.railway.app/api/v1/proposal/{{$('IF Completed?').first().json.proposal_id || $json.proposal_id}}/manifest",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -626,37 +742,37 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2840,
+        3320,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 11: Retrieves manifest.json verifying artifact hashes and file completeness."
+      "notes": "NODE 11: Fetches manifest.json to verify all 5 proposal artifacts and SHA256 hashes."
     },
     {
       "parameters": {
-        "jsCode": "const manifest = $input.first().json;\nconst proposalId = $('IF Completed?').first().json.proposal_id;\n\nreturn [{\n  json: {\n    proposal_id: proposalId,\n    file: 'proposal.pdf',\n    action: 'IMPORT_TO_CANVA',\n    status: 'READY',\n    manifest_verified: manifest.all_artifacts_present === true || manifest.artifact_count === 5\n  }\n}];"
+        "jsCode": "// NODE 12: PREPARE CANVA IMPORT HANDOFF\nconst manifest = $input.first().json;\nconst proposalId = $('IF Completed?').first().json.proposal_id;\n\nreturn [{\n  json: {\n    proposal_id: proposalId,\n    file: 'proposal.pdf',\n    action: 'IMPORT_TO_CANVA',\n    canva_status: 'READY_FOR_CANVA',\n    manifest_verified: manifest.all_artifacts_present === true || manifest.artifact_count === 5\n  }\n}];"
       },
       "id": "node-canva-handoff-prep",
       "name": "Prepare Canva Import Handoff",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3080,
+        3560,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 12: Prepares standardized import payload for Canva integration layer."
+      "notes": "NODE 12: Prepares standardized import payload with canva_status: 'READY_FOR_CANVA'."
     },
     {
       "parameters": {
-        "jsCode": "// CANVA IMPORT SERVICE PLACEHOLDER\n// This will later connect to our pipeline backend which handles:\n// - Canva OAuth\n// - Canva client secret\n// - Canva import API\n// - design creation\n\nconst item = $input.first().json;\nreturn [{\n  json: {\n    ...item,\n    canva_service_dispatched: true,\n    service_note: 'Handoff payload ready for Canva Import API integration.'\n  }\n}];"
+        "jsCode": "// CANVA IMPORT SERVICE PLACEHOLDER\n// This will later connect to our pipeline backend which handles:\n// - Canva OAuth\n// - Canva client secret\n// - Canva import API\n// - design creation\n\nconst item = $input.first().json;\nreturn [{\n  json: {\n    ...item,\n    canva_service_dispatched: true,\n    canva_status: 'READY_FOR_CANVA',\n    service_note: 'Handoff payload prepared. Awaiting Canva Connect API integration.'\n  }\n}];"
       },
       "id": "node-canva-import-service",
       "name": "CANVA IMPORT SERVICE",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3320,
+        3800,
         300
       ],
       "notesInFlow": true,
@@ -699,10 +815,10 @@
               "type": "boolean"
             },
             {
-              "id": "final-canva",
-              "name": "canva_ready",
-              "value": true,
-              "type": "boolean"
+              "id": "final-canva-status",
+              "name": "canva_status",
+              "value": "READY_FOR_CANVA",
+              "type": "string"
             }
           ]
         }
@@ -712,11 +828,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3560,
+        4040,
         300
       ],
       "notesInFlow": true,
-      "notes": "NODE 13: Emits final completion payload with job_id, proposal_id, and artifact status flags."
+      "notes": "NODE 13: Emits final completion payload with job_id, proposal_id, and canva_status: 'READY_FOR_CANVA'."
     }
   ],
   "connections": {
@@ -764,7 +880,36 @@
       "main": [
         [
           {
+            "node": "Validate Proposal Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Proposal Request": {
+      "main": [
+        [
+          {
+            "node": "IF Request Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Request Valid?": {
+      "main": [
+        [
+          {
             "node": "Call Sympl Proposal RAG API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Validation Error Response",
             "type": "main",
             "index": 0
           }

@@ -34,6 +34,11 @@ class BookkeepingScope:
     reconciliations: bool = True
     expense_management: bool = True
     catchup_cleanup: bool = False
+    bookkeeping_volume: Optional[str] = None
+    bookkeeping_frequency: Optional[str] = None
+    ap_ar_requirements: Optional[str] = None
+    reconciliation_requirements: Optional[str] = None
+    cleanup_requirements: Optional[str] = None
 
 
 @dataclass
@@ -45,6 +50,10 @@ class PayrollScope:
     sympl_processes_payroll: bool = True
     manager_input_responsibility: bool = True
     hr_functions_excluded: bool = True
+    employee_count_for_payroll: Optional[Any] = None
+    payroll_frequency: Optional[str] = None
+    current_payroll_system: Optional[str] = None
+    payroll_transition_requirements: Optional[str] = None
 
 
 @dataclass
@@ -54,6 +63,9 @@ class ReportingScope:
     class_department_tracking: bool = False
     board_package: bool = False
     budget_vs_actual: bool = False
+    reporting_requirements: Optional[str] = None
+    board_reporting_requirements: Optional[str] = None
+    budgeting_requirements: Optional[str] = None
 
 
 @dataclass
@@ -62,6 +74,8 @@ class ComplianceScope:
     t3010_support: bool = False
     audit_support: bool = False
     audit_response_sla: Optional[str] = None  # e.g., "1-2 business days" if explicitly approved
+    compliance_requirements: Optional[str] = None
+    regulatory_requirements: Optional[str] = None
 
 
 @dataclass
@@ -148,6 +162,24 @@ class EngagementContext:
 
 
 @dataclass
+class ClientNarrativeContext:
+    client_situation_summary: Optional[str] = None
+    client_challenges_summary: Optional[str] = None
+    organization_description: Optional[str] = None
+    industry_context: Optional[str] = None
+    employee_count: Optional[Any] = None
+    organization_size: Optional[str] = None
+    annual_budget_or_revenue_range: Optional[str] = None
+    current_accounting_system: Optional[str] = None
+    current_finance_process: Optional[str] = None
+    current_finance_team_structure: Optional[str] = None
+    current_finance_challenges: Optional[Union[str, List[str]]] = None
+    reason_for_engagement: Optional[str] = None
+    desired_outcomes: Optional[Union[str, List[str]]] = None
+    client_priorities: Optional[Union[str, List[str]]] = None
+
+
+@dataclass
 class ClientInput:
     client_id: str
     organization: OrganizationInfo
@@ -156,6 +188,12 @@ class ClientInput:
     approved_scope: ScopeContainer
     commercial_terms: ApprovedCommercialInputs
     preferences: Preferences = field(default_factory=Preferences)
+    narrative_context: Optional[ClientNarrativeContext] = None
+    service_context: Optional[Dict[str, Any]] = None
+    context_quality: str = "LOW"
+    context_score: int = 0
+    enriched_context: Dict[str, Any] = field(default_factory=dict)
+
 
 
 # ----------------------------------------------------------------------

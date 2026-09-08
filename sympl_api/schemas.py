@@ -79,3 +79,98 @@ class WebhookCallbackPayload(BaseModel):
     manifest_url: str = Field(..., description="URL endpoint to retrieve the artifact manifest.json")
     error_message: Optional[str] = Field(None, description="Error message if generation failed")
 
+
+class ClientNarrativeSchema(BaseModel):
+    """Optional narrative context capturing client operational situation, challenges, and goals."""
+    client_situation_summary: Optional[str] = Field(None, description="Operational posture and current situation")
+    client_challenges_summary: Optional[str] = Field(None, description="Core challenges and pain points")
+    organization_description: Optional[str] = Field(None, description="Organizational overview and mission")
+    industry_context: Optional[str] = Field(None, description="Sector context and regulatory environment")
+    employee_count: Optional[Any] = Field(None, description="Approximate employee / staff count")
+    organization_size: Optional[str] = Field(None, description="Size category (compact, small, medium, large)")
+    annual_budget_or_revenue_range: Optional[str] = Field(None, description="Budget or annual revenue range")
+    current_accounting_system: Optional[str] = Field(None, description="Primary accounting software (e.g. Sage, QBO)")
+    current_finance_process: Optional[str] = Field(None, description="Current invoicing, payables, and reporting workflow")
+    current_finance_team_structure: Optional[str] = Field(None, description="Internal team composition and departing roles")
+    current_finance_challenges: Optional[Any] = Field(None, description="Specific finance obstacles or backlog")
+    reason_for_engagement: Optional[str] = Field(None, description="Primary catalyst for seeking outsourced services")
+    desired_outcomes: Optional[Any] = Field(None, description="Target outcomes and success criteria")
+    client_priorities: Optional[Any] = Field(None, description="Top operational priorities")
+
+
+class BookkeepingContextSchema(BaseModel):
+    """Specific operational context for bookkeeping service."""
+    bookkeeping_volume: Optional[str] = None
+    bookkeeping_frequency: Optional[str] = None
+    ap_ar_requirements: Optional[str] = None
+    reconciliation_requirements: Optional[str] = None
+    cleanup_requirements: Optional[str] = None
+
+
+class PayrollContextSchema(BaseModel):
+    """Specific operational context for payroll service."""
+    employee_count_for_payroll: Optional[Any] = None
+    payroll_frequency: Optional[str] = None
+    current_payroll_system: Optional[str] = None
+    payroll_transition_requirements: Optional[str] = None
+
+
+class ReportingContextSchema(BaseModel):
+    """Specific operational context for reporting service."""
+    reporting_requirements: Optional[str] = None
+    board_reporting_requirements: Optional[str] = None
+    budgeting_requirements: Optional[str] = None
+
+
+class ComplianceContextSchema(BaseModel):
+    """Specific operational context for compliance service."""
+    compliance_requirements: Optional[str] = None
+    regulatory_requirements: Optional[str] = None
+
+
+class ServiceContextSchema(BaseModel):
+    """Container for service-specific operational requirements."""
+    bookkeeping: Optional[BookkeepingContextSchema] = None
+    payroll: Optional[PayrollContextSchema] = None
+    reporting: Optional[ReportingContextSchema] = None
+    compliance: Optional[ComplianceContextSchema] = None
+
+
+class ProposalIntakeRequest(BaseModel):
+    """
+    Intake schema for proposal generation.
+    Maintains 100% backward compatibility with legacy minimal payloads
+    while allowing rich client context and narrative story fields.
+    """
+    client_name: Optional[str] = Field(None, description="Client or organization name")
+    organization: Optional[Dict[str, Any]] = Field(None, description="Organization details (name, type, sector)")
+    engagement: Optional[Dict[str, Any]] = Field(None, description="Engagement context (type, complexity)")
+    requested_scope: Optional[Dict[str, Any]] = Field(None, description="Client requested service scope")
+    approved_scope: Dict[str, Any] = Field(..., description="Authoritative approved service scope")
+    commercial_terms: Dict[str, Any] = Field(..., description="Pricing structure and commercial terms")
+    preferences: Optional[Dict[str, Any]] = Field(None, description="Optional presentation preferences")
+
+    # High-value narrative fields (top-level or nested)
+    client_situation_summary: Optional[str] = None
+    client_challenges_summary: Optional[str] = None
+    organization_description: Optional[str] = None
+    industry_context: Optional[str] = None
+    employee_count: Optional[Any] = None
+    organization_size: Optional[str] = None
+    annual_budget_or_revenue_range: Optional[str] = None
+    current_accounting_system: Optional[str] = None
+    current_finance_process: Optional[str] = None
+    current_finance_team_structure: Optional[str] = None
+    current_finance_challenges: Optional[Any] = None
+    reason_for_engagement: Optional[str] = None
+    desired_outcomes: Optional[Any] = None
+    client_priorities: Optional[Any] = None
+
+    # Grouped structures (optional alternatives)
+    client_background: Optional[ClientNarrativeSchema] = None
+    finance_context: Optional[Dict[str, Any]] = None
+    objectives: Optional[Dict[str, Any]] = None
+    service_context: Optional[ServiceContextSchema] = None
+    callback_url: Optional[str] = None
+
+

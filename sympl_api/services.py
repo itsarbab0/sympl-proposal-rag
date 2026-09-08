@@ -24,7 +24,8 @@ from sympl_planner.schema import (
     TrainingScope,
     TransitionScope,
     ApprovedCommercialInputs,
-    Preferences
+    Preferences,
+    ClientNarrativeContext
 )
 from sympl_planner.engine import ProposalPlanner
 from sympl_planner.retrieval import DATABASE_URL
@@ -40,6 +41,103 @@ from sympl_api.exceptions import (
 from sympl_observability.environment import validate_environment
 from sympl_observability.telemetry import PipelineTelemetry
 from sympl_storage.store import default_store
+
+
+def calculate_context_quality(intake_dict: Dict[str, Any]) -> tuple:
+    """
+    Calculates weighted context quality score (0 to 100).
+    High-value narrative fields carry 75% of weight.
+    Structured and operational fields carry 25% of weight.
+
+    Returns:
+        (context_quality: str, score: int, breakdown: Dict[str, Any])
+    """
+    score = 0
+    breakdown = {}
+
+    org_data = intake_dict.get("organization") or {}
+    bg_data = intake_dict.get("client_background") or {}
+    fin_data = intake_dict.get("finance_context") or {}
+    obj_data = intake_dict.get("objectives") or {}
+    svc_data = intake_dict.get("service_context") or {}
+
+    # High-value narrative fields (up to 75 points)
+    # 1. Client Situation Summary (15 pts)
+    sit = intake_dict.get("client_situation_summary") or bg_data.get("client_situation_summary") or fin_data.get("client_situation_summary")
+    if sit and str(sit).strip():
+        score += 15
+        breakdown["client_situation_summary"] = 15
+
+    # 2. Client Challenges Summary (15 pts)
+    chal_sum = intake_dict.get("client_challenges_summary") or bg_data.get("client_challenges_summary") or fin_data.get("client_challenges_summary")
+    if chal_sum and str(chal_sum).strip():
+        score += 15
+        breakdown["client_challenges_summary"] = 15
+
+    # 3. Current Finance Challenges (15 pts)
+    fin_chal = intake_dict.get("current_finance_challenges") or fin_data.get("current_finance_challenges") or fin_data.get("challenges")
+    if fin_chal and (isinstance(fin_chal, list) and len(fin_chal) > 0 or str(fin_chal).strip()):
+        score += 15
+        breakdown["current_finance_challenges"] = 15
+
+    # 4. Organization Description (10 pts)
+    desc = intake_dict.get("organization_description") or bg_data.get("organization_description") or org_data.get("description") or intake_dict.get("description")
+    if desc and str(desc).strip():
+        score += 10
+        breakdown["organization_description"] = 10
+
+    # 5. Reason for Engagement (10 pts)
+    reason = intake_dict.get("reason_for_engagement") or obj_data.get("reason_for_engagement")
+    if reason and str(reason).strip():
+        score += 10
+        breakdown["reason_for_engagement"] = 10
+
+    # 6. Desired Outcomes (10 pts)
+    outcomes = intake_dict.get("desired_outcomes") or obj_data.get("desired_outcomes")
+    if outcomes and (isinstance(outcomes, list) and len(outcomes) > 0 or str(outcomes).strip()):
+        score += 10
+        breakdown["desired_outcomes"] = 10
+
+    # Structured context fields (up to 25 points)
+    # 7. Current Accounting System (5 pts)
+    sys_name = intake_dict.get("current_accounting_system") or fin_data.get("current_accounting_system") or fin_data.get("current_system") or (org_data.get("current_systems", [None])[0] if org_data.get("current_systems") else None)
+    if sys_name and str(sys_name).strip():
+        score += 5
+        breakdown["current_accounting_system"] = 5
+
+    # 8. Current Finance Process / Team (5 pts)
+    proc = intake_dict.get("current_finance_process") or fin_data.get("current_finance_process") or intake_dict.get("current_finance_team_structure") or fin_data.get("current_finance_team_structure")
+    if proc and str(proc).strip():
+        score += 5
+        breakdown["finance_process_or_team"] = 5
+
+    # 9. Employee Count / Org Size / Revenue Range (5 pts)
+    size = intake_dict.get("employee_count") or bg_data.get("employee_count") or intake_dict.get("organization_size") or bg_data.get("organization_size") or intake_dict.get("annual_budget_or_revenue_range") or bg_data.get("annual_budget_or_revenue_range")
+    if size is not None and str(size).strip():
+        score += 5
+        breakdown["organization_scale"] = 5
+
+    # 10. Service Specific Operational Context (10 pts)
+    has_svc_ctx = False
+    if svc_data and isinstance(svc_data, dict) and any(bool(v) for v in svc_data.values()):
+        has_svc_ctx = True
+    elif any(k.startswith("bookkeeping_") or k.startswith("payroll_") or k.startswith("reporting_") or k.startswith("compliance_") for k in intake_dict.keys()):
+        has_svc_ctx = True
+
+    if has_svc_ctx:
+        score += 10
+        breakdown["service_context"] = 10
+
+    score = min(100, score)
+
+    if score >= 70:
+        quality = "HIGH"
+    elif score >= 30:
+        quality = "MEDIUM"
+    else:
+        quality = "LOW"
+
+    return quality, score, breakdown
 
 
 class OrchestrationService:
@@ -130,10 +228,80 @@ class OrchestrationService:
                 details={}
             )
 
+        # Context Quality Scoring (weighted importance: 75% narrative, 25% structured)
+        context_quality, context_score, quality_breakdown = calculate_context_quality(intake_dict)
+        if context_quality == "LOW":
+            logger.warning(
+                f"Intake context quality is LOW ({context_score}/100) for client '{client_name}'. "
+                "Minimal business context provided; generating generic proposal."
+            )
+
+        # Extract enriched narrative context (support both top-level and nested structures)
+        bg_data = intake_dict.get("client_background") or {}
+        fin_data = intake_dict.get("finance_context") or {}
+        obj_data = intake_dict.get("objectives") or {}
+        svc_context_raw = intake_dict.get("service_context") or {}
+
+        sit_summary = intake_dict.get("client_situation_summary") or bg_data.get("client_situation_summary") or fin_data.get("client_situation_summary")
+        chal_summary = intake_dict.get("client_challenges_summary") or bg_data.get("client_challenges_summary") or fin_data.get("client_challenges_summary")
+        org_desc = intake_dict.get("organization_description") or bg_data.get("organization_description") or org_data.get("description") or intake_dict.get("description")
+        ind_ctx = intake_dict.get("industry_context") or bg_data.get("industry_context") or org_data.get("industry_context")
+        emp_cnt = intake_dict.get("employee_count") or bg_data.get("employee_count") or org_data.get("employee_count")
+        org_sz = intake_dict.get("organization_size") or bg_data.get("organization_size") or org_data.get("organization_size")
+        rev_rng = intake_dict.get("annual_budget_or_revenue_range") or bg_data.get("annual_budget_or_revenue_range") or org_data.get("annual_budget_or_revenue_range")
+
+        curr_acct = intake_dict.get("current_accounting_system") or fin_data.get("current_accounting_system") or fin_data.get("current_system")
+        if not curr_acct and org_data.get("current_systems"):
+            curr_acct = org_data.get("current_systems")[0]
+
+        curr_proc = intake_dict.get("current_finance_process") or fin_data.get("current_finance_process")
+        curr_team = intake_dict.get("current_finance_team_structure") or fin_data.get("current_finance_team_structure")
+        curr_chal = intake_dict.get("current_finance_challenges") or fin_data.get("current_finance_challenges") or fin_data.get("challenges")
+
+        reason_eng = intake_dict.get("reason_for_engagement") or obj_data.get("reason_for_engagement")
+        des_outcomes = intake_dict.get("desired_outcomes") or obj_data.get("desired_outcomes")
+        cl_prio = intake_dict.get("client_priorities") or obj_data.get("client_priorities")
+
+        narrative_ctx = ClientNarrativeContext(
+            client_situation_summary=sit_summary,
+            client_challenges_summary=chal_summary,
+            organization_description=org_desc,
+            industry_context=ind_ctx,
+            employee_count=emp_cnt,
+            organization_size=org_sz,
+            annual_budget_or_revenue_range=rev_rng,
+            current_accounting_system=curr_acct,
+            current_finance_process=curr_proc,
+            current_finance_team_structure=curr_team,
+            current_finance_challenges=curr_chal,
+            reason_for_engagement=reason_eng,
+            desired_outcomes=des_outcomes,
+            client_priorities=cl_prio
+        )
+
+        enriched_dict = {
+            "client_situation_summary": sit_summary,
+            "client_challenges_summary": chal_summary,
+            "organization_description": org_desc,
+            "industry_context": ind_ctx,
+            "employee_count": emp_cnt,
+            "organization_size": org_sz,
+            "annual_budget_or_revenue_range": rev_rng,
+            "current_accounting_system": curr_acct,
+            "current_finance_process": curr_proc,
+            "current_finance_team_structure": curr_team,
+            "current_finance_challenges": curr_chal,
+            "reason_for_engagement": reason_eng,
+            "desired_outcomes": des_outcomes,
+            "client_priorities": cl_prio,
+            "context_quality": context_quality,
+            "context_score": context_score
+        }
+
         # Scopes: strictly isolate approved_scope, NEVER fallback to requested_scope
         req_scope_raw = intake_dict.get("requested_scope") or {}
-        requested_scope = self._build_scope_container(req_scope_raw)
-        approved_scope = self._build_scope_container(app_scope_raw)
+        requested_scope = self._build_scope_container(req_scope_raw, svc_context_raw)
+        approved_scope = self._build_scope_container(app_scope_raw, svc_context_raw)
 
         # Ensure approved_scope contains at least one active service family
         if not approved_scope.active_families():
@@ -181,33 +349,52 @@ class OrchestrationService:
             requested_scope=requested_scope,
             approved_scope=approved_scope,
             commercial_terms=commercial_terms,
-            preferences=preferences
+            preferences=preferences,
+            narrative_context=narrative_ctx,
+            service_context=svc_context_raw if svc_context_raw else None,
+            context_quality=context_quality,
+            context_score=context_score,
+            enriched_context=enriched_dict
         )
 
-    def _build_scope_container(self, scope_dict: Dict[str, Any]) -> ScopeContainer:
-        """Maps nested scope dictionary into ScopeContainer."""
+    def _build_scope_container(
+        self,
+        scope_dict: Dict[str, Any],
+        service_context: Optional[Dict[str, Any]] = None
+    ) -> ScopeContainer:
+        """Maps nested scope dictionary into ScopeContainer, integrating service context."""
         if not isinstance(scope_dict, dict):
             return ScopeContainer()
+
+        svc_ctx = service_context or {}
 
         bk = None
         if "bookkeeping" in scope_dict and scope_dict["bookkeeping"]:
             bk_data = scope_dict["bookkeeping"] if isinstance(scope_dict["bookkeeping"], dict) else {}
-            bk = BookkeepingScope(**{k: v for k, v in bk_data.items() if hasattr(BookkeepingScope, k)})
+            bk_extra = svc_ctx.get("bookkeeping") or {}
+            combined_bk = {**bk_extra, **bk_data}
+            bk = BookkeepingScope(**{k: v for k, v in combined_bk.items() if hasattr(BookkeepingScope, k)})
 
         py = None
         if "payroll" in scope_dict and scope_dict["payroll"]:
             py_data = scope_dict["payroll"] if isinstance(scope_dict["payroll"], dict) else {}
-            py = PayrollScope(**{k: v for k, v in py_data.items() if hasattr(PayrollScope, k)})
+            py_extra = svc_ctx.get("payroll") or {}
+            combined_py = {**py_extra, **py_data}
+            py = PayrollScope(**{k: v for k, v in combined_py.items() if hasattr(PayrollScope, k)})
 
         rep = None
         if "financial_reporting" in scope_dict and scope_dict["financial_reporting"]:
             rep_data = scope_dict["financial_reporting"] if isinstance(scope_dict["financial_reporting"], dict) else {}
-            rep = ReportingScope(**{k: v for k, v in rep_data.items() if hasattr(ReportingScope, k)})
+            rep_extra = svc_ctx.get("reporting") or svc_ctx.get("financial_reporting") or {}
+            combined_rep = {**rep_extra, **rep_data}
+            rep = ReportingScope(**{k: v for k, v in combined_rep.items() if hasattr(ReportingScope, k)})
 
         comp = None
         if "compliance" in scope_dict and scope_dict["compliance"]:
             comp_data = scope_dict["compliance"] if isinstance(scope_dict["compliance"], dict) else {}
-            comp = ComplianceScope(**{k: v for k, v in comp_data.items() if hasattr(ComplianceScope, k)})
+            comp_extra = svc_ctx.get("compliance") or {}
+            combined_comp = {**comp_extra, **comp_data}
+            comp = ComplianceScope(**{k: v for k, v in combined_comp.items() if hasattr(ComplianceScope, k)})
 
         trans = None
         if "digital_transformation" in scope_dict and scope_dict["digital_transformation"]:
@@ -237,11 +424,27 @@ class OrchestrationService:
     def execute_planner(self, intake_data: Dict[str, Any]) -> Dict[str, Any]:
         """Runs the Proposal Planner and returns writer-sanitized proposal_plan."""
         client_input = self.parse_client_intake(intake_data)
+        logger.info(
+            f"[Planner Ingestion Validation] Client: '{client_input.organization.name}', "
+            f"Context Quality: {client_input.context_quality} ({client_input.context_score}/100)."
+        )
         plan = self.planner.plan(client_input)
         return json.loads(plan.to_json(for_writer=True))
 
     def execute_writer(self, plan_data: Dict[str, Any]) -> Dict[str, Any]:
         """Runs the Proposal Writer on a proposal_plan and returns proposal_draft."""
+        client_ctx = plan_data.get("client_context") or {}
+        meta = plan_data.get("metadata") or {}
+        logger.info(
+            f"[Writer Ingestion Validation] Client: '{plan_data.get('client_name')}', "
+            f"Context Quality: {meta.get('context_quality', client_ctx.get('context_quality', 'UNKNOWN'))} "
+            f"({meta.get('context_score', client_ctx.get('context_score', 0))}/100). "
+            f"Situation Summary: {bool(client_ctx.get('client_situation_summary'))}, "
+            f"Challenges Summary: {bool(client_ctx.get('client_challenges_summary'))}, "
+            f"Finance Challenges: {bool(client_ctx.get('current_finance_challenges'))}, "
+            f"Reason: {bool(client_ctx.get('reason_for_engagement'))}, "
+            f"Outcomes: {bool(client_ctx.get('desired_outcomes'))}."
+        )
         draft = self.writer.write(plan_data)
         return draft.to_dict()
 
