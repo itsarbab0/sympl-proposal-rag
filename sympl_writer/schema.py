@@ -19,6 +19,7 @@ import json
 class DraftSubsection:
     heading: str
     bullets: List[str] = field(default_factory=list)
+    narrative: Optional[str] = None
 
 
 @dataclass
@@ -75,7 +76,8 @@ class ProposalDraft:
             for sub in s.get("subsections", []):
                 subsections.append(DraftSubsection(
                     heading=sub.get("heading", ""),
-                    bullets=sub.get("bullets", [])
+                    bullets=sub.get("bullets", []),
+                    narrative=sub.get("narrative")
                 ))
             sections.append(DraftSection(
                 section_title=s.get("section_title", ""),

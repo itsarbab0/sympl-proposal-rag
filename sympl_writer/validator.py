@@ -272,7 +272,10 @@ class ProposalValidator:
         for s in draft.sections:
             sec_blob = s.section_title.lower() + " " + s.opening_text.lower()
             for sub in s.subsections:
-                sec_blob += " " + sub.heading.lower() + " " + " ".join(b.lower() for b in sub.bullets)
+                sec_blob += " " + sub.heading.lower()
+                if getattr(sub, "narrative", None):
+                    sec_blob += " " + sub.narrative.lower()
+                sec_blob += " " + " ".join(b.lower() for b in sub.bullets)
             section_texts.append(sec_blob)
 
         combined_sections_text = " ".join(section_texts)
@@ -477,6 +480,8 @@ class ProposalValidator:
             parts.append(s.opening_text)
             for sub in s.subsections:
                 parts.append(sub.heading)
+                if getattr(sub, "narrative", None):
+                    parts.append(sub.narrative)
                 parts.extend(sub.bullets)
 
         return " ".join(parts)
