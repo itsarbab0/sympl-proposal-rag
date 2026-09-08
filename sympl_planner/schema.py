@@ -7,7 +7,7 @@ and the final proposal plan.
 """
 
 from dataclasses import dataclass, field, asdict
-from typing import List, Dict, Optional, Any, Literal
+from typing import List, Dict, Optional, Any, Literal, Union
 import json
 import time
 import uuid
