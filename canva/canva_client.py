@@ -7,6 +7,7 @@ Implements:
 3. export_pdf() — triggers PDF export job, polls completion, and downloads vector PDF
 """
 
+import os
 import json
 import time
 import uuid
@@ -23,7 +24,7 @@ from .models import CanvaDesignMetadata, CanvaExportResult
 
 
 CANVA_API_BASE_URL = "https://api.canva.com/rest/v1"
-DEFAULT_MASTER_TEMPLATE_ID = "DAHU1H8DMjc"
+DEFAULT_MASTER_TEMPLATE_ID = os.environ.get("CANVA_TEMPLATE_ID", "DAHU50usCLE")
 
 
 class CanvaAPIException(Exception):

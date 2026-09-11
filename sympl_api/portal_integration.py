@@ -35,7 +35,7 @@ from canva.adapter import CanvaOperationsAdapter
 
 router = APIRouter(tags=["Portal Integration"])
 
-MASTER_TEMPLATE_ID = os.environ.get("CANVA_TEMPLATE_ID", "DAHU1H8DMjc")
+MASTER_TEMPLATE_ID = os.environ.get("CANVA_TEMPLATE_ID", "DAHU50usCLE")
 
 
 @router.get("/auth/canva/authorize", summary="Initiate Canva OAuth PKCE flow")
