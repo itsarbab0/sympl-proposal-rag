@@ -166,12 +166,63 @@ def canva_inspect_designs(test_id: Optional[str] = None):
     except Exception as e:
         copy_test = {"error": str(e)}
 
+    # Test brand-templates query
+    brand_templates = []
+    brand_templates_err = None
+    try:
+        req_bt = urllib.request.Request("https://api.canva.com/rest/v1/brand-templates", headers={"Authorization": f"Bearer {token}"})
+        with urllib.request.urlopen(req_bt, timeout=15) as resp_bt:
+            bt_data = json.loads(resp_bt.read().decode("utf-8"))
+            brand_templates = bt_data.get("items", [])
+    except urllib.error.HTTPError as e:
+        brand_templates_err = f"HTTP {e.code}: {e.read().decode('utf-8', errors='ignore')}"
+    except Exception as e:
+        brand_templates_err = str(e)
+
+    # Test dataset query on check_id
+    dataset_test = {}
+    try:
+        req_ds = urllib.request.Request(f"https://api.canva.com/rest/v1/brand-templates/{check_id}/dataset", headers={"Authorization": f"Bearer {token}"})
+        with urllib.request.urlopen(req_ds, timeout=15) as resp_ds:
+            dataset_test = json.loads(resp_ds.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        dataset_test = {"status": f"HTTP {e.code}", "response": e.read().decode("utf-8", errors="ignore")}
+    except Exception as e:
+        dataset_test = {"error": str(e)}
+
+    # Test autofill job on check_id
+    autofill_test = {}
+    try:
+        af_payload = {
+            "brand_template_id": check_id,
+            "title": "Test Autofill",
+            "data": {
+                "Client_Name": {"type": "text", "text": "Old Trout Puppet Workshop"},
+                "Project_Title": {"type": "text", "text": "Bookkeeping Services Proposal"}
+            }
+        }
+        req_af = urllib.request.Request(
+            "https://api.canva.com/rest/v1/autofills",
+            data=json.dumps(af_payload).encode("utf-8"),
+            headers=headers
+        )
+        with urllib.request.urlopen(req_af, timeout=15) as resp_af:
+            autofill_test = json.loads(resp_af.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        autofill_test = {"status": f"HTTP {e.code}", "response": e.read().decode("utf-8", errors="ignore")}
+    except Exception as e:
+        autofill_test = {"error": str(e)}
+
     return {
         "profile": profile,
         "tested_template_id": check_id,
         "master_template_id": MASTER_TEMPLATE_ID,
         "template_direct_access": template_test,
         "copy_test": copy_test,
+        "brand_templates": [{"id": bt.get("id"), "title": bt.get("title")} for bt in brand_templates],
+        "brand_templates_err": brand_templates_err,
+        "dataset_test": dataset_test,
+        "autofill_test": autofill_test,
         "accessible_designs": [{"id": d.get("id"), "title": d.get("title")} for d in designs],
         "designs_query_error": designs_err
     }
