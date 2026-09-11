@@ -225,9 +225,10 @@ class CanvaConnectClient:
                         design_meta = CanvaDesignMetadata(
                             design_id=new_id,
                             title=design_info.get("title", title),
-                            page_count=design_info.get("page_count", 11),
+                            page_count=design_info.get("page_count", 1),
                             edit_url=urls.get("edit_url", f"https://www.canva.com/design/{new_id}/edit"),
-                            view_url=urls.get("view_url", f"https://www.canva.com/design/{new_id}/view")
+                            view_url=urls.get("view_url", f"https://www.canva.com/design/{new_id}/view"),
+                            is_template_duplicated=False
                         )
                         logger.info(f"[CANVA] Design created ID: {design_meta.design_id}")
                         return design_meta
@@ -245,7 +246,8 @@ class CanvaConnectClient:
             title=title,
             page_count=11,
             edit_url=f"https://www.canva.com/design/{unique_design_id}/edit",
-            view_url=f"https://www.canva.com/design/{unique_design_id}/view"
+            view_url=f"https://www.canva.com/design/{unique_design_id}/view",
+            is_template_duplicated=False
         )
 
     def _poll_autofill_job(self, job_id: str, max_wait_seconds: int = 45) -> CanvaDesignMetadata:

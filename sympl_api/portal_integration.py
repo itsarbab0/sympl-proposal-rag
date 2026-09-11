@@ -415,13 +415,20 @@ def generate_proposal_from_portal(payload: ProposalIntakePayload, request: Reque
             # 2. Populate dynamic proposal fields
             canva_client.populate_design(design_meta.design_id, autofill_data)
 
-            # 3. Export PDF from Canva (with high-res vector PDF fallback)
-            try:
-                canva_download_url, pdf_bytes = canva_client.export_pdf(design_meta.design_id)
-                print("Export completed: yes")
-            except Exception as exp_err:
-                logger.warning(f"[CANVA] Direct Canva export issue: {exp_err}. Using high-res vector PDF renderer fallback.")
-                print("Export completed: yes (vector fallback)")
+            # 3. Export PDF (Canva export if duplicated, vector PDF engine if template access was restricted)
+            if getattr(design_meta, "is_template_duplicated", True):
+                try:
+                    canva_download_url, pdf_bytes = canva_client.export_pdf(design_meta.design_id)
+                    print("Export completed: yes")
+                except Exception as exp_err:
+                    logger.warning(f"[CANVA] Direct Canva export issue: {exp_err}. Using high-res vector PDF renderer fallback.")
+                    print("Export completed: yes (vector fallback)")
+                    rendered_dict = service.execute_renderer(draft_dict)
+                    pdf_service = PdfGenerationService()
+                    pdf_bytes = pdf_service.generate_pdf(rendered_dict)
+            else:
+                logger.info("[CANVA] Master template access was restricted. Generating complete 11-page proposal vector PDF...")
+                print("Export completed: yes (vector renderer)")
                 rendered_dict = service.execute_renderer(draft_dict)
                 pdf_service = PdfGenerationService()
                 pdf_bytes = pdf_service.generate_pdf(rendered_dict)

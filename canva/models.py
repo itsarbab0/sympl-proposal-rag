@@ -68,6 +68,7 @@ class CanvaDesignMetadata:
     view_url: str = ""
     created_at: int = 0
     updated_at: int = 0
+    is_template_duplicated: bool = True
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "CanvaDesignMetadata":
