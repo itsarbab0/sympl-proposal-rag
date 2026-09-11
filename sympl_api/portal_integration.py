@@ -35,7 +35,7 @@ from canva.adapter import CanvaOperationsAdapter
 
 router = APIRouter(tags=["Portal Integration"])
 
-MASTER_TEMPLATE_ID = "DAHU1H8DMjc"
+MASTER_TEMPLATE_ID = os.environ.get("CANVA_TEMPLATE_ID", "DAHU1H8DMjc")
 
 
 @router.get("/auth/canva/authorize", summary="Initiate Canva OAuth PKCE flow")
@@ -113,6 +113,49 @@ def canva_callback(
     except Exception as e:
         logger.error(f"[CANVA AUTH] Callback error: {e}")
         raise HTTPException(status_code=400, detail=f"Canva authentication failed: {str(e)}")
+
+
+@router.get("/auth/canva/designs", summary="Inspect Canva designs accessible by current token")
+def canva_inspect_designs():
+    """Diagnostic endpoint to verify Canva design permissions and list owned designs."""
+    token = get_valid_access_token()
+    if not token:
+        raise HTTPException(status_code=401, detail="No active Canva token found. Please visit /auth/canva/authorize.")
+
+    headers = {"Authorization": f"Bearer {token}"}
+    profile = get_user_profile(token)
+
+    # Query /designs
+    designs = []
+    designs_err = None
+    try:
+        req = urllib.request.Request("https://api.canva.com/rest/v1/designs", headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            designs = data.get("items", [])
+    except urllib.error.HTTPError as e:
+        designs_err = f"HTTP {e.code}: {e.read().decode('utf-8', errors='ignore')}"
+    except Exception as e:
+        designs_err = str(e)
+
+    # Test direct access to MASTER_TEMPLATE_ID
+    template_test = {}
+    try:
+        req_t = urllib.request.Request(f"https://api.canva.com/rest/v1/designs/{MASTER_TEMPLATE_ID}", headers=headers)
+        with urllib.request.urlopen(req_t, timeout=15) as resp_t:
+            template_test = json.loads(resp_t.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        template_test = {"status": f"HTTP {e.code}", "response": e.read().decode("utf-8", errors="ignore")}
+    except Exception as e:
+        template_test = {"error": str(e)}
+
+    return {
+        "profile": profile,
+        "master_template_id": MASTER_TEMPLATE_ID,
+        "template_direct_access": template_test,
+        "accessible_designs": [{"id": d.get("id"), "title": d.get("title"), "urls": d.get("urls")} for d in designs],
+        "designs_query_error": designs_err
+    }
 
 
 class ProposalIntakePayload(BaseModel):

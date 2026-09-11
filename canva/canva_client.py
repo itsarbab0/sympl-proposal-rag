@@ -165,8 +165,7 @@ class CanvaConnectClient:
         # Strategy 2b: Fallback to Canva Designs Duplication / Copy endpoint
         design_payload = {
             "type": "design",
-            "design_id": target_template,
-            "title": title
+            "design_id": target_template
         }
 
         try:
