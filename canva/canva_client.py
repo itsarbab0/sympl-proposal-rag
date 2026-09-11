@@ -191,6 +191,7 @@ class CanvaConnectClient:
                     view_url=view_url
                 )
                 logger.info(f"[CANVA] Design created ID: {design_meta.design_id}")
+                return design_meta
         except urllib.error.HTTPError as e2:
             err_body2 = e2.read().decode("utf-8", errors="ignore")
             logger.warning(f"[CANVA] Template duplication failed (HTTP {e2.code}): {err_body2}. Attempting supported design creation workflow...")
