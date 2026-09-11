@@ -15,6 +15,7 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
+os.environ.setdefault("RENDERER_MODE", "mock")
 
 from starlette.testclient import TestClient
 from sympl_api.main import app

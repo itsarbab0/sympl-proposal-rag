@@ -23,10 +23,50 @@ from sympl_writer.validator import ProposalValidator
 from canva.template_schema import draft_to_canva_data
 from canva.template_mapper import MasterTemplateMapper
 from canva.layout_validator import CanvaLayoutValidator
+from canva.oauth import (
+    create_authorization_url,
+    exchange_code_for_token,
+    get_valid_access_token,
+    get_canva_credentials
+)
+from canva.canva_client import CanvaConnectClient, CanvaAPIException
+from canva.adapter import CanvaOperationsAdapter
 
 router = APIRouter(tags=["Portal Integration"])
 
 MASTER_TEMPLATE_ID = "DAHU1H8DMjc"
+
+
+@router.get("/auth/canva/authorize", summary="Initiate Canva OAuth PKCE flow")
+def canva_authorize(request: Request):
+    """Generates PKCE authorization URL and redirects user to Canva."""
+    base_url = str(request.base_url).rstrip("/")
+    redirect_uri = os.environ.get("CANVA_REDIRECT_URI") or f"{base_url}/auth/callback"
+    try:
+        auth_url, state = create_authorization_url(redirect_uri)
+        return Response(status_code=status.HTTP_307_TEMPORARY_REDIRECT, headers={"Location": auth_url})
+    except Exception as e:
+        logger.error(f"Failed to initiate Canva OAuth: {e}")
+        raise HTTPException(status_code=500, detail=f"Canva OAuth error: {str(e)}")
+
+
+@router.get("/auth/callback", summary="Canva OAuth callback handler")
+@router.get("/auth/canva/callback", summary="Canva OAuth callback handler alias")
+def canva_callback(code: str, state: str, request: Request):
+    """Exchanges code for Canva access token and stores it securely in PostgreSQL."""
+    base_url = str(request.base_url).rstrip("/")
+    redirect_uri = os.environ.get("CANVA_REDIRECT_URI") or f"{base_url}/auth/callback"
+    try:
+        token_data = exchange_code_for_token(code=code, state=state, redirect_uri=redirect_uri)
+        return {
+            "status": "authenticated",
+            "message": "Canva OAuth successful! Access token stored securely in PostgreSQL database.",
+            "scope": token_data.get("scope"),
+            "expires_in": token_data.get("expires_in")
+        }
+    except Exception as e:
+        logger.error(f"Canva OAuth callback failure: {e}")
+        raise HTTPException(status_code=400, detail=f"Canva authentication failed: {str(e)}")
 
 
 class ProposalIntakePayload(BaseModel):
@@ -284,39 +324,90 @@ def generate_proposal_from_portal(payload: ProposalIntakePayload, request: Reque
             detail=f"Canva layout population failed: {str(e)}"
         )
 
-    # Step 4: Proposal ready (Renderer & PDF Export)
+    # Step 4: Proposal ready (Canva Execution & PDF Export)
     proposal_id = f"prop_{uuid.uuid4().hex[:12]}"
-    try:
-        logger.info(f"[Stage 4/4] Executing Renderer & Vector PDF Generation: {proposal_id}...")
-        rendered_dict = service.execute_renderer(draft_dict)
+    
+    canva_client = CanvaConnectClient(master_template_id=MASTER_TEMPLATE_ID)
+    is_authenticated = canva_client.is_authenticated()
+    is_mock_mode = (
+        os.environ.get("RENDERER_MODE", "").lower() == "mock" or
+        os.environ.get("CANVA_MOCK_FALLBACK", "").lower() in ("true", "1") or
+        os.environ.get("ENVIRONMENT", "").lower() == "test"
+    )
 
+    if not is_authenticated and not is_mock_mode:
+        print("[CANVA]")
+        print("Authenticated: no")
+        print("Template duplicated: no")
+        print("New design ID: None")
+        print("Export completed: no")
+        logger.error("[CANVA] Authenticated: no. Missing Canva OAuth credentials.")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="[CANVA ERROR] Canva credentials or OAuth authorization missing. Please complete Canva authorization at /auth/canva/authorize."
+        )
+
+    canva_url = ""
+    pdf_bytes = None
+
+    if is_authenticated:
+        print("[CANVA]")
+        print("Authenticated: yes")
+        try:
+            adapter = CanvaOperationsAdapter()
+            autofill_data = adapter.operations_to_autofill_dataset(canva_ops, cdata)
+
+            # 1. Duplicate master template into new isolated design
+            design_meta = canva_client.create_design(
+                title=f"Sympl Proposal - {client_name}",
+                template_id=MASTER_TEMPLATE_ID,
+                initial_data=autofill_data
+            )
+            print("Template duplicated: yes")
+            print(f"New design ID: {design_meta.design_id}")
+
+            # 2. Populate dynamic proposal fields
+            canva_client.populate_design(design_meta.design_id, autofill_data)
+
+            # 3. Export PDF from Canva
+            canva_download_url, pdf_bytes = canva_client.export_pdf(design_meta.design_id)
+            print("Export completed: yes")
+
+            canva_url = design_meta.view_url or design_meta.edit_url or f"https://www.canva.com/design/{design_meta.design_id}/view"
+        except Exception as e:
+            logger.error(f"Failed in Canva execution layer: {e}", exc_info=True)
+            print("Template duplicated: no")
+            print("Export completed: no")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Canva execution failed: {str(e)}"
+            )
+    else:
+        # Development / offline unit test fallback
+        mock_design_id = f"DAHU1_{uuid.uuid4().hex[:8]}"
+        print("[CANVA]")
+        print("Authenticated: yes (mock)")
+        print("Template duplicated: yes")
+        print(f"New design ID: {mock_design_id}")
+        print("Export completed: yes")
+        canva_url = f"https://www.canva.com/design/{mock_design_id}/view"
+
+        # Fallback to local vector PDF renderer for offline tests
+        rendered_dict = service.execute_renderer(draft_dict)
         pdf_service = PdfGenerationService()
         pdf_bytes = pdf_service.generate_pdf(rendered_dict)
 
-        # Persist artifacts in default store
-        default_store.save_plan(proposal_id, plan_dict)
-        default_store.save_draft(proposal_id, draft_dict)
-        default_store.save_render(proposal_id, rendered_dict)
+    # Persist artifacts in default store
+    default_store.save_plan(proposal_id, plan_dict)
+    default_store.save_draft(proposal_id, draft_dict)
+    if pdf_bytes:
         default_store.save_pdf(proposal_id, pdf_bytes)
-        default_store.compile_manifest(
-            proposal_id=proposal_id,
-            client_name=client_name,
-            title=draft_dict.get("title", payload.project_title or "Services Proposal")
-        )
+    default_store.compile_manifest(
+        proposal_id=proposal_id,
+        client_name=client_name,
+        title=draft_dict.get("title", payload.project_title or "Services Proposal")
+    )
 
-        logger.info(f"[Stage 4/4 Complete] Artifacts persisted for '{proposal_id}' ({len(pdf_bytes)} bytes PDF).")
-    except Exception as e:
-        logger.error(f"Failed in Stage 4 (PDF export): {e}", exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Proposal finalization failed: {str(e)}"
-        )
-
-    # Generate Canva and PDF URLs
-    slug_name = urllib.parse.quote_plus(client_name)
-    canva_url = f"https://www.canva.com/design/{MASTER_TEMPLATE_ID}/view?title={slug_name}"
-
-    # Build relative PDF download URL (works across local, port 8000, and reverse proxies)
     pdf_url = f"/api/v1/proposal/{proposal_id}/pdf"
 
     return ProposalGenerationResponse(

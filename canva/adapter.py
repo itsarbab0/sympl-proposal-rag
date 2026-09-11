@@ -1,0 +1,95 @@
+"""
+Sympl Solutions — Canva Operations Adapter Layer
+Converts MasterTemplateMapper editing operations and CanvaProposalData
+into Canva Connect API payloads (Autofill data dictionary and transaction operations).
+"""
+
+import json
+from pathlib import Path
+from typing import List, Dict, Any, Optional
+from .models import CanvaEditingOperation
+from .template_schema import CanvaProposalData
+
+
+class CanvaOperationsAdapter:
+    """
+    Adapter converting 70 MasterTemplateMapper editing operations and structured
+    proposal fields into Canva Connect API compatible payloads.
+    """
+
+    def __init__(self, template_config_path: Optional[str] = None):
+        if template_config_path is None:
+            base = Path(__file__).resolve().parent
+            template_config_path = str(base / "templates" / "DAHU1H8DMjc.json")
+        self.config_path = Path(template_config_path)
+        self.element_to_field_map = self._build_element_field_map()
+
+    def _build_element_field_map(self) -> Dict[str, str]:
+        """Inverts the template config fields dictionary to map element_id -> field_name."""
+        mapping = {}
+        if self.config_path.exists():
+            try:
+                with open(self.config_path, "r", encoding="utf-8") as f:
+                    cfg = json.load(f)
+                    for field_name, field_info in cfg.get("fields", {}).items():
+                        elem_id = field_info.get("element_id")
+                        if elem_id:
+                            mapping[elem_id] = field_name
+            except Exception:
+                pass
+        return mapping
+
+    def operations_to_autofill_dataset(
+        self,
+        operations: List[CanvaEditingOperation],
+        cdata: Optional[CanvaProposalData] = None
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Adapts the 70 operations into Canva's Autofill data dictionary format:
+        {
+           "<field_name>": { "type": "text", "text": "<value>" }
+        }
+        """
+        dataset: Dict[str, Dict[str, Any]] = {}
+
+        # 1. Map operations by recognized field name or element ID
+        for op in operations:
+            text_val = op.text or op.replace_text
+            if text_val is None:
+                continue
+
+            # Check if this element ID has a recognized template field name
+            field_name = self.element_to_field_map.get(op.element_id) if op.element_id else None
+
+            if field_name:
+                dataset[field_name] = {
+                    "type": "text",
+                    "text": str(text_val)
+                }
+
+            # Also provide element-keyed entry for direct element binding
+            if op.element_id:
+                dataset[f"elem_{op.element_id}"] = {
+                    "type": "text",
+                    "text": str(text_val)
+                }
+
+        # 2. Augment with structured proposal fields from CanvaProposalData if available
+        if cdata:
+            dataset["client_name"] = {"type": "text", "text": cdata.cover.client_name}
+            dataset["proposal_title"] = {"type": "text", "text": cdata.cover.proposal_title}
+            dataset["proposal_date"] = {"type": "text", "text": cdata.cover.date}
+            dataset["executive_summary"] = {"type": "text", "text": cdata.executive_summary.body}
+            dataset["approach_summary"] = {"type": "text", "text": cdata.scope_and_approach.approach_overview}
+            dataset["total_investment"] = {"type": "text", "text": cdata.commercials.total_summary}
+
+        return dataset
+
+    def operations_to_transaction_payload(
+        self,
+        operations: List[CanvaEditingOperation]
+    ) -> List[Dict[str, Any]]:
+        """
+        Converts CanvaEditingOperation objects into serializable JSON dictionaries.
+        """
+        return [op.to_dict() for op in operations]
