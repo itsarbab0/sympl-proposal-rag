@@ -29,9 +29,9 @@ services:
       -w 4
       -k uvicorn.workers.UvicornWorker
       -b 0.0.0.0:8000
-      --timeout 60
-      --graceful-timeout 30
-      --keep-alive 5
+      --timeout 300
+      --graceful-timeout 90
+      --keep-alive 65
       --access-logfile -
       --error-logfile -
     volumes:

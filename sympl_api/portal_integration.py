@@ -187,16 +187,20 @@ def normalize_frontend_to_pipeline(payload: ProposalIntakePayload) -> Dict[str, 
 @router.post(
     "/api/generate-proposal",
     response_model=ProposalGenerationResponse,
+    status_code=status.HTTP_200_OK,
     summary="Portal Proposal Generation Pipeline",
     description="Synchronously executes the full Sympl Proposal RAG and Canva generation pipeline."
 )
-async def generate_proposal_from_portal(payload: ProposalIntakePayload, request: Request):
+def generate_proposal_from_portal(payload: ProposalIntakePayload, request: Request):
     """
     Executes the 4-stage pipeline for frontend proposal portal intake:
     1. Planner (analyzes requirements and retrieval context)
     2. Writer (generates narrative draft)
     3. Validator (validates draft and Canva layout compatibility)
     4. Canva Population & PDF Export (maps to Canva template and exports vector PDF)
+
+    Note: Declared with 'def' (sync) so FastAPI automatically runs it in a worker threadpool,
+    preventing blocking of the Uvicorn asyncio event loop and ensuring Gunicorn heartbeats succeed.
     """
     req_id = get_current_request_id() or generate_request_id()
     client_name = payload.client_name.strip()
@@ -270,7 +274,7 @@ async def generate_proposal_from_portal(payload: ProposalIntakePayload, request:
         canva_mapper = MasterTemplateMapper()
         canva_ops = canva_mapper.map_proposal_to_operations(cdata)
 
-        canva_val = CanvaLayoutValidator(template_config_path=str(Path(r"d:\Sympl\sympl-proposal-rag\canva\templates\DAHU1H8DMjc.json")))
+        canva_val = CanvaLayoutValidator()
         val_report = canva_val.validate_proposal(cdata)
         logger.info(f"[Stage 3/4 Complete] Canva layout validated: {val_report.get('status')}, ops count: {len(canva_ops)}")
     except Exception as e:

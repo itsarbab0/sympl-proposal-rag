@@ -32,5 +32,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://127.0.0.1:${PORT:-8000}/health || exit 1
 
-# Production entrypoint: launches Gunicorn + Uvicorn workers binding to dynamic PORT
-CMD ["sh", "-c", "exec gunicorn sympl_api.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT:-8000} --timeout 60 --graceful-timeout 30"]
+# Production entrypoint: launches Gunicorn + Uvicorn workers binding to dynamic PORT (300s timeout for long-running AI pipelines)
+CMD ["sh", "-c", "exec gunicorn sympl_api.main:app -w ${GUNICORN_WORKERS:-2} -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT:-8000} --timeout ${GUNICORN_TIMEOUT:-300} --graceful-timeout ${GUNICORN_GRACEFUL_TIMEOUT:-90} --keep-alive 65"]
