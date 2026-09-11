@@ -116,20 +116,20 @@ def canva_callback(
 
 
 @router.get("/auth/canva/designs", summary="Inspect Canva designs accessible by current token")
-def canva_inspect_designs():
+def canva_inspect_designs(test_id: Optional[str] = None):
     """Diagnostic endpoint to verify Canva design permissions and list owned designs."""
     token = get_valid_access_token()
     if not token:
         raise HTTPException(status_code=401, detail="No active Canva token found. Please visit /auth/canva/authorize.")
 
-    headers = {"Authorization": f"Bearer {token}"}
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
     profile = get_user_profile(token)
 
     # Query /designs
     designs = []
     designs_err = None
     try:
-        req = urllib.request.Request("https://api.canva.com/rest/v1/designs", headers=headers)
+        req = urllib.request.Request("https://api.canva.com/rest/v1/designs", headers={"Authorization": f"Bearer {token}"})
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             designs = data.get("items", [])
@@ -138,10 +138,11 @@ def canva_inspect_designs():
     except Exception as e:
         designs_err = str(e)
 
-    # Test direct access to MASTER_TEMPLATE_ID
+    # Test direct access to target template
+    check_id = test_id or MASTER_TEMPLATE_ID
     template_test = {}
     try:
-        req_t = urllib.request.Request(f"https://api.canva.com/rest/v1/designs/{MASTER_TEMPLATE_ID}", headers=headers)
+        req_t = urllib.request.Request(f"https://api.canva.com/rest/v1/designs/{check_id}", headers={"Authorization": f"Bearer {token}"})
         with urllib.request.urlopen(req_t, timeout=15) as resp_t:
             template_test = json.loads(resp_t.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
@@ -149,11 +150,29 @@ def canva_inspect_designs():
     except Exception as e:
         template_test = {"error": str(e)}
 
+    # Test copy capability on target template
+    copy_test = {}
+    try:
+        copy_payload = {"type": "design", "design_id": check_id}
+        req_c = urllib.request.Request(
+            "https://api.canva.com/rest/v1/designs",
+            data=json.dumps(copy_payload).encode("utf-8"),
+            headers=headers
+        )
+        with urllib.request.urlopen(req_c, timeout=20) as resp_c:
+            copy_test = json.loads(resp_c.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        copy_test = {"status": f"HTTP {e.code}", "response": e.read().decode("utf-8", errors="ignore")}
+    except Exception as e:
+        copy_test = {"error": str(e)}
+
     return {
         "profile": profile,
+        "tested_template_id": check_id,
         "master_template_id": MASTER_TEMPLATE_ID,
         "template_direct_access": template_test,
-        "accessible_designs": [{"id": d.get("id"), "title": d.get("title"), "urls": d.get("urls")} for d in designs],
+        "copy_test": copy_test,
+        "accessible_designs": [{"id": d.get("id"), "title": d.get("title")} for d in designs],
         "designs_query_error": designs_err
     }
 
