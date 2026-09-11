@@ -1,0 +1,246 @@
+{
+  "template_id": "DAHU1H8DMjc",
+  "template_name": "Sympl Master Proposal Template (Gary Crawford Layout)",
+  "total_pages": 11,
+  "supported_service_modules_max": 4,
+  "table_capacities": {
+    "deliverables_table": {
+      "page_number": 3,
+      "max_rows": 7,
+      "columns": ["Page / Component", "Purpose / Deliverable Description"],
+      "col1_max_chars": 25,
+      "col2_max_chars": 140
+    },
+    "timeline_table": {
+      "page_number": 7,
+      "max_rows": 6,
+      "columns": ["Week / Cadence", "Phase", "Deliverables"],
+      "col1_max_chars": 15,
+      "col2_max_chars": 25,
+      "col3_max_chars": 200
+    },
+    "payment_schedule": {
+      "page_number": 8,
+      "max_milestones": 2,
+      "milestone_max_chars": 90
+    }
+  },
+  "fields": {
+    "cover_title": {
+      "element_id": "PBV1SCndGVxlSNHy-LBnKP3F5yVR4Dyj4",
+      "page_number": 1,
+      "required": true,
+      "max_chars": 70,
+      "max_words": 12,
+      "description": "Uppercase Client Name + Proposal Subtitle"
+    },
+    "cover_client_and_date": {
+      "element_id": "PBV1SCndGVxlSNHy-LB20dGS480CqKK3P",
+      "page_number": 1,
+      "required": true,
+      "max_chars": 50,
+      "max_words": 8,
+      "description": "Client Name + Prepared Date"
+    },
+    "exec_summary_heading": {
+      "element_id": "PBjf8VsrNQJPQVLD-LBl7qGKDyHrSxymB",
+      "page_number": 2,
+      "required": true,
+      "max_chars": 30,
+      "max_words": 4,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "exec_summary_body": {
+      "element_id": "PBjf8VsrNQJPQVLD-LB4F546VGt88jHkB",
+      "page_number": 2,
+      "required": true,
+      "max_chars": 1500,
+      "max_words": 220,
+      "description": "3-4 paragraph narrative covering context, challenge, approach, and outcome"
+    },
+    "scope_heading_p3": {
+      "element_id": "PBQnr1MNZFCPZSGT-LBjKVC2RxSFgVB25",
+      "page_number": 3,
+      "required": true,
+      "max_chars": 30,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "scope_overview_p3": {
+      "element_id": "PBQnr1MNZFCPZSGT-LBj38qD1z2yhxyRx",
+      "page_number": 3,
+      "required": true,
+      "max_chars": 160,
+      "max_words": 25
+    },
+    "service_module_1": {
+      "element_id": "PBQnr1MNZFCPZSGT-LBssff5PZJ8Z97h1",
+      "page_number": 3,
+      "required": true,
+      "max_chars": 380,
+      "max_words": 55
+    },
+    "scope_outcome_p3": {
+      "element_id": "PBQnr1MNZFCPZSGT-LBhRKsTqzX5VR913",
+      "page_number": 3,
+      "required": true,
+      "max_chars": 350,
+      "max_words": 50
+    },
+    "scope_heading_p4": {
+      "element_id": "PBh3v3V5yD9235ps-LB62x8l2004g8DdT",
+      "page_number": 4,
+      "required": true,
+      "max_chars": 30,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "service_modules_2_and_3": {
+      "element_id": "PBh3v3V5yD9235ps-LBp7qPNvclcvg7SV",
+      "page_number": 4,
+      "required": true,
+      "max_chars": 1350,
+      "max_words": 210,
+      "description": "Composite container for Service Modules 2 and 3"
+    },
+    "scope_heading_p5": {
+      "element_id": "PBNrhdkGL25CnND0-LBd7hDckfDxSD5pf",
+      "page_number": 5,
+      "required": true,
+      "max_chars": 30,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "service_module_4": {
+      "element_id": "PBNrhdkGL25CnND0-LB2RStvhwrhCKPc6",
+      "page_number": 5,
+      "required": true,
+      "max_chars": 1250,
+      "max_words": 200,
+      "description": "Training, Enablement, or Year-End Transition module"
+    },
+    "process_heading": {
+      "element_id": "PBRbZdkMTPgf8cWP-LBrcfXVW9JCsZC8C",
+      "page_number": 6,
+      "required": true,
+      "max_chars": 30,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "process_intro": {
+      "element_id": "PBRbZdkMTPgf8cWP-LBLljQR3f4jXWQ89",
+      "page_number": 6,
+      "required": true,
+      "max_chars": 180,
+      "max_words": 30
+    },
+    "timeline_heading": {
+      "element_id": "PB21P41FwcjkrKSR-LBkJ4zk76Ff13HJc",
+      "page_number": 7,
+      "required": true,
+      "max_chars": 30,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "timeline_intro": {
+      "element_id": "PB21P41FwcjkrKSR-LB6z7Wx9zxYVC3WF",
+      "page_number": 7,
+      "required": true,
+      "max_chars": 200,
+      "max_words": 30
+    },
+    "timeline_disclaimer": {
+      "element_id": "PB21P41FwcjkrKSR-LBrqfbHD6Jlk0xbt",
+      "page_number": 7,
+      "required": false,
+      "max_chars": 180,
+      "max_words": 30
+    },
+    "pricing_heading": {
+      "element_id": "PBJbHpggXKcsRwJL-LBclS9Bl3WKcp4d3",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 35,
+      "format_rules": {
+        "strip_roman_numerals": true,
+        "list_level": 0
+      }
+    },
+    "pricing_intro": {
+      "element_id": "PBJbHpggXKcsRwJL-LBClW40Hp9zJy1kg",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 140,
+      "max_words": 25
+    },
+    "monthly_investment_card": {
+      "element_id": "PBJbHpggXKcsRwJL-LBnjdgTzYwZlPDGj-A1",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 110,
+      "max_words": 15,
+      "description": "Retainer/Fee Callout Card. Description MUST NOT exceed 15 words to prevent overlap with Fee Schedule"
+    },
+    "pricing_schedule_header": {
+      "element_id": "PBJbHpggXKcsRwJL-LB5yZ6WVQyNzjX7c",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 25
+    },
+    "pricing_milestone_1": {
+      "element_id": "PBJbHpggXKcsRwJL-LBDLdTxbgC9ym6Wg-A1",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 90,
+      "max_words": 15
+    },
+    "pricing_milestone_2": {
+      "element_id": "PBJbHpggXKcsRwJL-LBDLdTxbgC9ym6Wg-B1",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 90,
+      "max_words": 15
+    },
+    "pricing_exclusions_note": {
+      "element_id": "PBJbHpggXKcsRwJL-LBtcQdNnVgFYCgLN-A1",
+      "page_number": 8,
+      "required": true,
+      "max_chars": 350,
+      "max_words": 60
+    }
+  },
+  "asset_fills": {
+    "client_cover_artwork": {
+      "element_id": "PBV1SCndGVxlSNHy-LB1cLWqpGhNmsF2c",
+      "page_number": 1,
+      "asset_id": "MAHM2dHKfWI",
+      "description": "Gary Crawford signature watercolor artwork behind proposal title",
+      "default_action": "delete",
+      "client_override_action": "replace"
+    },
+    "sympl_logo_cover": {
+      "element_id": "PBV1SCndGVxlSNHy-LBQ6fpWK1jvZ4FHk",
+      "page_number": 1,
+      "asset_id": "MAHLbOC6BpM",
+      "default_action": "preserve"
+    },
+    "sympl_logo_footer": {
+      "element_id": "PBjf8VsrNQJPQVLD-LBNlS0DcQYJDrvC4",
+      "asset_id": "MAHLbOC6BpM",
+      "default_action": "preserve"
+    }
+  }
+}

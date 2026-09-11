@@ -20,6 +20,10 @@ class DraftSubsection:
     heading: str
     bullets: List[str] = field(default_factory=list)
     narrative: Optional[str] = None
+    context: Optional[str] = None
+    approach: Optional[str] = None
+    workflow: Optional[str] = None
+    outcome: Optional[str] = None
 
 
 @dataclass
@@ -74,10 +78,25 @@ class ProposalDraft:
         for s in data.get("sections", []):
             subsections = []
             for sub in s.get("subsections", []):
+                narr = sub.get("narrative")
+                ctx = sub.get("context")
+                app = sub.get("approach")
+                wf = sub.get("workflow")
+                out = sub.get("outcome")
+
+                if not narr:
+                    narr_parts = [p.strip() for p in [ctx, app, wf, out] if p and p.strip()]
+                    if narr_parts:
+                        narr = "\n\n".join(narr_parts)
+
                 subsections.append(DraftSubsection(
                     heading=sub.get("heading", ""),
                     bullets=sub.get("bullets", []),
-                    narrative=sub.get("narrative")
+                    narrative=narr,
+                    context=ctx,
+                    approach=app,
+                    workflow=wf,
+                    outcome=out
                 ))
             sections.append(DraftSection(
                 section_title=s.get("section_title", ""),

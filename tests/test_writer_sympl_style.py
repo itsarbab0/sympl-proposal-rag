@@ -15,6 +15,7 @@ Verifies:
 """
 
 import os
+os.environ["HF_HUB_OFFLINE"] = "1"
 import sys
 import json
 from pathlib import Path

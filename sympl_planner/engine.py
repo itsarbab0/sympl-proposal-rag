@@ -34,12 +34,13 @@ class ProposalPlanner:
     Coordinates the end-to-end planning process to produce a validated ProposalPlan.
     """
 
-    def __init__(self, db_url: Optional[str] = None):
+    def __init__(self, db_url: Optional[str] = None, conn: Optional[psycopg.Connection] = None):
         self.db_url = db_url or DATABASE_URL
-        if not self.db_url:
+        self._conn = conn
+        if not self.db_url and not self._conn:
             raise RuntimeError("DATABASE_URL is required to run the ProposalPlanner.")
 
-    def plan(self, client_input: ClientInput) -> ProposalPlan:
+    def plan(self, client_input: ClientInput, conn: Optional[psycopg.Connection] = None) -> ProposalPlan:
         """
         Executes the planning pipeline and returns a structured ProposalPlan.
         """
@@ -77,7 +78,7 @@ class ProposalPlanner:
         ref_block_manifest: List[str] = []
         retrieval_scores: List[float] = []
 
-        with psycopg.connect(self.db_url) as conn:
+        def _attach(c: psycopg.Connection):
             for sec in sections:
                 # Apply style rules for this section family
                 if sec.service_family in ExemplarRetriever.STYLE_RULES_BY_FAMILY:
@@ -98,7 +99,7 @@ class ProposalPlanner:
                 # For retrieval-driven service sections, attach 1-3 exemplars
                 else:
                     retrieval_ctx = ExemplarRetriever.attach_exemplars_to_section(
-                        conn=conn,
+                        conn=c,
                         service_family=sec.service_family or "",
                         section_type=sec.section_type,
                         target_archetype=selected_archetype,
@@ -108,6 +109,21 @@ class ProposalPlanner:
                         sec.retrieval_context = retrieval_ctx
                         if retrieval_ctx.exemplars:
                             retrieval_scores.append(retrieval_ctx.exemplars[0].similarity_score)
+
+        active_conn = conn or self._conn
+        if active_conn is not None and not active_conn.closed:
+            _attach(active_conn)
+        else:
+            retries = 4
+            for attempt in range(retries):
+                try:
+                    with psycopg.connect(self.db_url, connect_timeout=15) as fresh_conn:
+                        _attach(fresh_conn)
+                    break
+                except Exception as e:
+                    if attempt == retries - 1:
+                        raise
+                    time.sleep(1 + attempt)
 
         # --------------------------------------------------------------
         # 6. Calculate Confidence Metadata & Quality Flags
@@ -196,12 +212,26 @@ class ProposalPlanner:
         client_context["context_quality"] = getattr(client_input, "context_quality", "LOW")
         client_context["context_score"] = getattr(client_input, "context_score", 0)
 
+        # Extract and resolve service_category and generic_services
+        from dataclasses import asdict
+        resolved_category = getattr(client_input, "service_category", None)
+        generic_services_raw = getattr(client_input.approved_scope, "generic_services", [])
+        generic_services_list = [asdict(gs) for gs in generic_services_raw] if generic_services_raw else None
+
+        if not resolved_category and generic_services_list:
+            resolved_category = generic_services_list[0].get("service_category")
+
+        if resolved_category:
+            client_context["service_category"] = resolved_category
+
         approved_scope_dict = {}
         for fam in client_input.approved_scope.active_families():
             item = getattr(client_input.approved_scope, fam, None)
             if item is not None:
-                from dataclasses import asdict
                 approved_scope_dict[fam] = asdict(item)
+
+        if generic_services_list:
+            approved_scope_dict["generic_services"] = generic_services_list
 
         return ProposalPlan(
             plan_id=plan_id,
@@ -228,6 +258,9 @@ class ProposalPlanner:
                 "overall_confidence": overall_conf,
                 "flags": flags,
                 "context_quality": getattr(client_input, "context_quality", "LOW"),
-                "context_score": getattr(client_input, "context_score", 0)
-            }
+                "context_score": getattr(client_input, "context_score", 0),
+                "service_category": resolved_category
+            },
+            service_category=resolved_category,
+            generic_services=generic_services_list
         )

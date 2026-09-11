@@ -25,6 +25,7 @@ class OrganizationInfo:
     current_systems: List[str] = field(default_factory=list)
     target_systems: List[str] = field(default_factory=list)
     evaluation_systems: List[str] = field(default_factory=list)
+    service_category: Optional[str] = None
 
 
 @dataclass
@@ -103,6 +104,19 @@ class TransitionScope:
     legacy_systems: List[str] = field(default_factory=list)
 
 
+
+@dataclass
+class GenericServiceScope:
+    service_category: str                    # e.g., "Website Development", "Data Analytics"
+    service_name: str                        # e.g., "Website Redesign & CMS Migration"
+    description: Optional[str] = None
+    deliverables: List[str] = field(default_factory=list)
+    requirements: List[str] = field(default_factory=list)
+    timeline: Optional[str] = None
+    constraints: Optional[str] = None
+    target_systems: List[str] = field(default_factory=list)
+
+
 @dataclass
 class ScopeContainer:
     bookkeeping: Optional[BookkeepingScope] = None
@@ -112,6 +126,7 @@ class ScopeContainer:
     digital_transformation: Optional[TransformationScope] = None
     training: Optional[TrainingScope] = None
     transition: Optional[TransitionScope] = None
+    generic_services: List[GenericServiceScope] = field(default_factory=list)
 
     def active_families(self) -> List[str]:
         active = []
@@ -129,6 +144,10 @@ class ScopeContainer:
             active.append("training")
         if self.transition is not None:
             active.append("transition")
+        for gs in self.generic_services:
+            cat_key = gs.service_category.lower().replace(" ", "_").replace("/", "_")
+            if cat_key not in active:
+                active.append(cat_key)
         return active
 
 
@@ -193,6 +212,7 @@ class ClientInput:
     context_quality: str = "LOW"
     context_score: int = 0
     enriched_context: Dict[str, Any] = field(default_factory=dict)
+    service_category: Optional[str] = None
 
 
 
@@ -207,6 +227,7 @@ class ExemplarItem:
     section_type: str
     similarity_score: float
     cleaned_text: str                    # Strictly placed only here
+    service_category: Optional[str] = None
 
 
 @dataclass
@@ -269,6 +290,8 @@ class ProposalPlan:
     reference_blocks: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
     unapproved_requested_scope: List[Dict[str, Any]] = field(default_factory=list)
+    service_category: Optional[str] = None
+    generic_services: Optional[List[Dict[str, Any]]] = None
 
     def to_dict(self, for_writer: bool = False) -> Dict[str, Any]:
         d = asdict(self)

@@ -27,3 +27,7 @@ proposal_draft.json
 proposal_plan.json
 proposal_render.json
 rendered_proposal.json
+
+# Scratch & temporary workspace
+scratch/
+

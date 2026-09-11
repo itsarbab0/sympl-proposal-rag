@@ -127,7 +127,10 @@ class ProposalValidator:
         "digital_transformation": ["transformation", "system migration", "workflow", "cloud", "integration", "dext", "onboarding"],
         "management_consulting": ["consulting", "advisory", "cfo", "strategic", "governance"],
         "transition_services": ["transition", "interim", "handover", "onboarding plan"],
-        "audit_oversight": ["audit oversight", "auditor", "audit readiness", "working paper"]
+        "audit_oversight": ["audit oversight", "auditor", "audit readiness", "working paper"],
+        "website": ["website", "web", "cms", "squarespace", "portfolio", "showcase"],
+        "data_analytics": ["data", "analytics", "database", "dashboard", "power bi", "tableau", "kpi"],
+        "finance_transformation": ["finance transformation", "transformation", "budget", "forecast", "gl realignment", "chart of accounts", "scenario"]
     }
 
     def __init__(self, strict_mode: bool = True):
@@ -282,8 +285,8 @@ class ProposalValidator:
 
         # For each active family, verify presence
         for family in active_families:
-            keywords = self.SCOPE_FAMILY_KEYWORDS.get(family, [family])
-            found = any(kw in combined_sections_text for kw in keywords)
+            keywords = self.SCOPE_FAMILY_KEYWORDS.get(family, [family, family.replace("_", " "), family.replace("-", " ")])
+            found = any(kw.lower() in combined_sections_text for kw in keywords)
             if not found:
                 violations.append(f"MISSING_APPROVED_SCOPE_ITEM: Approved scope item '{family}' is missing from generated draft")
 
@@ -432,11 +435,9 @@ class ProposalValidator:
             if re.search(rf"\b{re.escape(buzz)}\b", all_text, re.IGNORECASE):
                 errors.append(f"Forbidden buzzword/hype detected: '{buzz}'")
 
-        # 2. Executive summary word count check (target <= 120 words)
-        if draft.executive_summary:
-            exec_words = len(draft.executive_summary.split())
-            if exec_words > 120:
-                warnings.append(f"Executive summary exceeds target word count ({exec_words} words > 120 words)")
+        # 2. Executive summary check: ensure narrative depth exists
+        if not draft.executive_summary or not draft.executive_summary.strip():
+            warnings.append("Executive summary is missing or empty.")
 
         # 3. Bullet analysis: length, passive voice, trailing periods
         for s in draft.sections:
@@ -480,6 +481,14 @@ class ProposalValidator:
             parts.append(s.opening_text)
             for sub in s.subsections:
                 parts.append(sub.heading)
+                if getattr(sub, "context", None):
+                    parts.append(sub.context)
+                if getattr(sub, "approach", None):
+                    parts.append(sub.approach)
+                if getattr(sub, "workflow", None):
+                    parts.append(sub.workflow)
+                if getattr(sub, "outcome", None):
+                    parts.append(sub.outcome)
                 if getattr(sub, "narrative", None):
                     parts.append(sub.narrative)
                 parts.extend(sub.bullets)

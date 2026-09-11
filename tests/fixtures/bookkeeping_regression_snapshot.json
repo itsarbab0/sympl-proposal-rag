@@ -1,0 +1,567 @@
+{
+  "TACT": {
+    "archetype": "ARCH_COMPREHENSIVE_TRANSFORMATION",
+    "sections": {
+      "digital_transformation": {
+        "section_type": "digital_transformation",
+        "candidate_pool_size": 8,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_DIGITAL_TRANSFORMATION",
+            "section_type": "digital_transformation",
+            "similarity_score": 0.6464
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+            "section_type": "digital_transformation",
+            "similarity_score": 0.6349
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "PIRS_2025",
+            "chunk_key": "PIRS_2025_TRANSFORMATION_STRATEGY",
+            "section_type": "digital_transformation",
+            "similarity_score": 0.6158
+          }
+        ]
+      },
+      "bookkeeping": {
+        "section_type": "bookkeeping",
+        "candidate_pool_size": 14,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6477
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6423
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_BOOKKEEPING_RECONCILIATIONS",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6222
+          }
+        ]
+      },
+      "payroll": {
+        "section_type": "payroll",
+        "candidate_pool_size": 7,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6425
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_TRANSFORMATION_PAYROLL_MIGRATION",
+            "section_type": "digital_transformation",
+            "similarity_score": 0.6199
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6117
+          }
+        ]
+      },
+      "financial_reporting": {
+        "section_type": "financial_reporting",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.666
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6631
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6234
+          }
+        ]
+      },
+      "compliance": {
+        "section_type": "compliance",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.6198
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_COMPLIANCE_AUDIT",
+            "section_type": "compliance",
+            "similarity_score": 0.6114
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_COMPLIANCE",
+            "section_type": "compliance",
+            "similarity_score": 0.5544
+          }
+        ]
+      },
+      "transition": {
+        "section_type": "transition",
+        "candidate_pool_size": 4,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+            "section_type": "onboarding",
+            "similarity_score": 0.6693
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "YPT_2026",
+            "chunk_key": "YPT_2026_CONTEXT_TRANSITION",
+            "section_type": "transition",
+            "similarity_score": 0.6299
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "YPT_2026",
+            "chunk_key": "YPT_2026_SYSTEMS_CONTINUITY",
+            "section_type": "transition",
+            "similarity_score": 0.6267
+          }
+        ]
+      }
+    }
+  },
+  "RPFF": {
+    "archetype": "ARCH_STANDARD_NONPROFIT",
+    "sections": {
+      "bookkeeping": {
+        "section_type": "bookkeeping",
+        "candidate_pool_size": 14,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_BOOKKEEPING_RECONCILIATIONS",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6762
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.648
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_AP_AR",
+            "section_type": "service_module",
+            "similarity_score": 0.6279
+          }
+        ]
+      },
+      "payroll": {
+        "section_type": "payroll",
+        "candidate_pool_size": 6,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6411
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6272
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.5901
+          }
+        ]
+      },
+      "financial_reporting": {
+        "section_type": "financial_reporting",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6688
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6609
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6444
+          }
+        ]
+      },
+      "compliance": {
+        "section_type": "compliance",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.6057
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.5938
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.5863
+          }
+        ]
+      }
+    }
+  },
+  "CAHOOTS": {
+    "archetype": "ARCH_COMPACT_BOOKKEEPING",
+    "sections": {
+      "bookkeeping": {
+        "section_type": "bookkeeping",
+        "candidate_pool_size": 14,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_BOOKKEEPING_RECONCILIATIONS",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6488
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6465
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_WEEKLY_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6277
+          }
+        ]
+      },
+      "payroll": {
+        "section_type": "payroll",
+        "candidate_pool_size": 6,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6519
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6188
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "PIRS_2025",
+            "chunk_key": "PIRS_2025_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.616
+          }
+        ]
+      },
+      "compliance": {
+        "section_type": "compliance",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.6008
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.5939
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.5887
+          }
+        ]
+      }
+    }
+  },
+  "YPT": {
+    "archetype": "ARCH_TRANSITION_INTERIM",
+    "sections": {
+      "bookkeeping": {
+        "section_type": "bookkeeping",
+        "candidate_pool_size": 14,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6678
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_AP_AR",
+            "section_type": "service_module",
+            "similarity_score": 0.6623
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6588
+          }
+        ]
+      },
+      "payroll": {
+        "section_type": "payroll",
+        "candidate_pool_size": 6,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6531
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.647
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_PAYROLL",
+            "section_type": "payroll",
+            "similarity_score": 0.6174
+          }
+        ]
+      },
+      "financial_reporting": {
+        "section_type": "financial_reporting",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6868
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6822
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6701
+          }
+        ]
+      },
+      "transition": {
+        "section_type": "transition",
+        "candidate_pool_size": 4,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "YPT_2026",
+            "chunk_key": "YPT_2026_CONTEXT_TRANSITION",
+            "section_type": "transition",
+            "similarity_score": 0.7459
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_SETUP_TRANSITION_SCOPE",
+            "section_type": "onboarding",
+            "similarity_score": 0.6681
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "YPT_2026",
+            "chunk_key": "YPT_2026_SYSTEMS_CONTINUITY",
+            "section_type": "transition",
+            "similarity_score": 0.6461
+          }
+        ]
+      }
+    }
+  },
+  "PIRS": {
+    "archetype": "ARCH_AUDIT_OVERSIGHT_TRANSFORMATION",
+    "sections": {
+      "bookkeeping": {
+        "section_type": "bookkeeping",
+        "candidate_pool_size": 14,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "TACT_2026",
+            "chunk_key": "TACT_2026_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6565
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_BIWEEKLY_BOOKKEEPING",
+            "section_type": "bookkeeping",
+            "similarity_score": 0.6337
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_AP_AR",
+            "section_type": "service_module",
+            "similarity_score": 0.6321
+          }
+        ]
+      },
+      "financial_reporting": {
+        "section_type": "financial_reporting",
+        "candidate_pool_size": 6,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6514
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_FUNDING_FUND_TRACKING",
+            "section_type": "service_module",
+            "similarity_score": 0.6446
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "GOODFOOT_2026",
+            "chunk_key": "GOODFOOT_2026_FINANCIAL_REPORTING",
+            "section_type": "financial_reporting",
+            "similarity_score": 0.6429
+          }
+        ]
+      },
+      "compliance": {
+        "section_type": "compliance",
+        "candidate_pool_size": 5,
+        "exemplars": [
+          {
+            "role": "primary",
+            "proposal_code": "RPFF_2025",
+            "chunk_key": "RPFF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.6002
+          },
+          {
+            "role": "secondary",
+            "proposal_code": "CAHOOTS_2026",
+            "chunk_key": "CAHOOTS_2026_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.5953
+          },
+          {
+            "role": "optional_archetype",
+            "proposal_code": "CAREOF_2025",
+            "chunk_key": "CAREOF_2025_COMPLIANCE_YEAR_END",
+            "section_type": "compliance",
+            "similarity_score": 0.5894
+          }
+        ]
+      }
+    }
+  }
+}

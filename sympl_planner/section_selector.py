@@ -343,6 +343,72 @@ class SectionSelector:
                 order += 1
 
         # --------------------------------------------------------------
+        # 2b. Generic Service Sections (Multi-Service Support)
+        # --------------------------------------------------------------
+        if app_scope.generic_services:
+            for gs in app_scope.generic_services:
+                cat_key = gs.service_category.lower().replace(" ", "_").replace("/", "_")
+                
+                # Context / Objectives
+                if not any(s.section_type == "context_objectives" for s in sections):
+                    sections.append(PlanSection(
+                        section_id=f"sec_context_{cat_key}",
+                        section_title=f"Context & Engagement Objectives",
+                        section_type="context_objectives",
+                        service_family=cat_key,
+                        section_order=order,
+                        structural_role="narrative_context",
+                        section_instructions=[
+                            f"Frame {org.name}'s operational context, current challenges, and strategic goals for {gs.service_name}."
+                        ]
+                    ))
+                    order += 1
+
+                # Architecture / Discovery / Approach
+                sections.append(PlanSection(
+                    section_id=f"sec_approach_{cat_key}",
+                    section_title=f"Technical Approach & Architecture",
+                    section_type="architecture",
+                    service_family=cat_key,
+                    section_order=order,
+                    structural_role="modular_service",
+                    section_instructions=[
+                        f"Detail Sympl's methodology, architecture, and operational standards for {gs.service_name}.",
+                        f"Target systems: {', '.join(gs.target_systems) if gs.target_systems else 'Modern cloud platforms'}."
+                    ]
+                ))
+                order += 1
+
+                # Deliverables
+                sections.append(PlanSection(
+                    section_id=f"sec_deliverables_{cat_key}",
+                    section_title=f"Scope of Work & Deliverables",
+                    section_type="deliverables",
+                    service_family=cat_key,
+                    section_order=order,
+                    structural_role="modular_service",
+                    section_instructions=[
+                        f"Specify tangible project deliverables and implementation tasks for {gs.service_name}.",
+                        f"Deliverables: {', '.join(gs.deliverables) if gs.deliverables else 'Core engagement deliverables'}."
+                    ]
+                ))
+                order += 1
+
+                # Implementation Timeline
+                sections.append(PlanSection(
+                    section_id=f"sec_timeline_{cat_key}",
+                    section_title=f"Implementation Roadmap & Timeline",
+                    section_type="timeline",
+                    service_family=cat_key,
+                    section_order=order,
+                    structural_role="modular_service",
+                    section_instructions=[
+                        f"Provide phased milestone roadmap and timeline ({gs.timeline or 'Phased rollout'})."
+                    ]
+                ))
+                order += 1
+
+        # --------------------------------------------------------------
         # 3. Why Us Section (Optional by dynamic planner decision)
         # --------------------------------------------------------------
         if include_why_us:

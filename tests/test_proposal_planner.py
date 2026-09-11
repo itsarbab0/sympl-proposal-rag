@@ -13,10 +13,12 @@ Validates:
 """
 
 import os
+os.environ["HF_HUB_OFFLINE"] = "1"
 import sys
 import json
 import unittest
 from pathlib import Path
+import psycopg
 
 # Add project root to sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -36,14 +38,29 @@ from sympl_planner.schema import (
     ApprovedCommercialInputs,
     Preferences
 )
+import time
 from sympl_planner.engine import ProposalPlanner
+from sympl_planner.retrieval import DATABASE_URL
 
 
 class TestProposalPlanner(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.planner = ProposalPlanner()
+        for attempt in range(5):
+            try:
+                cls.conn = psycopg.connect(DATABASE_URL)
+                break
+            except Exception:
+                if attempt == 4:
+                    raise
+                time.sleep(2.0)
+        cls.planner = ProposalPlanner(conn=cls.conn)
+
+    @classmethod
+    def tearDownClass(cls):
+        if hasattr(cls, "conn") and cls.conn and not cls.conn.closed:
+            cls.conn.close()
 
     def test_scenario_1_compact_bookkeeping_unapproved_requested(self):
         """
@@ -575,15 +592,23 @@ class TestProposalPlanner(unittest.TestCase):
                 cur.execute("SELECT count(*) FROM proposal_chunks WHERE embedding IS NOT NULL;")
                 embedded_count = cur.fetchone()[0]
 
+                cur.execute("SELECT count(*) FROM proposal_documents WHERE metadata->>'service_category' = 'Accounting';")
+                bk_docs_count = cur.fetchone()[0]
+
+                cur.execute("SELECT count(*) FROM proposal_chunks WHERE (metadata->>'service_category' = 'Accounting' OR core_bookkeeping = true) AND embedding IS NOT NULL;")
+                bk_embedded_count = cur.fetchone()[0]
+
                 cur.execute("SELECT count(*) FROM proposal_chunks WHERE retrieval_enabled = false AND embedding IS NOT NULL;")
                 unsafe_embedded = cur.fetchone()[0]
 
-        self.assertEqual(docs_count, 7, "proposal_documents must remain 7")
-        self.assertEqual(chunks_count, 71, "proposal_chunks must remain 71")
+        self.assertEqual(docs_count, 10, "proposal_documents must be 10 (7 accounting + 3 multi-service)")
+        self.assertEqual(bk_docs_count, 7, "accounting proposal documents must remain exactly 7")
+        self.assertEqual(chunks_count, 86, "proposal_chunks must be 86 (71 accounting + 15 multi-service)")
         self.assertEqual(imports_count, 7, "dataset_imports must remain 7")
         self.assertEqual(rules_count, 21, "sympl_style_rules must remain 21")
         self.assertEqual(refs_count, 13, "sympl_reference_blocks must remain 13")
-        self.assertEqual(embedded_count, 47, "embedded chunks must remain exactly 47")
+        self.assertEqual(embedded_count, 62, "total embedded chunks must be 62 (47 accounting + 15 multi-service)")
+        self.assertEqual(bk_embedded_count, 47, "accounting embedded chunks must remain exactly 47")
         self.assertEqual(unsafe_embedded, 0, "unsafe embedded must remain 0")
 
 

@@ -11,6 +11,7 @@ End-to-End Test for Tayyab OldT Assessment:
 
 import json
 import os
+os.environ["HF_HUB_OFFLINE"] = "1"
 import sys
 import time
 import urllib.request
@@ -312,6 +313,41 @@ def step_7_download_artifacts(proposal_id):
         print(f"Retrieved manifest with {len(manifest_data.get('artifacts', []))} artifacts.")
         
     return pdf_path, pdf_url, manifest_url
+
+
+def test_tayyab_oldt_intake_validation_and_preview():
+    """Validates that OldT intake meets strict schema and achieves HIGH context quality."""
+    text = step_1_load_fixture()
+    assert len(text) > 0
+
+    fixture_intake_path = os.path.join(os.path.dirname(__file__), "fixtures", "oldt_enriched_payload.json")
+    if os.path.exists(fixture_intake_path):
+        with open(fixture_intake_path, "r", encoding="utf-8") as f:
+            intake = json.load(f)
+    else:
+        intake = step_2_ai_extraction(text)
+
+    is_valid = step_3_validate_intake(intake)
+    assert is_valid is True
+
+    quality, score = step_4_compute_preview(intake)
+    assert quality == "HIGH"
+    assert score >= 70
+
+
+def test_tayyab_oldt_local_writer_generation():
+    """Validates that OldT proposal generates correctly with modular writer playbooks."""
+    from sympl_writer import ProposalWriter, MockLLMClient
+    fixture_intake_path = os.path.join(os.path.dirname(__file__), "fixtures", "oldt_enriched_payload.json")
+    with open(fixture_intake_path, "r", encoding="utf-8") as f:
+        intake = json.load(f)
+
+    writer = ProposalWriter(llm_client=MockLLMClient())
+    draft = writer.write(intake)
+    assert draft is not None
+    assert draft.validation_metadata["passed"] is True
+    assert "OldT" in draft.title
+
 
 def main():
     print("=" * 60)

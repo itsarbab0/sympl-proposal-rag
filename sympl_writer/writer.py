@@ -98,6 +98,7 @@ class ProposalWriter:
             val_result = self.validator.validate(draft, plan_data, raise_on_error=False)
 
             # Attach audit metadata to draft
+            audit_dict = PromptBuilder.last_audit_log.to_dict() if hasattr(PromptBuilder, "last_audit_log") and PromptBuilder.last_audit_log else None
             draft.validation_metadata = {
                 "passed": val_result.passed,
                 "retries_count": attempt - 1,
@@ -106,7 +107,8 @@ class ProposalWriter:
                 "details": val_result.details,
                 "provider": self.llm_client.provider_name,
                 "model": self.llm_client.model_name,
-                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "playbook_selection_audit": audit_dict
             }
 
             if val_result.passed:

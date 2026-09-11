@@ -1,0 +1,122 @@
+[
+  {
+    "proposal": "AKM Proposal Centralized DB.pdf",
+    "proposal_code": "AKM_2026",
+    "client_name": "Aga Khan Museum",
+    "service_category": "Data Analytics",
+    "service_subcategory": "Centralized Database & Discovery",
+    "industry": "Arts & Culture / Museum",
+    "engagement_type": "Project / Discovery",
+    "confidence": 98,
+    "reason": "Comprehensive data assessment across multiple systems, centralized database architecture, data extraction, and audience analytics for performing arts program.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "Gary Crawford Website Proposal.pdf",
+    "proposal_code": "CRAWFORD_2026",
+    "client_name": "Gary Crawford Art",
+    "service_category": "Website Development",
+    "service_subcategory": "Website Redesign & Digital Presence",
+    "industry": "Arts & Culture / Visual Arts",
+    "engagement_type": "Fixed Project",
+    "confidence": 99,
+    "reason": "Complete website redesign, portfolio showcase, collector discovery UX, modern responsive CMS, and digital presence strategy.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "Sympl x Compass Proposal.pdf",
+    "proposal_code": "COMPASS_2026",
+    "client_name": "Compass | Boussole | Akii-Izhinoogan",
+    "service_category": "Finance Transformation",
+    "service_subcategory": "Budget Process Revamp & Forecasting",
+    "industry": "Community & Social Services",
+    "engagement_type": "Consulting Engagement",
+    "confidence": 95,
+    "reason": "Multi-program budgeting process revamp, financial forecasting model development, reporting workflow transformation, and advisory governance.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "TACT x Sympl - Bookkeeping Proposal - May 2026.pdf",
+    "proposal_code": "TACT_2026",
+    "client_name": "The Autism Centre of Toronto",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Community Services / Health",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Full accounting, bookkeeping, QBO migration, payroll transition via WagePoint, and funder financial reporting.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "RPFF x Sympl - Bookkeeping Proposal.pdf",
+    "proposal_code": "RPFF_2025",
+    "client_name": "Regent Park Film Festival",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Arts & Culture / Film",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Ongoing bookkeeping, semi-monthly payroll, funder grant tracking, and annual audit preparation.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "CAHOOTS x Sympl - Bookkeeping Proposal.pdf.pdf",
+    "proposal_code": "CAHOOTS_2026",
+    "client_name": "Cahoots Theatre Company",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Arts & Culture / Theatre",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Biweekly bookkeeping, reconciliations, WagePoint payroll, and year-end sales tax compliance.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "YPT x Sympl - Bookkeeping Proposal.pdf",
+    "proposal_code": "YPT_2026",
+    "client_name": "Young People's Theatre",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Arts & Culture / Theatre",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Full-cycle weekly bookkeeping, payroll administration, board financial package, and transition continuity.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "PIRS x Sympl - Bookkeeping Proposal - July 2025.pdf",
+    "proposal_code": "PIRS_2025",
+    "client_name": "Pacific Immigrant Resources Society",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Community Services / Immigrant Services",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Bookkeeping oversight, financial management reporting, audit preparation, and multi-program GL allocations.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "CareOf x Sympl - Bookkeeping Proposal.pdf",
+    "proposal_code": "CAREOF_2025",
+    "client_name": "Care/Of Experiences",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Arts & Culture",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Operational monthly bookkeeping, reconciliations, sales tax filing, and cash flow tracking.",
+    "verified_by_human": true
+  },
+  {
+    "proposal": "Good Foot x Sympl - Bookkeeping & Financial Management Proposal.pdf",
+    "proposal_code": "GOODFOOT_2026",
+    "client_name": "Good Foot Support Services",
+    "service_category": "Accounting",
+    "service_subcategory": "Bookkeeping",
+    "industry": "Social Enterprise / Disability Services",
+    "engagement_type": "Retainer",
+    "confidence": 100,
+    "reason": "Bookkeeping, payroll administration, financial management reporting, digital transformation, and staff training.",
+    "verified_by_human": true
+  }
+]

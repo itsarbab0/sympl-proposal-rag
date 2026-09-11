@@ -23,6 +23,7 @@ from sympl_planner.schema import (
     TransformationScope,
     TrainingScope,
     TransitionScope,
+    GenericServiceScope,
     ApprovedCommercialInputs,
     Preferences,
     ClientNarrativeContext
@@ -411,6 +412,36 @@ class OrchestrationService:
             ts_data = scope_dict["transition"] if isinstance(scope_dict["transition"], dict) else {}
             trans_svc = TransitionScope(**{k: v for k, v in ts_data.items() if hasattr(TransitionScope, k)})
 
+        generic_list: List[GenericServiceScope] = []
+        if "generic_services" in scope_dict and isinstance(scope_dict["generic_services"], list):
+            valid_keys = getattr(GenericServiceScope, "__dataclass_fields__", {})
+            for gs in scope_dict["generic_services"]:
+                if isinstance(gs, dict):
+                    filtered = {k: v for k, v in gs.items() if k in valid_keys}
+                    generic_list.append(GenericServiceScope(**filtered))
+
+        for k, v in scope_dict.items():
+            if k in ("bookkeeping", "payroll", "financial_reporting", "compliance", "digital_transformation", "training", "transition", "generic_services"):
+                continue
+            if isinstance(v, dict):
+                cat_name = v.get("service_category") or k.replace("_", " ").title()
+                generic_list.append(GenericServiceScope(
+                    service_category=cat_name,
+                    service_name=v.get("service_name", cat_name),
+                    description=v.get("description"),
+                    deliverables=v.get("deliverables", []) if isinstance(v.get("deliverables"), list) else [],
+                    requirements=v.get("requirements", []) if isinstance(v.get("requirements"), list) else [],
+                    timeline=v.get("timeline"),
+                    constraints=v.get("constraints"),
+                    target_systems=v.get("target_systems", []) if isinstance(v.get("target_systems"), list) else []
+                ))
+            elif isinstance(v, bool) and v:
+                cat_name = k.replace("_", " ").title()
+                generic_list.append(GenericServiceScope(
+                    service_category=cat_name,
+                    service_name=cat_name
+                ))
+
         return ScopeContainer(
             bookkeeping=bk,
             payroll=py,
@@ -418,7 +449,8 @@ class OrchestrationService:
             compliance=comp,
             digital_transformation=trans,
             training=train,
-            transition=trans_svc
+            transition=trans_svc,
+            generic_services=generic_list
         )
 
     def execute_planner(self, intake_data: Dict[str, Any]) -> Dict[str, Any]:

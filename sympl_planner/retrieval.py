@@ -43,6 +43,8 @@ def load_environment() -> Dict[str, str]:
 
 ENV = load_environment()
 DATABASE_URL = ENV.get('DATABASE_URL')
+if DATABASE_URL and 'junction.proxy.rlwy.net' in DATABASE_URL and 'hostaddr' not in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL + ('&' if '?' in DATABASE_URL else '?') + 'hostaddr=66.33.22.241'
 EMBEDDING_MODEL = ENV.get('EMBEDDING_MODEL', 'BAAI/bge-m3')
 EMBEDDING_DIMENSION = int(ENV.get('EMBEDDING_DIMENSION', '1024'))
 
@@ -107,8 +109,8 @@ class ExemplarRetriever:
         return cls._model
 
     @classmethod
-    def get_corpus(cls, conn: psycopg.Connection) -> Dict[str, Dict[str, Any]]:
-        if cls._corpus_cache is None:
+    def get_corpus(cls, conn: psycopg.Connection, force_reload: bool = False) -> Dict[str, Dict[str, Any]]:
+        if cls._corpus_cache is None or force_reload:
             with conn.cursor(row_factory=dict_row) as cur:
                 cur.execute("""
                     SELECT 
@@ -120,7 +122,9 @@ class ExemplarRetriever:
                         pc.boilerplate_content,
                         pc.retrieval_enabled,
                         pc.retrieval_text,
-                        pc.cleaned_text
+                        pc.cleaned_text,
+                        pc.metadata,
+                        pc.core_bookkeeping
                     FROM proposal_chunks pc
                     JOIN proposal_documents pd ON pc.proposal_id = pd.id
                     WHERE pc.retrieval_enabled = true;
@@ -134,17 +138,77 @@ class ExemplarRetriever:
         cls,
         family: str,
         query_text: str,
-        corpus: Dict[str, Dict[str, Any]]
+        corpus: Dict[str, Dict[str, Any]],
+        target_category: Optional[str] = None
     ) -> List[str]:
         """
-        Applies Service-Family Eligibility Version 2.0 to resolve candidates.
+        Applies Service-Family Eligibility & Category Isolation to resolve candidate keys.
+        Guarantees that category filtering occurs strictly BEFORE vector search.
         """
         fam = family.lower()
         qt = query_text.lower()
-        pool = []
+        target_cat = (target_category or "").strip()
 
+        # -------------------------------------------------------------
+        # NON-ACCOUNTING CATEGORIES: Multi-Tier Isolation & Fallback
+        # -------------------------------------------------------------
+        if target_cat and target_cat.lower() != "accounting":
+            tier1 = []
+            tier2 = []
+            tier3 = []
+
+            for k, c in corpus.items():
+                if not c['retrieval_enabled'] or c['pricing_content'] or c['boilerplate_content']:
+                    continue
+
+                meta = c.get('metadata') or {}
+                chunk_cat = meta.get('service_category', 'Accounting')
+                is_bookkeeping = c.get('core_bookkeeping', False) or (chunk_cat == 'Accounting')
+
+                # STRICT HARD NEGATIVE FIREWALL: Never return accounting chunks for non-accounting requests
+                if is_bookkeeping:
+                    continue
+
+                st = (c.get('section_type') or '').lower()
+
+                # Tier 1: Exact category match
+                if chunk_cat.lower() == target_cat.lower():
+                    # If section type matches or is directly relevant
+                    if st in (fam, 'deliverables', 'architecture', 'implementation', 'discovery', 'timeline', 'context_objectives'):
+                        tier1.append(k)
+                    else:
+                        tier2.append(k)
+                elif meta.get('proposal_style') == 'consulting_deliverables':
+                    # Tier 3: General Sympl consulting fallback (non-accounting)
+                    tier3.append(k)
+
+            # Combine according to exact hierarchy:
+            # Priority: Tier 1 -> Tier 2 -> Tier 3
+            pool = list(tier1)
+            for k in tier2:
+                if k not in pool:
+                    pool.append(k)
+            if len(pool) < 3:
+                for k in tier3:
+                    if k not in pool:
+                        pool.append(k)
+
+            # Tier 4: Return whatever candidates exist (even if only 1 or 2 chunks)
+            return pool
+
+        # -------------------------------------------------------------
+        # ACCOUNTING CATEGORY: Battle-tested bookkeeping candidate resolution
+        # -------------------------------------------------------------
+        pool = []
         for k, c in corpus.items():
             if not c['retrieval_enabled'] or c['pricing_content'] or c['boilerplate_content']:
+                continue
+
+            meta = c.get('metadata') or {}
+            chunk_cat = meta.get('service_category', 'Accounting')
+
+            # STRICT ISOLATION: Never include website or data chunks in accounting proposals
+            if chunk_cat != 'Accounting':
                 continue
 
             st = c['section_type']
@@ -227,6 +291,7 @@ class ExemplarRetriever:
     ) -> Optional[RetrievalContext]:
         """
         Retrieves 1-3 exemplars for a section and compiles RetrievalContext.
+        Category filtering is strictly enforced BEFORE pgvector search.
         """
         if not service_family or service_family in ("why_us", "pricing", "exclusions"):
             return None
@@ -234,6 +299,37 @@ class ExemplarRetriever:
         corpus = cls.get_corpus(conn)
         org = client_input.organization
         eng = client_input.engagement
+
+        # Determine target service category
+        target_category = None
+        if hasattr(client_input, "service_category") and client_input.service_category:
+            target_category = client_input.service_category
+        elif hasattr(org, "service_category") and org.service_category:
+            target_category = org.service_category
+        elif client_input.approved_scope.generic_services:
+            for gs in client_input.approved_scope.generic_services:
+                cat_norm = gs.service_category.lower().replace(" ", "_").replace("/", "_")
+                if cat_norm == service_family:
+                    target_category = gs.service_category
+                    break
+            if not target_category and client_input.approved_scope.generic_services:
+                target_category = client_input.approved_scope.generic_services[0].service_category
+
+        if not target_category:
+            if service_family in ("bookkeeping", "payroll", "financial_reporting", "compliance", "training", "transition", "context", "financial_management"):
+                target_category = "Accounting"
+            else:
+                norm_fam = service_family.lower()
+                if "web" in norm_fam:
+                    target_category = "Website Development"
+                elif "data" in norm_fam or "analytic" in norm_fam:
+                    target_category = "Data Analytics"
+                elif "tech" in norm_fam:
+                    target_category = "Technology Consulting"
+                elif "finance" in norm_fam or "forecast" in norm_fam:
+                    target_category = "Finance Transformation"
+                else:
+                    target_category = "Accounting"
 
         # Formulate query text representing the client section intent
         query_parts = [
@@ -261,19 +357,33 @@ class ExemplarRetriever:
             ts = client_input.approved_scope.transition
             query_parts.append(f"Onboarding: {ts.onboarding_duration_weeks} weeks, Handover continuity: {ts.handover_continuity}.")
 
+        # For generic services, incorporate deliverables and scope details
+        if client_input.approved_scope.generic_services:
+            for gs in client_input.approved_scope.generic_services:
+                if gs.deliverables:
+                    query_parts.append(f"Deliverables: {', '.join(gs.deliverables)}.")
+                if gs.requirements:
+                    query_parts.append(f"Requirements: {', '.join(gs.requirements)}.")
+
         query_text = " ".join(query_parts)
 
-        # Resolve candidate pool
-        cand_pool = cls.resolve_candidate_pool(service_family, query_text, corpus)
+        # -------------------------------------------------------------
+        # 1. Resolve candidate pool with category filtering FIRST
+        # -------------------------------------------------------------
+        cand_pool = cls.resolve_candidate_pool(service_family, query_text, corpus, target_category=target_category)
         if not cand_pool:
             return None
 
-        # Encode query
+        # -------------------------------------------------------------
+        # 2. Encode query vector
+        # -------------------------------------------------------------
         model = cls.get_model()
         vec = model.encode(query_text, normalize_embeddings=True)
         vec_str = "[" + ",".join(f"{x:.8f}" for x in vec) + "]"
 
-        # Query pgvector for top-5 candidates
+        # -------------------------------------------------------------
+        # 3. Query pgvector for candidates within the pre-filtered pool
+        # -------------------------------------------------------------
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT 
@@ -293,20 +403,24 @@ class ExemplarRetriever:
         if not ranked:
             return None
 
-        # Assemble 1-3 exemplars (Primary, Secondary, Optional Archetype)
+        # -------------------------------------------------------------
+        # 4. Assemble 1-3 exemplars (Primary, Secondary, Optional Archetype)
+        # -------------------------------------------------------------
         exemplars: List[ExemplarItem] = []
 
         # 1. Primary (Top-1)
         top1 = ranked[0]
         top1_key = top1[0]
         top1_chunk = corpus[top1_key]
+        top1_meta = top1_chunk.get('metadata') or {}
         exemplars.append(ExemplarItem(
             role="primary",
             chunk_key=top1_key,
             proposal_code=top1[1],
             section_type=top1[2],
             similarity_score=float(top1[3]),
-            cleaned_text=top1_chunk['cleaned_text']
+            cleaned_text=top1_chunk['cleaned_text'],
+            service_category=top1_meta.get('service_category', 'Accounting')
         ))
 
         # 2. Secondary (Top-2, if available)
@@ -314,17 +428,18 @@ class ExemplarRetriever:
             top2 = ranked[1]
             top2_key = top2[0]
             top2_chunk = corpus[top2_key]
+            top2_meta = top2_chunk.get('metadata') or {}
             exemplars.append(ExemplarItem(
                 role="secondary",
                 chunk_key=top2_key,
                 proposal_code=top2[1],
                 section_type=top2[2],
                 similarity_score=float(top2[3]),
-                cleaned_text=top2_chunk['cleaned_text']
+                cleaned_text=top2_chunk['cleaned_text'],
+                service_category=top2_meta.get('service_category', 'Accounting')
             ))
 
         # 3. Optional Archetype (Exemplar matching selected archetype, or Top-3)
-        # Find candidate matching selected archetype proposals
         archetype_proposals = {
             "ARCH_TRANSITION_INTERIM": ["YPT_2026"],
             "ARCH_AUDIT_OVERSIGHT_TRANSFORMATION": ["PIRS_2025"],
@@ -334,31 +449,35 @@ class ExemplarRetriever:
         }.get(target_archetype, [])
 
         archetype_candidate = None
-        for r in ranked[1:]:  # start from ranked[1] to avoid duplicating top1
+        for r in ranked[1:]:
             if r[1] in archetype_proposals and r[0] != exemplars[-1].chunk_key:
                 archetype_candidate = r
                 break
 
         if archetype_candidate:
             arch_chunk = corpus[archetype_candidate[0]]
+            arch_meta = arch_chunk.get('metadata') or {}
             exemplars.append(ExemplarItem(
                 role="optional_archetype",
                 chunk_key=archetype_candidate[0],
                 proposal_code=archetype_candidate[1],
                 section_type=archetype_candidate[2],
                 similarity_score=float(archetype_candidate[3]),
-                cleaned_text=arch_chunk['cleaned_text']
+                cleaned_text=arch_chunk['cleaned_text'],
+                service_category=arch_meta.get('service_category', 'Accounting')
             ))
         elif len(ranked) > 2 and len(exemplars) < 3:
             top3 = ranked[2]
             top3_chunk = corpus[top3[0]]
+            top3_meta = top3_chunk.get('metadata') or {}
             exemplars.append(ExemplarItem(
                 role="optional_archetype",
                 chunk_key=top3[0],
                 proposal_code=top3[1],
                 section_type=top3[2],
                 similarity_score=float(top3[3]),
-                cleaned_text=top3_chunk['cleaned_text']
+                cleaned_text=top3_chunk['cleaned_text'],
+                service_category=top3_meta.get('service_category', 'Accounting')
             ))
 
         return RetrievalContext(

@@ -117,7 +117,22 @@ def create_app() -> FastAPI:
     # Versioned endpoints: /api/v1/proposal/generate/async, /api/v1/health, /api/v1/proposal/{id}/pdf, etc.
     app.include_router(router, prefix="/api/v1")
 
+    # 7. Portal Integration Route Mount (/api/generate-proposal)
+    from sympl_api.portal_integration import router as portal_router
+    app.include_router(portal_router)
+
+    # 8. Frontend Portal Static Mount (Optional convenience for single-server execution)
+    try:
+        from fastapi.staticfiles import StaticFiles
+        from pathlib import Path
+        frontend_dir = Path(r"d:\Sympl\frontend")
+        if frontend_dir.exists():
+            app.mount("/portal", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+    except Exception as e:
+        logger.warning(f"Could not mount static frontend: {e}")
+
     return app
+
 
 
 app = create_app()

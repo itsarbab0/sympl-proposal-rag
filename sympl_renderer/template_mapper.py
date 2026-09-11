@@ -54,17 +54,14 @@ class TemplateMapper:
         # ----------------------------------------------------------------------
         # 2. Executive Summary Page (Always present)
         # ----------------------------------------------------------------------
-        exec_page = self._build_executive_summary_page(page_num, exec_summary, client_name)
+        exec_page = self._build_executive_summary_page(page_num, exec_summary, client_name, sections=sections)
         pages.append(exec_page)
         page_num += 1
 
         # ----------------------------------------------------------------------
-        # 3. Services Overview Page (If multiple sections present)
+        # 3. Services Overview: Standalone page omitted to prevent empty pages;
+        # functional workstream summary is integrated into Executive Summary.
         # ----------------------------------------------------------------------
-        if len(sections) > 1:
-            overview_page = self._build_services_overview_page(page_num, sections, client_name)
-            pages.append(overview_page)
-            page_num += 1
 
         # ----------------------------------------------------------------------
         # 4. Service Detail Pages (Dynamic: automatically paginated per section)
@@ -147,13 +144,19 @@ class TemplateMapper:
             components=components
         )
 
-    def _build_executive_summary_page(self, page_num: int, exec_summary: str, client_name: str) -> RenderPage:
+    def _build_executive_summary_page(
+        self,
+        page_num: int,
+        exec_summary: str,
+        client_name: str,
+        sections: Optional[List[Dict[str, Any]]] = None
+    ) -> RenderPage:
         components = [
             RenderComponent(
                 component_id="exec_summary_heading",
                 component_type=ComponentType.HEADING,
                 title="Executive Summary",
-                content=f"Strategic Partnership & Financial Operations for {client_name}",
+                content=f"Strategic Partnership & Operational Engagement for {client_name}",
                 styling={"color": self.branding.colors.primary}
             ),
             RenderComponent(
@@ -163,6 +166,26 @@ class TemplateMapper:
                 styling={"color": self.branding.colors.neutral_dark, "font_size": self.branding.typography.body_size}
             )
         ]
+        if sections:
+            if len(sections) > 1:
+                workstream_items = [
+                    s.get("section_title", "") for s in sections if s.get("section_title")
+                ]
+                card_title = "Approved Functional Workstreams"
+            else:
+                subs = sections[0].get("subsections", [])
+                sub_headings = [sub.get("heading", "") for sub in subs if sub.get("heading")]
+                workstream_items = sub_headings[:5] if sub_headings else [sections[0].get("section_title", "")]
+                card_title = f"Scope Focus: {sections[0].get('section_title', '')}"
+
+            if workstream_items:
+                components.append(RenderComponent(
+                    component_id="exec_summary_workstreams",
+                    component_type=ComponentType.CARD,
+                    title=card_title,
+                    items=workstream_items,
+                    styling={"background_color": self.branding.colors.callout_bg}
+                ))
         return RenderPage(
             page_number=page_num,
             page_type=PageType.EXECUTIVE_SUMMARY,
@@ -323,9 +346,9 @@ class TemplateMapper:
 
     def _build_timeline_page(self, page_num: int, sections: List[Dict[str, Any]], client_name: str) -> RenderPage:
         phases = [
-            "Phase 1 (Weeks 1–2): Chart of accounts review, software access setup, and historical data ingestion",
-            "Phase 2 (Weeks 3–4): Workflow integration, digital expense tool configuration, and parallel verification run",
-            "Phase 3 (Weeks 5+): Operational go-live, management reporting cadence, and ongoing weekly financial operations"
+            "Phase 1 (Weeks 1–2): Discovery, system access configuration, and baseline data ingestion",
+            "Phase 2 (Weeks 3–4): Workflow integration, system configuration, and parallel verification run",
+            "Phase 3 (Weeks 5+): Operational go-live, governance review cadence, and ongoing handover"
         ]
 
         components = [
@@ -452,11 +475,23 @@ class TemplateMapper:
                 }
             ))
 
+        components.append(RenderComponent(
+            component_id="exclusions_operating_prereqs",
+            component_type=ComponentType.CARD,
+            title="Operational Prerequisites & Client Responsibilities",
+            items=[
+                "Timely provision of necessary system credentials, platform authorizations, and source documentation.",
+                "Designation of primary organizational contact and authorized signing officers for written payment authorizations.",
+                "Direct client ownership and billing for third-party software subscriptions, hosting, and merchant processing fees."
+            ],
+            styling={"background_color": self.branding.colors.neutral_light}
+        ))
+
         return RenderPage(
             page_number=page_num,
             page_type=PageType.EXCLUSIONS,
             page_title="Engagement Terms & Exclusions",
-            page_subtitle="Service Boundaries",
+            page_subtitle="Service Boundaries & Operating Prerequisites",
             components=components
         )
 
@@ -510,8 +545,8 @@ class TemplateMapper:
         """Determines whether to include an Implementation Timeline page."""
         # Include timeline if transformation, transition, or multiple systems setup present
         all_text = " ".join(s.get("section_title", "") + " " + s.get("opening_text", "") for s in sections).lower()
-        has_transform = "transformation" in all_text or "digital" in all_text or "migration" in all_text
-        has_transition = "transition" in all_text or "onboarding plan" in all_text
+        has_transform = "transformation" in all_text or "cloud migration" in all_text or "system migration" in all_text or "database discovery" in all_text
+        has_transition = "transition roadmap" in all_text or "onboarding schedule" in all_text or "implementation roadmap" in all_text
 
         # Also check pricing setup fee
         pricing = draft_data.get("pricing", {})
