@@ -82,12 +82,16 @@ class CanvaOperationsAdapter:
 
         # 2. Augment with structured proposal fields from CanvaProposalData if available
         if cdata:
-            dataset["client_name"] = {"type": "text", "text": cdata.cover.client_name}
-            dataset["proposal_title"] = {"type": "text", "text": cdata.cover.proposal_title}
-            dataset["proposal_date"] = {"type": "text", "text": cdata.cover.date}
-            dataset["executive_summary"] = {"type": "text", "text": cdata.executive_summary.body}
-            dataset["approach_summary"] = {"type": "text", "text": cdata.scope_and_approach.approach_overview}
-            dataset["total_investment"] = {"type": "text", "text": cdata.commercials.total_summary}
+            if hasattr(cdata, "cover") and cdata.cover:
+                dataset["client_name"] = {"type": "text", "text": getattr(cdata.cover, "client_name", "")}
+                dataset["proposal_title"] = {"type": "text", "text": getattr(cdata.cover, "proposal_title", "")}
+                dataset["proposal_date"] = {"type": "text", "text": getattr(cdata.cover, "date", "")}
+            if hasattr(cdata, "executive_summary") and cdata.executive_summary:
+                exec_text = getattr(cdata.executive_summary, "full_text", "") or " ".join(getattr(cdata.executive_summary, "paragraphs", []))
+                dataset["executive_summary"] = {"type": "text", "text": exec_text}
+            if hasattr(cdata, "pricing") and cdata.pricing:
+                dataset["total_investment"] = {"type": "text", "text": getattr(cdata.pricing, "investment_amount", "")}
+                dataset["investment_description"] = {"type": "text", "text": getattr(cdata.pricing, "investment_description", "")}
 
         return dataset
 
