@@ -30,7 +30,7 @@ logger = logging.getLogger("canva.oauth")
 CANVA_AUTH_URL = "https://www.canva.com/api/oauth/authorize"
 CANVA_TOKEN_URL = "https://api.canva.com/rest/v1/oauth/token"
 CANVA_DEFAULT_SCOPES = [
-    "design:read",
+    "profile:read",
     "design:content:read",
     "design:content:write",
     "design:meta:read",
@@ -57,6 +57,10 @@ CREATE TABLE IF NOT EXISTS canva_pkce_states (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 """
+
+# Resilient local in-memory fallback for local development & network fluctuations
+_LOCAL_PKCE_STATES: Dict[str, Tuple[str, str]] = {}
+_LOCAL_TOKEN_CACHE: Dict[str, Any] = {}
 
 
 def get_database_url() -> Optional[str]:
@@ -134,10 +138,13 @@ def create_authorization_url(redirect_uri: str, scopes: Optional[list] = None) -
     verifier, challenge = generate_pkce_pair()
     state = secrets.token_urlsafe(32)
 
+    # Always store in memory fallback
+    _LOCAL_PKCE_STATES[state] = (verifier, redirect_uri)
+
     db_url = get_database_url()
     if db_url:
         try:
-            with psycopg.connect(db_url) as conn:
+            with psycopg.connect(db_url, connect_timeout=5) as conn:
                 with conn.cursor() as cur:
                     cur.execute(
                         "INSERT INTO canva_pkce_states (state, code_verifier, redirect_uri) VALUES (%s, %s, %s) "
@@ -146,9 +153,13 @@ def create_authorization_url(redirect_uri: str, scopes: Optional[list] = None) -
                     )
                 conn.commit()
         except Exception as e:
-            logger.error(f"Failed to persist PKCE state in database: {e}")
+            logger.warning(f"Database PKCE save warning (falling back to memory): {e}")
 
-    active_scopes = " ".join(scopes or CANVA_DEFAULT_SCOPES)
+    env_scopes = os.environ.get("CANVA_SCOPES")
+    if env_scopes and env_scopes.strip():
+        active_scopes = env_scopes.strip()
+    else:
+        active_scopes = " ".join(scopes or CANVA_DEFAULT_SCOPES)
     params = {
         "client_id": client_id,
         "response_type": "code",
@@ -171,14 +182,14 @@ def exchange_code_for_token(code: str, state: str, redirect_uri: Optional[str] =
     if not client_id or not client_secret:
         raise ValueError("CANVA_CLIENT_ID or CANVA_CLIENT_SECRET is missing.")
 
-    # Retrieve verifier from database
+    # Retrieve verifier from database or local memory cache
     db_url = get_database_url()
     verifier = None
     stored_redirect_uri = redirect_uri
 
     if db_url:
         try:
-            with psycopg.connect(db_url) as conn:
+            with psycopg.connect(db_url, connect_timeout=5) as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT code_verifier, redirect_uri FROM canva_pkce_states WHERE state = %s", (state,))
                     row = cur.fetchone()
@@ -188,7 +199,12 @@ def exchange_code_for_token(code: str, state: str, redirect_uri: Optional[str] =
                         cur.execute("DELETE FROM canva_pkce_states WHERE state = %s", (state,))
                     conn.commit()
         except Exception as e:
-            logger.error(f"Error querying PKCE state from database: {e}")
+            logger.warning(f"Database PKCE lookup warning (checking memory): {e}")
+
+    # Fallback to local memory cache if database was unreachable or row was missing
+    if not verifier and state in _LOCAL_PKCE_STATES:
+        verifier, r_uri = _LOCAL_PKCE_STATES.pop(state)
+        stored_redirect_uri = redirect_uri or r_uri
 
     if not verifier:
         raise ValueError("Invalid or expired OAuth state parameter.")
@@ -220,6 +236,33 @@ def exchange_code_for_token(code: str, state: str, redirect_uri: Optional[str] =
         err_body = e.read().decode("utf-8", errors="ignore")
         logger.error(f"Failed to exchange Canva token (HTTP {e.code}): {err_body}")
         raise ValueError(f"Canva token exchange failed (HTTP {e.code}): {err_body}")
+
+
+def get_user_profile(access_token: str) -> Dict[str, Any]:
+    """
+    Retrieves authenticated user profile from Canva Connect API:
+    GET https://api.canva.com/rest/v1/users/me/profile
+    """
+    url = "https://api.canva.com/rest/v1/users/me/profile"
+    req = urllib.request.Request(
+        url,
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            return data
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode("utf-8", errors="ignore")
+        logger.error(f"Failed to retrieve Canva profile (HTTP {e.code}): {err_body}")
+        raise ValueError(f"Canva profile request failed (HTTP {e.code}): {err_body}")
+    except Exception as e:
+        logger.error(f"Error requesting Canva profile: {e}")
+        raise ValueError(f"Canva profile request error: {str(e)}")
+
 
 
 def refresh_token(refresh_token_value: str) -> Dict[str, Any]:
@@ -257,19 +300,27 @@ def refresh_token(refresh_token_value: str) -> Dict[str, Any]:
 
 def save_tokens(token_data: Dict[str, Any]):
     """Persists tokens into PostgreSQL database table canva_oauth_tokens."""
-    db_url = get_database_url()
-    if not db_url:
-        return
-
-    init_token_tables()
     access_token = token_data.get("access_token")
     refresh_token_val = token_data.get("refresh_token")
     expires_in = token_data.get("expires_in", 14400)
     expires_at = time.time() + float(expires_in)
     scope = token_data.get("scope", "")
 
+    # Save in memory cache as well
+    _LOCAL_TOKEN_CACHE["canva_default"] = {
+        "access_token": access_token,
+        "refresh_token": refresh_token_val,
+        "expires_at": expires_at,
+        "scope": scope
+    }
+
+    db_url = get_database_url()
+    if not db_url:
+        return
+
+    init_token_tables()
     try:
-        with psycopg.connect(db_url) as conn:
+        with psycopg.connect(db_url, connect_timeout=5) as conn:
             with conn.cursor() as cur:
                 cur.execute(
                     """
@@ -286,7 +337,7 @@ def save_tokens(token_data: Dict[str, Any]):
                 )
             conn.commit()
     except Exception as e:
-        logger.error(f"Failed to save Canva tokens to database: {e}")
+        logger.warning(f"Database token save warning (cached in memory): {e}")
 
 
 def get_valid_access_token() -> Optional[str]:
@@ -294,7 +345,8 @@ def get_valid_access_token() -> Optional[str]:
     Returns an active, valid Canva Bearer token.
     1. Checks direct environment override CANVA_ACCESS_TOKEN or CANVA_API_KEY.
     2. Checks PostgreSQL database table canva_oauth_tokens.
-    3. Automatically refreshes token if expired.
+    3. Checks local memory cache.
+    4. Automatically refreshes token if expired.
     Returns None if no token is available or authenticated.
     """
     # 1. Environment variable override
@@ -304,30 +356,41 @@ def get_valid_access_token() -> Optional[str]:
 
     # 2. Database lookup
     db_url = get_database_url()
-    if not db_url:
+    access_token = None
+    refresh_tok = None
+    expires_at = None
+
+    if db_url:
+        try:
+            init_token_tables()
+            with psycopg.connect(db_url, connect_timeout=5) as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT access_token, refresh_token, expires_at FROM canva_oauth_tokens WHERE id = 'canva_default'")
+                    row = cur.fetchone()
+                    if row:
+                        access_token, refresh_tok, expires_at = row
+        except Exception as e:
+            logger.warning(f"Database token check warning: {e}")
+
+    # 3. Memory cache lookup fallback
+    if not access_token and "canva_default" in _LOCAL_TOKEN_CACHE:
+        cached = _LOCAL_TOKEN_CACHE["canva_default"]
+        access_token = cached.get("access_token")
+        refresh_tok = cached.get("refresh_token")
+        expires_at = cached.get("expires_at")
+
+    if not access_token:
         return None
 
-    try:
-        init_token_tables()
-        with psycopg.connect(db_url) as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT access_token, refresh_token, expires_at FROM canva_oauth_tokens WHERE id = 'canva_default'")
-                row = cur.fetchone()
-                if not row:
-                    return None
-                access_token, refresh_tok, expires_at = row
-                
-                # Check expiration (with 60-second safety window)
-                now = time.time()
-                if expires_at and now >= (float(expires_at) - 60):
-                    if refresh_tok:
-                        logger.info("Canva access token expired, refreshing with refresh_token...")
-                        refreshed = refresh_token(refresh_tok)
-                        return refreshed.get("access_token")
-                    else:
-                        logger.warning("Canva access token expired and no refresh_token available.")
-                        return None
-                return access_token
-    except Exception as e:
-        logger.error(f"Error checking Canva access token in database: {e}")
-        return None
+    # Check expiration (with 60-second safety window)
+    now = time.time()
+    if expires_at and now >= (float(expires_at) - 60):
+        if refresh_tok:
+            logger.info("Canva access token expired, refreshing with refresh_token...")
+            refreshed = refresh_token(refresh_tok)
+            return refreshed.get("access_token")
+        else:
+            logger.warning("Canva access token expired and no refresh_token available.")
+            return None
+
+    return access_token

@@ -27,7 +27,8 @@ from canva.oauth import (
     create_authorization_url,
     exchange_code_for_token,
     get_valid_access_token,
-    get_canva_credentials
+    get_canva_credentials,
+    get_user_profile
 )
 from canva.canva_client import CanvaConnectClient, CanvaAPIException
 from canva.adapter import CanvaOperationsAdapter
@@ -38,12 +39,13 @@ MASTER_TEMPLATE_ID = "DAHU1H8DMjc"
 
 
 @router.get("/auth/canva/authorize", summary="Initiate Canva OAuth PKCE flow")
-def canva_authorize(request: Request):
+def canva_authorize(request: Request, scope: Optional[str] = None):
     """Generates PKCE authorization URL and redirects user to Canva."""
     base_url = str(request.base_url).rstrip("/")
     redirect_uri = os.environ.get("CANVA_REDIRECT_URI") or f"{base_url}/auth/callback"
     try:
-        auth_url, state = create_authorization_url(redirect_uri)
+        active_scopes = scope.split() if (scope and scope.strip()) else None
+        auth_url, state = create_authorization_url(redirect_uri, scopes=active_scopes)
         return Response(status_code=status.HTTP_307_TEMPORARY_REDIRECT, headers={"Location": auth_url})
     except Exception as e:
         logger.error(f"Failed to initiate Canva OAuth: {e}")
@@ -52,20 +54,64 @@ def canva_authorize(request: Request):
 
 @router.get("/auth/callback", summary="Canva OAuth callback handler")
 @router.get("/auth/canva/callback", summary="Canva OAuth callback handler alias")
-def canva_callback(code: str, state: str, request: Request):
-    """Exchanges code for Canva access token and stores it securely in PostgreSQL."""
+def canva_callback(
+    request: Request,
+    code: Optional[str] = None,
+    state: Optional[str] = None,
+    error: Optional[str] = None,
+    error_description: Optional[str] = None
+):
+    """
+    Exchanges authorization code for Canva access token,
+    immediately tests connection by querying Canva profile,
+    and returns connection verification.
+    """
+    if error:
+        err_msg = f"Canva returned OAuth error: {error}"
+        if error_description:
+            err_msg += f" ({error_description})"
+        logger.error(f"[CANVA AUTH] {err_msg}")
+        return {
+            "connected": False,
+            "error": error,
+            "error_description": error_description,
+            "token_valid": False,
+            "hint": "Please verify that all requested scopes are enabled in your Canva Developer Portal under Scopes."
+        }
+
+    if not code or not state:
+        raise HTTPException(
+            status_code=400,
+            detail="Missing required 'code' or 'state' parameters from Canva authorization callback."
+        )
+
     base_url = str(request.base_url).rstrip("/")
     redirect_uri = os.environ.get("CANVA_REDIRECT_URI") or f"{base_url}/auth/callback"
     try:
+        print("[CANVA AUTH] Authorization successful")
+        logger.info("[CANVA AUTH] Authorization successful")
+
         token_data = exchange_code_for_token(code=code, state=state, redirect_uri=redirect_uri)
+        access_token = token_data.get("access_token")
+
+        print("[CANVA AUTH] Token received")
+        logger.info("[CANVA AUTH] Token received")
+
+        profile_data = get_user_profile(access_token)
+
+        print("[CANVA AUTH] Profile request successful")
+        logger.info("[CANVA AUTH] Profile request successful")
+
+        profile_obj = profile_data.get("profile", {})
+        display_name = profile_obj.get("display_name") or profile_data.get("display_name") or "Canva User"
+
         return {
-            "status": "authenticated",
-            "message": "Canva OAuth successful! Access token stored securely in PostgreSQL database.",
-            "scope": token_data.get("scope"),
-            "expires_in": token_data.get("expires_in")
+            "connected": True,
+            "canva_user": display_name,
+            "token_valid": True
         }
     except Exception as e:
-        logger.error(f"Canva OAuth callback failure: {e}")
+        logger.error(f"[CANVA AUTH] Callback error: {e}")
         raise HTTPException(status_code=400, detail=f"Canva authentication failed: {str(e)}")
 
 

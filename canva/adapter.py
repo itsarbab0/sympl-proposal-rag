@@ -54,12 +54,18 @@ class CanvaOperationsAdapter:
 
         # 1. Map operations by recognized field name or element ID
         for op in operations:
-            text_val = op.text or op.replace_text
+            if isinstance(op, dict):
+                text_val = op.get("text") or op.get("replace_text")
+                elem_id = op.get("element_id")
+            else:
+                text_val = getattr(op, "text", None) or getattr(op, "replace_text", None)
+                elem_id = getattr(op, "element_id", None)
+
             if text_val is None:
                 continue
 
             # Check if this element ID has a recognized template field name
-            field_name = self.element_to_field_map.get(op.element_id) if op.element_id else None
+            field_name = self.element_to_field_map.get(elem_id) if elem_id else None
 
             if field_name:
                 dataset[field_name] = {
@@ -68,8 +74,8 @@ class CanvaOperationsAdapter:
                 }
 
             # Also provide element-keyed entry for direct element binding
-            if op.element_id:
-                dataset[f"elem_{op.element_id}"] = {
+            if elem_id:
+                dataset[f"elem_{elem_id}"] = {
                     "type": "text",
                     "text": str(text_val)
                 }
@@ -87,9 +93,9 @@ class CanvaOperationsAdapter:
 
     def operations_to_transaction_payload(
         self,
-        operations: List[CanvaEditingOperation]
+        operations: List[Any]
     ) -> List[Dict[str, Any]]:
         """
-        Converts CanvaEditingOperation objects into serializable JSON dictionaries.
+        Converts CanvaEditingOperation objects or dicts into serializable JSON dictionaries.
         """
-        return [op.to_dict() for op in operations]
+        return [op.to_dict() if hasattr(op, "to_dict") else op for op in operations]
